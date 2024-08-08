@@ -2,7 +2,12 @@ import React from "react";
 
 export default function loginPage() {
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen relative">
+      <div className="w-full h-full absolute inset-0 z-[-1] bg-gray-50 blur-[120px]">
+        <div className="w-[10rem] h-[10rem] bg-red-c-100 z-0 absolute inset-[5rem]"></div>
+        <div className="w-[10rem] h-[10rem] bg-green-c-100 z-0 absolute right-0 top-[10rem]"></div>
+        <div className="w-[10rem] h-[10rem] bg-beige-c-100 z-0 absolute left-[15rem] bottom-0"></div>
+      </div>
       <div className="sm:w-[30rem] w-[90%] border rounded-lg bg-white p-8">
         <div className="flex min-h-full flex-1 flex-col justify-center">
           <div className="flex items-center justify-between sm:mx-auto sm:w-full sm:max-w-sm">
