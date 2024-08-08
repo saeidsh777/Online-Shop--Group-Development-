@@ -3,12 +3,21 @@ import React from "react";
 
 export default function loginPage() {
   return (
-    <div className="flex justify-center items-center h-screen relative">
+    <div className="flex flex-col justify-center items-center h-screen relative">
       <div className="w-full h-full absolute inset-0 z-[-1] bg-gray-50 blur-[120px]">
         <div className="w-[10rem] h-[10rem] bg-beige-c-100 z-0 absolute right-[3rem] top-[10rem]"></div>
         <div className="w-[10rem] h-[10rem] bg-red-c-100 z-0 absolute left-[20rem] bottom-[10rem]"></div>
         <div className="w-[10rem] h-[10rem] bg-green-c-100 z-0 absolute left-[7rem] bottom-[2rem]"></div>
       </div>
+
+      <Link
+        href="/"
+        className="group h-[4rem] bg-blue-100 sm:w-[30rem] w-[90%] flex items-center justify-center rounded-xl hover:bg-blue-500"
+      >
+        <h2 className="font-black text-blue-500 group-hover:text-white ">
+          HOME
+        </h2>
+      </Link>
 
       <div className="sm:w-[30rem] w-[90%] border rounded-lg bg-white p-8">
         <div className="flex min-h-full flex-1 flex-col justify-center">
@@ -18,7 +27,7 @@ export default function loginPage() {
             </h2>
             <Link
               className="text-sm  text-blue-500 hover:text-blue-600"
-              href="/"
+              href="/auth/register"
             >
               Don't have an account?
             </Link>
@@ -83,7 +92,6 @@ export default function loginPage() {
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
