@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
 import { useForm } from '@/hooks/useForm';
+import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 
 export default function LoginForm() {
 
@@ -80,12 +81,7 @@ export default function LoginForm() {
                             </div>
 
                             <div>
-                                <button
-                                    type="submit"
-                                    className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                                >
-                                    Sign in
-                                </button>
+                                <SubmitBtn title="Login"/>
                             </div>
                         </form>
                     </div>
