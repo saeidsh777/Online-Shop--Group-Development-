@@ -10,4 +10,8 @@
         padding: 0;
         box-sizing: border-box;
     }
+
+    .iconFontSize {
+        @apply text-lg 425:text-xl md:text-2xl lg:text-3xl xl:text-4xl;
+    }
 }
