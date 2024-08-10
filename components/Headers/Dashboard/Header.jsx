@@ -1,6 +1,6 @@
 'use client';
 
-import { SidebarContext } from '@/app/_Contexts/SidebarProvider';
+import { SidebarContext } from '@/contexts/SidebarProvider';
 import { useContext } from 'react';
 import { FiMenu } from 'react-icons/fi';
 

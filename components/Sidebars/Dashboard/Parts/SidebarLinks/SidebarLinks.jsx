@@ -1,5 +1,5 @@
-import SidebarLink from '../../../app/dashboard/_Sidebar/Link/SidebarLink';
-import SidebarSection from '../../../app/dashboard/_Sidebar/Section/SidebarSection';
+import SidebarLink from './Components/SidebarLink';
+import SidebarLinkSection from './Components/SidebarLinkSection';
 
 const SidebarLinks = () => {
     return (
@@ -9,7 +9,7 @@ const SidebarLinks = () => {
                 use children to pass icon and use
                 react-icons instead of SVGs
             */}
-            <SidebarSection title={'test2'}>
+            <SidebarLinkSection title={'test2'}>
                 <SidebarLink href={'/'} text={'Dashboard'}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ const SidebarLinks = () => {
                         ></path>
                     </svg>
                 </SidebarLink>
-            </SidebarSection>
+            </SidebarLinkSection>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { SidebarContext } from '@/app/_Contexts/SidebarProvider';
+import { SidebarContext } from '@/contexts/SidebarProvider';
 import { useContext } from 'react';
 import BgOverlay from './Parts/BgOverlay';
 import Logo from './Parts/Logo';
