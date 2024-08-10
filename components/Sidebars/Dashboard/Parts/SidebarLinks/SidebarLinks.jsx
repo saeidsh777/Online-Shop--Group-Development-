@@ -1,5 +1,5 @@
-import SidebarLink from './Link/SidebarLink';
-import SidebarSection from './Section/SidebarSection';
+import SidebarLink from '../../../app/dashboard/_Sidebar/Link/SidebarLink';
+import SidebarSection from '../../../app/dashboard/_Sidebar/Section/SidebarSection';
 
 const SidebarLinks = () => {
     return (

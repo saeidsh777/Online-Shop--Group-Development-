@@ -1,4 +1,4 @@
-const SidebarSection = ({ children, title }) => {
+const SidebarLinkSection = ({ children, title }) => {
     return (
         <div>
             <p className="font-roboto text-[#3e4853] text-[10px] 425:text-xs md:text-sm lg:text-base xl:text-lg  uppercase">
@@ -8,4 +8,4 @@ const SidebarSection = ({ children, title }) => {
         </div>
     );
 };
-export default SidebarSection;
+export default SidebarLinkSection;

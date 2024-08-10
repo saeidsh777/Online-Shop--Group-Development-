@@ -4,7 +4,7 @@ import { SidebarContext } from '@/app/_Contexts/SidebarProvider';
 import { useContext } from 'react';
 import { FiMenu } from 'react-icons/fi';
 
-const Topbar = () => {
+const Header = () => {
     const { SwitchSidebarStatus } = useContext(SidebarContext);
 
     return (
@@ -21,4 +21,4 @@ const Topbar = () => {
         </header>
     );
 };
-export default Topbar;
+export default Header;
