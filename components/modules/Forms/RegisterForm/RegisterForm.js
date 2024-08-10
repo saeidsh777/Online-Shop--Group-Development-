@@ -6,6 +6,7 @@ import { useForm } from '@/hooks/useForm';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 
 export default function RegisterForm() {
+    
     const [formState, onChangeHandled] = useForm({
         name:"",
         email: '',
@@ -111,7 +112,7 @@ export default function RegisterForm() {
                             </div>
 
                             <div>
-                                <SubmitBtn title="Sign up" />
+                                <SubmitBtn title="Create Account" />
                             </div>
                         </form>
                     </div>
