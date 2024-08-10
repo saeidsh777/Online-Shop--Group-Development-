@@ -14,6 +14,25 @@ export default function RegisterForm() {
         password: '',
     });
 
+    const onSubmitHandler = async e => {
+        e.preventDefault();
+
+        const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({ ...formState.inputs }),
+        });
+        console.log(res);
+
+        //The Next method does not work
+        // const result = await res.json();
+
+        // write your code
+        // .....
+    };
+
     return (
         <>
             <Link
@@ -40,7 +59,7 @@ export default function RegisterForm() {
                     </div>
 
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                        <form action="#" method="POST" className="space-y-6">
+                        <form onSubmit={onSubmitHandler} className="space-y-6">
                             <div>
                                 <label
                                     htmlFor="name"
