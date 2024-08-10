@@ -5,13 +5,13 @@ import AuthInput from '../../Inputs/AuthInput/AuthInput';
 import { useForm } from '@/hooks/useForm';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 
-export default function LoginForm() {
-
+export default function RegisterForm() {
     const [formState, onChangeHandled] = useForm({
+        name:"",
         email: '',
-        password:""
+        phoneNumber:"",
+        password: '',
     });
-
 
     return (
         <>
@@ -19,7 +19,7 @@ export default function LoginForm() {
                 href="/"
                 className="group h-[3rem] bg-blue-100 sm:w-[30rem] w-[90%] flex items-center justify-center rounded-xl hover:bg-blue-500"
             >
-                <h2 className="font-black text-lg text-blue-500 group-hover:text-white ">
+                <h2 className="font-bold text-lg text-blue-500 group-hover:text-white ">
                     HOME
                 </h2>
             </Link>
@@ -28,18 +28,33 @@ export default function LoginForm() {
                 <div className="flex min-h-full flex-1 flex-col justify-center">
                     <div className="flex items-center justify-between sm:mx-auto sm:w-full sm:max-w-sm">
                         <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                            Login
+                            Sign up
                         </h2>
                         <Link
                             className="text-sm  text-blue-500 hover:text-blue-600"
-                            href="/auth/register"
+                            href="/auth/login"
                         >
-                            Don&apos;t have an account?
+                            Already have an account?
                         </Link>
                     </div>
 
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                         <form action="#" method="POST" className="space-y-6">
+                            <div>
+                                <label
+                                    htmlFor="name"
+                                    className="block text-sm font-medium leading-6 text-gray-500"
+                                >
+                                    Your Name
+                                </label>
+                                <AuthInput
+                                    type="text"
+                                    id="name"
+                                    value={formState.inputs.name}
+                                    onChange={onChangeHandled}
+                                />
+                            </div>
+
                             <div>
                                 <label
                                     htmlFor="email"
@@ -51,6 +66,21 @@ export default function LoginForm() {
                                     type="email"
                                     id="email"
                                     value={formState.inputs.email}
+                                    onChange={onChangeHandled}
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    htmlFor="phoneNumber"
+                                    className="block text-sm font-medium leading-6 text-gray-500"
+                                >
+                                    Phone Number
+                                </label>
+                                <AuthInput
+                                    type="text"
+                                    id="phoneNumber"
+                                    value={formState.inputs.phoneNumber}
                                     onChange={onChangeHandled}
                                 />
                             </div>
@@ -81,7 +111,7 @@ export default function LoginForm() {
                             </div>
 
                             <div>
-                                <SubmitBtn title="Login"/>
+                                <SubmitBtn title="Sign up" />
                             </div>
                         </form>
                     </div>
