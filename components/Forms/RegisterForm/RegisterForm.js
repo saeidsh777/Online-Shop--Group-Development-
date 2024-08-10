@@ -4,27 +4,28 @@ import Link from 'next/link';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
 import { useForm } from '@/hooks/useForm';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
+import { API_BASE_URL } from '@/utils/variabels';
 
 export default function RegisterForm() {
-    
     const [formState, onChangeHandled] = useForm({
-        name:"",
+        name: '',
         email: '',
-        phoneNumber:"",
+        phoneNumber: '',
         password: '',
     });
 
     const onSubmitHandler = async e => {
         e.preventDefault();
 
-        const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+        await fetch(`${API_BASE_URL}/auth/signup`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({ ...formState.inputs }),
-        });
-        console.log(res);
+        })
+            .then(res => res.json())
+            .then(result => console.log(result));
 
         //The Next method does not work
         // const result = await res.json();
