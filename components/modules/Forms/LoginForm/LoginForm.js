@@ -17,9 +17,9 @@ export default function LoginForm() {
         <>
             <Link
                 href="/"
-                className="group h-[4rem] bg-blue-100 sm:w-[30rem] w-[90%] flex items-center justify-center rounded-xl hover:bg-blue-500"
+                className="group h-[3rem] bg-blue-100 sm:w-[30rem] w-[90%] flex items-center justify-center rounded-xl hover:bg-blue-500"
             >
-                <h2 className="font-black text-blue-500 group-hover:text-white ">
+                <h2 className="font-black text-lg text-blue-500 group-hover:text-white ">
                     HOME
                 </h2>
             </Link>
