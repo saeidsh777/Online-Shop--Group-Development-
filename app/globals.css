@@ -14,4 +14,68 @@
     .iconFontSize {
         @apply text-lg 425:text-xl md:text-2xl lg:text-3xl xl:text-4xl;
     }
+
+    @media screen and (min-width: 1280px) {
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoContainer {
+            min-height: 75px;
+        }
+
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logo {
+            width: 66px;
+            height: 28px;
+        }
+
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-linktext {
+            max-width: 0;
+        }
+
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-linkSection {
+            display: none;
+        }
+
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-linkContainer {
+            gap: 0;
+            padding: 0.75rem;
+            justify-content: center;
+            max-width: max-content;
+            margin: 0 auto;
+        }
+        .Dashboard_Sidebar.active .Dashboard_Sidebar-linkContainer:hover {
+            background-color: rgba(230, 232, 234, 0.85);
+        }
+
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoutText {
+            max-width: 0;
+        }
+
+        .Dashboard_Sidebar:not(.active)
+            .Dashboard_Sidebar-logoutContainer
+            .iconFontSize {
+            transform: translateX(3px);
+            -webkit-transform: translateX(3px);
+            -moz-transform: translateX(3px);
+            -ms-transform: translateX(3px);
+            -o-transform: translateX(3px);
+        }
+
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoutContainer {
+            gap: 0;
+            padding: 0.75rem;
+            justify-content: center;
+            max-width: max-content;
+            margin: 0 auto;
+        }
+
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-LogoutButton {
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-LogoutButton,
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-SidebarLinks,
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoContainer {
+            padding-right: 0.75rem;
+            padding-left: 0.75rem;
+        }
+    }
 }

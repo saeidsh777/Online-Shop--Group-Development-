@@ -3,7 +3,7 @@ import SidebarLinkSection from './Components/SidebarLinkSection';
 
 const SidebarLinks = () => {
     return (
-        <div className="mt-1 flex flex-col gap-1 overflow-y-auto px-4">
+        <div className="mt-1 flex flex-col gap-1 overflow-y-auto xl:overflow-x-hidden px-4 Dashboard_Sidebar-SidebarLinks">
             {/* these are just for test */}
             {/*
                 use children to pass icon and use
