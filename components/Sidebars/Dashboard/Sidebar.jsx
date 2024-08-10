@@ -1,11 +1,11 @@
 'use client';
 
-import { SidebarContext } from '@/app/_Contexts/SidebarProvider';
+import { SidebarContext } from '@/contexts/SidebarProvider';
 import { useContext } from 'react';
-import BgOverlay from './BgOverlay';
-import Logo from './Logo';
-import LogoutButton from './LogoutButton';
-import SidebarLinks from './SidebarLinks';
+import BgOverlay from './Parts/BgOverlay';
+import Logo from './Parts/Logo';
+import LogoutButton from './Parts/LogoutButton';
+import SidebarLinks from './Parts/SidebarLinks/SidebarLinks';
 
 const Sidebar = () => {
     const { status: isSidebarActive, CloseSidebar } =
