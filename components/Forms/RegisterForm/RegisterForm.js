@@ -2,36 +2,48 @@
 
 import Link from 'next/link';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import { useForm } from '@/hooks/useForm';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
-import { API_BASE_URL } from '@/utils/variabels';
+import { useForm } from 'react-hook-form';
+import { API_BASE_URL } from '@/utils/constants';
+import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterForm() {
-    const [formState, onChangeHandled] = useForm({
-        name: '',
-        email: '',
-        phoneNumber: '',
-        password: '',
-    });
+    const {
+        register,
+        resetField,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
-    const onSubmitHandler = async e => {
-        e.preventDefault();
+    const router = useRouter()
 
-        await fetch(`${API_BASE_URL}/auth/signup`, {
+    const onSubmit = async data => {
+        const res = await fetch(`${API_BASE_URL}/auth/signup`, {
             method: 'POST',
             headers: {
-                'content-type': 'application/json',
+                'Content-type': 'application/json',
             },
-            body: JSON.stringify({ ...formState.inputs }),
-        })
-            .then(res => res.json())
-            .then(result => console.log(result));
+            body: JSON.stringify({ ...data }),
+        });
+        const result = await res.json();
 
-        //The Next method does not work
-        // const result = await res.json();
+        if (res.status === 201) {
+            resetField('name');
+            resetField('email');
+            resetField('phoneNumber');
+            resetField('password');
+            toast.success(result.message);
+            router.push("/")
+        }
 
-        // write your code
-        // .....
+        if (res.status === 400) {
+            toast.error(result.message + '!');
+        }
+
+        if (res.status === 401) {
+            toast.error(result.message + '!');
+        }
     };
 
     return (
@@ -60,7 +72,10 @@ export default function RegisterForm() {
                     </div>
 
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                        <form onSubmit={onSubmitHandler} className="space-y-6">
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="space-y-6"
+                        >
                             <div>
                                 <label
                                     htmlFor="name"
@@ -69,10 +84,9 @@ export default function RegisterForm() {
                                     Your Name
                                 </label>
                                 <AuthInput
-                                    type="text"
-                                    id="name"
-                                    value={formState.inputs.name}
-                                    onChange={onChangeHandled}
+                                    type="name"
+                                    register={register}
+                                    errors={errors}
                                 />
                             </div>
 
@@ -85,9 +99,8 @@ export default function RegisterForm() {
                                 </label>
                                 <AuthInput
                                     type="email"
-                                    id="email"
-                                    value={formState.inputs.email}
-                                    onChange={onChangeHandled}
+                                    register={register}
+                                    errors={errors}
                                 />
                             </div>
 
@@ -99,10 +112,9 @@ export default function RegisterForm() {
                                     Phone Number
                                 </label>
                                 <AuthInput
-                                    type="text"
-                                    id="phoneNumber"
-                                    value={formState.inputs.phoneNumber}
-                                    onChange={onChangeHandled}
+                                    type="phoneNumber"
+                                    register={register}
+                                    errors={errors}
                                 />
                             </div>
 
@@ -125,9 +137,8 @@ export default function RegisterForm() {
                                 </div>
                                 <AuthInput
                                     type="password"
-                                    id="password"
-                                    value={formState.inputs.password}
-                                    onChange={onChangeHandled}
+                                    register={register}
+                                    errors={errors}
                                 />
                             </div>
 
@@ -137,6 +148,36 @@ export default function RegisterForm() {
                         </form>
                     </div>
                 </div>
+                <Toaster
+                    toastOptions={{
+                        success: {
+                            style: {
+                                background: '#dcfce7',
+                                color: '#15803d',
+                                fontSize: '.8rem',
+                                padding: '1rem',
+                                border: '1px solid #4ade80',
+                            },
+                            iconTheme: {
+                                primary: '#4ade80',
+                                secondary: '#15803d',
+                            },
+                        },
+                        error: {
+                            style: {
+                                background: '#fee2e2',
+                                color: '#f87171',
+                                fontSize: '.8rem',
+                                padding: '1rem',
+                                border: '1px solid #fca5a5',
+                            },
+                            iconTheme: {
+                                primary: '#f87171',
+                                secondary: '#dc2626',
+                            },
+                        },
+                    }}
+                />
             </div>
         </>
     );
