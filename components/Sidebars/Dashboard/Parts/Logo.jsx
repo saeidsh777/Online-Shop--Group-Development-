@@ -2,12 +2,12 @@ import Link from 'next/link';
 
 const Logo = () => {
     return (
-        <div className="min-h-[50px] md:min-h-[75px] lg:min-h-[100px] flex items-center sticky top-0 bg-inherit px-4">
+        <div className="min-h-[50px] md:min-h-[75px] lg:min-h-[100px] flex items-center sticky top-0 bg-inherit px-4 Dashboard_Sidebar-logoContainer">
             <Link href={'/'}>
                 <svg
                     width="44"
                     height="18.6"
-                    className="w-11 h-[18.6px] 425:w-14 425:h-5 md:w-[66px] md:h-7 lg:w-[88px] lg:h-9"
+                    className="w-11 h-[18.6px] 425:w-14 425:h-5 md:w-[66px] md:h-7 lg:w-[88px] lg:h-9 Dashboard_Sidebar-logo"
                     viewBox="0 0 66 28"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
