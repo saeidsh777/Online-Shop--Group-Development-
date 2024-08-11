@@ -2,16 +2,35 @@
 
 import Link from 'next/link';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import { useForm } from '@/hooks/useForm';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
+import { useForm } from 'react-hook-form';
 
 export default function LoginForm() {
+    const {
+        register,
+        resetField,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
-    const [formState, onChangeHandled] = useForm({
-        email: '',
-        password:""
-    });
+    const onSubmit = async data => {
 
+        const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({ ...data }),
+        });
+
+        if (res.status === 201) {
+            resetField('name');
+            resetField('email');
+            resetField('phoneNumber');
+            resetField('password');
+            const result = await res.json();
+        }
+    };
 
     return (
         <>
@@ -39,7 +58,10 @@ export default function LoginForm() {
                     </div>
 
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                        <form action="#" method="POST" className="space-y-6">
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="space-y-6"
+                        >
                             <div>
                                 <label
                                     htmlFor="email"
@@ -49,9 +71,8 @@ export default function LoginForm() {
                                 </label>
                                 <AuthInput
                                     type="email"
-                                    id="email"
-                                    value={formState.inputs.email}
-                                    onChange={onChangeHandled}
+                                    register={register}
+                                    errors={errors}
                                 />
                             </div>
 
@@ -74,14 +95,13 @@ export default function LoginForm() {
                                 </div>
                                 <AuthInput
                                     type="password"
-                                    id="password"
-                                    value={formState.inputs.password}
-                                    onChange={onChangeHandled}
+                                    register={register}
+                                    errors={errors}
                                 />
                             </div>
 
                             <div>
-                                <SubmitBtn title="Login"/>
+                                <SubmitBtn title="Login" />
                             </div>
                         </form>
                     </div>
