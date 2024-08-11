@@ -1,11 +1,18 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
+
+import toast, { Toaster } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 
+import AuthInput from '../../Inputs/AuthInput/AuthInput';
+import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
+import { API_BASE_URL } from '@/utils/constants';
+
 export default function LoginForm() {
+    const router = useRouter();
+
     const {
         register,
         resetField,
@@ -14,21 +21,26 @@ export default function LoginForm() {
     } = useForm();
 
     const onSubmit = async data => {
-
-        const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+        const res = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
             },
             body: JSON.stringify({ ...data }),
         });
+        const result = await res.json();
 
-        if (res.status === 201) {
-            resetField('name');
-            resetField('email');
+        if (res.status === 200) {
             resetField('phoneNumber');
             resetField('password');
-            const result = await res.json();
+            toast.success(result.message);
+            router.push('/');
+        }
+        if (res.status === 400) {
+            toast.error(result.message);
+        }
+        if (res.status === 200) {
+            toast.error(result.message);
         }
     };
 
@@ -67,10 +79,10 @@ export default function LoginForm() {
                                     htmlFor="email"
                                     className="block text-sm font-medium leading-6 text-gray-500"
                                 >
-                                    Email address
+                                    Phone number
                                 </label>
                                 <AuthInput
-                                    type="email"
+                                    type="phoneNumber"
                                     register={register}
                                     errors={errors}
                                 />
@@ -106,6 +118,36 @@ export default function LoginForm() {
                         </form>
                     </div>
                 </div>
+                <Toaster
+                    toastOptions={{
+                        success: {
+                            style: {
+                                background: '#dcfce7',
+                                color: '#15803d',
+                                fontSize: '.8rem',
+                                padding: '1rem',
+                                border: '1px solid #4ade80',
+                            },
+                            iconTheme: {
+                                primary: '#4ade80',
+                                secondary: '#15803d',
+                            },
+                        },
+                        error: {
+                            style: {
+                                background: '#fee2e2',
+                                color: '#f87171',
+                                fontSize: '.8rem',
+                                padding: '1rem',
+                                border: '1px solid #fca5a5',
+                            },
+                            iconTheme: {
+                                primary: '#f87171',
+                                secondary: '#dc2626',
+                            },
+                        },
+                    }}
+                />
             </div>
         </>
     );
