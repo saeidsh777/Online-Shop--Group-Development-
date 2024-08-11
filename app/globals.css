@@ -15,7 +15,7 @@
         @apply text-lg 425:text-xl md:text-2xl lg:text-3xl xl:text-4xl;
     }
 
-    @media screen and (min-width: 1280px) {
+    @media screen and (min-width: 1152px) {
         .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoContainer {
             min-height: 75px;
         }

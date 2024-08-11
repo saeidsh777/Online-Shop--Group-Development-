@@ -4,12 +4,12 @@ import SidebarProvider from '../../contexts/SidebarProvider';
 
 export default function DashboardLayout({ children }) {
     return (
-        <main className="relative bg-dashboard-bg min-h-screen text-dashboard-text xl:grid xl:grid-rows-[auto,1fr] xl:grid-cols-[auto,1fr]">
+        <main className="relative bg-dashboard-bg min-h-screen text-dashboard-text 1152:grid 1152:grid-rows-[auto,1fr] 1152:grid-cols-[auto,1fr]">
             <SidebarProvider>
                 <Header />
                 <Sidebar />
             </SidebarProvider>
-            <div className="xl:row-start-2 xl:row-end-3 xl:col-start-2 xl:col-end-3">
+            <div className="1152:row-start-2 1152:row-end-3 1152:col-start-2 1152:col-end-3">
                 {children}
             </div>
         </main>
