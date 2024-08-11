@@ -1,14 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
-import { useForm } from 'react-hook-form';
-import { API_BASE_URL } from '@/utils/constants';
-import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
+import toast, { Toaster } from 'react-hot-toast';
+import { useForm } from 'react-hook-form';
+import AuthInput from '../../Inputs/AuthInput/AuthInput';
+import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
+import { API_BASE_URL } from '@/utils/constants';
+
 export default function RegisterForm() {
+
+    const router = useRouter()
+
     const {
         register,
         resetField,
@@ -16,7 +20,6 @@ export default function RegisterForm() {
         formState: { errors },
     } = useForm();
 
-    const router = useRouter()
 
     const onSubmit = async data => {
         const res = await fetch(`${API_BASE_URL}/auth/signup`, {
