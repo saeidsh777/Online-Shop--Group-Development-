@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
             <body
                 className={
                     fonts +
-                    ' max-425:text-xs 425:text-sm md:text-base lg:text-lg 1152:text-xl xl:text-2xl '
+                    ' max-425:text-xs 425:text-sm md:text-base lg:text-lg 1152:text-xl'
                 }
             >
                 {children}

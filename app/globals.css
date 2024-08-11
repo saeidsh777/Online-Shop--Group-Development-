@@ -12,9 +12,10 @@
     }
 
     .iconFontSize {
-        @apply text-lg 425:text-xl md:text-2xl lg:text-3xl xl:text-4xl;
+        @apply text-lg 425:text-xl md:text-2xl lg:text-3xl 1152:text-[33px];
     }
 
+    /* change sidebar flow */
     @media screen and (min-width: 1152px) {
         .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoContainer {
             min-height: 75px;
