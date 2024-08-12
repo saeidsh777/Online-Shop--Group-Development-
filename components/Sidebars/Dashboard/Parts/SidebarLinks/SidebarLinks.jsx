@@ -1,5 +1,5 @@
 import { FiArrowDown } from 'react-icons/fi';
-import { IoBicycleSharp } from 'react-icons/io5';
+import { IoAddCircleSharp, IoBicycleSharp } from 'react-icons/io5';
 import SidebarLink from './Components/SidebarLink';
 import SidebarLinkSection from './Components/SidebarLinkSection';
 
@@ -25,6 +25,13 @@ const SidebarLinks = ({ linkClicked }) => {
                     linkClicked={linkClicked}
                 >
                     <IoBicycleSharp />
+                </SidebarLink>
+                <SidebarLink
+                    href={'/add-new-product'}
+                    text={'add product'}
+                    linkClicked={linkClicked}
+                >
+                    <IoAddCircleSharp />
                 </SidebarLink>
             </SidebarLinkSection>
         </div>

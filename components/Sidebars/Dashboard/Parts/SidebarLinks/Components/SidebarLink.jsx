@@ -17,7 +17,7 @@ const SidebarLink = ({ href: hrefProps, text, children, linkClicked }) => {
             onClick={linkClicked}
         >
             <div className="iconFontSize">{children}</div>
-            <div className="1152:overflow-hidden 1152:transition-all 1152:duration-200 1152:max-w-full 1152:max-h-full Dashboard_Sidebar-linktext">
+            <div className="1152:max-w-96 1152:max-h-96 Dashboard_Sidebar-linktext 1152:line-clamp-1">
                 {text}
             </div>
         </Link>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 const Logo = () => {
     return (
         <div className="min-h-[50px] md:min-h-[75px] lg:min-h-[100px] flex items-center sticky top-0 bg-inherit px-4 Dashboard_Sidebar-logoContainer">
-            <Link href={'/'}>
+            <Link href={'/dashboard'}>
                 <svg
                     width="44"
                     height="18.6"
