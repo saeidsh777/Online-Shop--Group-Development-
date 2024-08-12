@@ -1,17 +1,48 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+
+import toast, { Toaster } from 'react-hot-toast';
+import { useForm } from 'react-hook-form';
+
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import { useForm } from '@/hooks/useForm';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
+import { API_BASE_URL } from '@/utils/constants';
 
 export default function LoginForm() {
+    const router = useRouter();
 
-    const [formState, onChangeHandled] = useForm({
-        email: '',
-        password:""
-    });
+    const {
+        register,
+        resetField,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
+    const onSubmit = async data => {
+        const res = await fetch(`${API_BASE_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({ ...data }),
+        });
+        const result = await res.json();
+
+        if (res.status === 200) {
+            resetField('phoneNumber');
+            resetField('password');
+            toast.success(result.message);
+            router.push('/');
+        }
+        if (res.status === 400) {
+            toast.error(result.message);
+        }
+        if (res.status === 200) {
+            toast.error(result.message);
+        }
+    };
 
     return (
         <>
@@ -39,19 +70,21 @@ export default function LoginForm() {
                     </div>
 
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                        <form action="#" method="POST" className="space-y-6">
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="space-y-6"
+                        >
                             <div>
                                 <label
                                     htmlFor="email"
                                     className="block text-sm font-medium leading-6 text-gray-500"
                                 >
-                                    Email address
+                                    Phone number
                                 </label>
                                 <AuthInput
-                                    type="email"
-                                    id="email"
-                                    value={formState.inputs.email}
-                                    onChange={onChangeHandled}
+                                    type="phoneNumber"
+                                    register={register}
+                                    errors={errors}
                                 />
                             </div>
 
@@ -74,18 +107,47 @@ export default function LoginForm() {
                                 </div>
                                 <AuthInput
                                     type="password"
-                                    id="password"
-                                    value={formState.inputs.password}
-                                    onChange={onChangeHandled}
+                                    register={register}
+                                    errors={errors}
                                 />
                             </div>
 
                             <div>
-                                <SubmitBtn title="Login"/>
+                                <SubmitBtn title="Login" />
                             </div>
                         </form>
                     </div>
                 </div>
+                <Toaster
+                    toastOptions={{
+                        success: {
+                            style: {
+                                background: '#dcfce7',
+                                color: '#15803d',
+                                fontSize: '.8rem',
+                                padding: '1rem',
+                                border: '1px solid #4ade80',
+                            },
+                            iconTheme: {
+                                primary: '#4ade80',
+                                secondary: '#15803d',
+                            },
+                        },
+                        error: {
+                            style: {
+                                background: '#fee2e2',
+                                color: '#f87171',
+                                fontSize: '.8rem',
+                                padding: '1rem',
+                                border: '1px solid #fca5a5',
+                            },
+                            iconTheme: {
+                                primary: '#f87171',
+                                secondary: '#dc2626',
+                            },
+                        },
+                    }}
+                />
             </div>
         </>
     );
