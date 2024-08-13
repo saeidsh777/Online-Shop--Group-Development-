@@ -15,6 +15,10 @@
         @apply text-lg 425:text-xl md:text-2xl lg:text-3xl 1152:text-[33px];
     }
 
+    .Auth_Input{
+        @apply block w-full px-3 py-3 rounded-md border-0 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-300 sm:text-sm sm:leading-6
+    }
+
     /* change sidebar flow */
     @media screen and (min-width: 1152px) {
         .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoContainer {
