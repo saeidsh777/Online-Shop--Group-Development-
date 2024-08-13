@@ -76,9 +76,16 @@ export default function AddNewProductFrom() {
                             </div>
                         </div>
                     </div>
+                    <div className='mt-3'>
+                        <small>Final Price: <span className='ms-2 bg-gray-100 px-2 py-1 rounded-lg'>0$</span></small>
+                    </div>
                 </div>
 
                 <div className="p-4 border border-gray-200 rounded-xl">
+                    <div className="mb-3">
+                        
+                        <input type="file" />
+                    </div>
                     <div className="mb-3">
                         <label className="text-sm" htmlFor="description">
                             Product Description
