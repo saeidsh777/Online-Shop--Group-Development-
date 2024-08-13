@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { createContext, useCallback, useEffect, useState } from 'react';
 
 export const SidebarContext = createContext(false);
@@ -35,6 +36,12 @@ const SidebarProvider = ({ children }) => {
             window.removeEventListener('keydown', ESClistener);
         };
     }, [status, CloseSidebar]);
+
+    const pathName = usePathname();
+
+    useEffect(() => {
+        CloseSidebar();
+    }, [pathName, CloseSidebar]);
 
     return (
         <SidebarContext.Provider value={contextValue}>
