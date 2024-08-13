@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
-import { API_BASE_URL } from '@/utils/constants';
+import { API_BASE_URL, optionsHookForm } from '@/utils/constants';
 
 export default function LoginForm() {
     const router = useRouter();
@@ -82,8 +82,13 @@ export default function LoginForm() {
                                     Phone number
                                 </label>
                                 <AuthInput
-                                    type="phoneNumber"
-                                    register={register}
+                                    type="text"
+                                    register={{
+                                        ...register(
+                                            'phoneNumber',
+                                            optionsHookForm.phoneNumber
+                                        ),
+                                    }}
                                     errors={errors}
                                 />
                             </div>
@@ -107,7 +112,12 @@ export default function LoginForm() {
                                 </div>
                                 <AuthInput
                                     type="password"
-                                    register={register}
+                                    register={{
+                                        ...register(
+                                            'password',
+                                            optionsHookForm.password
+                                        ),
+                                    }}
                                     errors={errors}
                                 />
                             </div>
