@@ -15,10 +15,34 @@
         @apply text-lg 425:text-xl md:text-2xl lg:text-3xl 1152:text-[33px];
     }
 
+    /** Inputs Styles Start **/
     .Auth_Input{
         @apply block w-full px-3 py-3 rounded-md border-0 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-300 sm:text-sm sm:leading-6
     }
 
+    .General_Input_1{
+        @apply block bg-white hover:ring-blue-400 w-full p-2 rounded-md border-0 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-400 placeholder:text-gray-400 focus-visible:ring-blue-400 focus-visible:outline focus-visible:outline-blue-50 sm:text-sm sm:leading-6
+    }
+
+    .Input_Label_Dollar::before{
+        position: absolute;
+        content: "$";
+        top: .1rem;
+        right: .1rem;
+        background-color:#e5e7eb ;
+        height: 90%;
+        width: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0 .3rem .3rem 0;
+        -webkit-border-radius: 0 .3rem .3rem 0;
+        -moz-border-radius: 0 .3rem .3rem 0;
+        -ms-border-radius: 0 .3rem .3rem 0;
+        -o-border-radius: 0 .3rem .3rem 0;
+}
+    /* Inputs Styles END */
+    
     /* change sidebar flow */
     @media screen and (min-width: 1152px) {
         .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoContainer {
