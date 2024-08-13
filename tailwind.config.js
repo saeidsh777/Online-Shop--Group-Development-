@@ -19,6 +19,7 @@ module.exports = {
                 dashboard: {
                     bg: '#F8F9FA',
                     text: '#5b6b79',
+                    title: 'rgb(29, 38, 48)',
                     sidebar: {
                         textActive: '#4680ff',
                         hover: 'rgb(243, 245, 247)',

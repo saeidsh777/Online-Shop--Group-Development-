@@ -1,4 +1,7 @@
-
-export default function SectionTitel({title}) {
-  return <h2 className="text-3xl font-bold text-gray-800 mb-5">{title}</h2>;
+export default function SectionTitel({ title }) {
+    return (
+        <h2 className="mt-2 text-dashboard-title text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
+            {title}
+        </h2>
+    );
 }

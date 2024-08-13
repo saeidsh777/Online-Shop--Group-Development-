@@ -10,7 +10,7 @@ export default function DashboardLayout({ children }) {
                 <Header />
                 <Sidebar />
             </SidebarProvider>
-            <div className="1152:row-start-2 1152:row-end-3 1152:col-start-2 1152:col-end-3 px-4 425:px-6 md:px-8">
+            <div className="1152:row-start-2 1152:row-end-3 1152:col-start-2 1152:col-end-3 px-4 425:px-6 md:px-8 pb-3">
                 <BreadCrumb />
                 {children}
             </div>
