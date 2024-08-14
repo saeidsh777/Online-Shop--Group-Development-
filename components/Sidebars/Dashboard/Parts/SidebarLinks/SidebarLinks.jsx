@@ -1,6 +1,8 @@
+import { BsBox } from 'react-icons/bs';
 import { FiArrowDown } from 'react-icons/fi';
 import { IoAddCircleSharp, IoBicycleSharp } from 'react-icons/io5';
-import { TbCategoryPlus } from 'react-icons/tb';
+import { MdOutlineAddBox } from 'react-icons/md';
+import { TbCategoryPlus, TbListDetails } from 'react-icons/tb';
 import SidebarLink from './Components/SidebarLink';
 import SidebarLinkSection from './Components/SidebarLinkSection';
 
@@ -16,6 +18,17 @@ const SidebarLinks = () => {
                 </SidebarLink>
                 <SidebarLink href={'/add-new-product'} text={'add product'}>
                     <IoAddCircleSharp />
+                </SidebarLink>
+            </SidebarLinkSection>
+            <SidebarLinkSection title={'products'}>
+                <SidebarLink href={'/add-new-product'} text={'Add product'}>
+                    <MdOutlineAddBox />
+                </SidebarLink>
+                <SidebarLink href={'/products'} text={'Products list'}>
+                    <TbListDetails />
+                </SidebarLink>
+                <SidebarLink href={'/products/12'} text={'Product page'}>
+                    <BsBox />
                 </SidebarLink>
             </SidebarLinkSection>
             <SidebarLinkSection title={'category'}>
