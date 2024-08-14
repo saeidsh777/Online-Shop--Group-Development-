@@ -13,9 +13,7 @@ const page = () => {
                         className="p-3 sm:p-3.5 lg:p-4 lg:px-5 1152:px-6 1152:py-5"
                         placeholder="Category Name..."
                     />
-                    <DashboardBTN className="ml-auto py-1 px-3.5 sm:px-3.5 md:px-6 md:py-2 lg:px-8 lg:py-3">
-                        Add
-                    </DashboardBTN>
+                    <DashboardBTN className="ml-auto">Add</DashboardBTN>
                 </form>
             </DashboardBox>
         </div>
