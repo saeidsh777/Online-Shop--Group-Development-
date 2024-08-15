@@ -33,6 +33,12 @@ const page = ({ params: { productId } }) => {
                                 69$
                             </p>
                         </div>
+                        <div className="flex items-center justify-between">
+                            <p className="capitalize">Discount:</p>
+                            <p className="text-dashboard-title font-medium">
+                                0%
+                            </p>
+                        </div>
                         <div>
                             <p
                                 className="capitalize sm:mb-0.5 md:mb-1
