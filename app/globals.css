@@ -23,7 +23,10 @@
     .General_Input_1{
         @apply block bg-white hover:ring-blue-400 w-full p-2 rounded-md border-0 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-400 placeholder:text-gray-400 focus-visible:ring-blue-400 focus-visible:outline focus-visible:outline-blue-50 sm:text-sm sm:leading-6
     }
-
+    .General_Input_1:disabled{
+        @apply bg-gray-200 hover:ring-gray-400
+    }
+    
     .Input_Label_Dollar::before{
         position: absolute;
         content: "$";
