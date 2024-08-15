@@ -1,30 +1,61 @@
 'use client';
-import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
+
+import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
+import { NewProductContext } from '@/contexts/NewProductProvider';
 import { FiUploadCloud } from 'react-icons/fi';
+import { justNumberRegex } from '@/utils/regex';
 
 export default function AddNewProductFrom() {
-    const [textInputFile, setTextInputFile] = useState('No File');
+    const { inputs, onChange } = useContext(NewProductContext);
+    const [dataInputFile, setDataInputFile] = useState({});
     const productImage = useRef();
 
     // Receiving photos from input file and creating a viewable photo
     function readURL(input) {
         if (input.files && input.files[0]) {
             let reader = new FileReader();
-
             reader.onload = function (e) {
                 productImage.current.setAttribute('src', e.target.result);
             };
-
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    // Product discount calculation
+    const discountHandler = value => {
+        // For numeric discountType
+        if (inputs.discountType === 'Numerical') {
+            if (inputs.price - value >= 0) {
+                onChange('finalPrice', inputs.price - value);
+            } else {
+                onChange('finalPrice', inputs.price - inputs.price);
+            }
+        }
+
+        // For numeric Percentage
+        if (inputs.discountType === 'Percentage') {
+            if (value >= 100) {
+                onChange('finalPrice', 0);
+            } else if (value <= 0) {
+                onChange('finalPrice', +inputs.price);
+            } else {
+                onChange(
+                    'finalPrice',
+                    +inputs.price - (+inputs.price * +value) / 100
+                );
+            }
+        }
+    };
+
+    const submitHandler = () => {};
 
     return (
         <form
             className=" grid grid-cols-1 lg:grid-cols-2 gap-3"
             name="add-new-product"
+            onSubmit={submitHandler}
         >
             <div className="p-4 border border-gray-200 rounded-xl">
                 <div className="mb-3">
@@ -37,6 +68,8 @@ export default function AddNewProductFrom() {
                             type="text"
                             placeholder="Enter product name"
                             className="General_Input_1"
+                            value={inputs?.name}
+                            onChange={e => onChange('name', +e.target.value)}
                         />
                     </div>
                 </div>
@@ -49,6 +82,8 @@ export default function AddNewProductFrom() {
                         <select
                             id="category"
                             className="General_Input_1 h-[36px]"
+                            value={inputs?.category}
+                            onChange={e => onChange('category', +e.target.value)}
                         >
                             <option value="-1">Select your category</option>
                             <option value="1">Mobil</option>
@@ -65,6 +100,20 @@ export default function AddNewProductFrom() {
                             type="text"
                             placeholder="0 $"
                             className="General_Input_1"
+                            value={inputs?.price}
+                            onChange={e => {
+                                if (justNumberRegex.test(e.target.value)) {
+                                    onChange('price', +e.target.value);
+                                    onChange('discount', "");
+                                    onChange('finalPrice', +e.target.value);
+                                } else {
+                                    if (e.target.value.length == 0) {
+                                        onChange('price', '');
+                                        onChange('discount', "");
+                                        onChange('finalPrice', 0);
+                                    }
+                                }
+                            }}
                         />
                     </div>
                 </div>
@@ -77,6 +126,12 @@ export default function AddNewProductFrom() {
                             <select
                                 id="discountType"
                                 className="General_Input_1 h-[36px]"
+                                value={inputs?.discountType}
+                                onChange={e => {
+                                    onChange('discountType', e.target.value);
+                                    onChange('discount', "");
+                                    onChange('finalPrice', +inputs.price);
+                                }}
                             >
                                 <option value="-1">Select type</option>
                                 <option value="Numerical">$</option>
@@ -85,24 +140,63 @@ export default function AddNewProductFrom() {
                         </div>
                     </div>
                     <div className="mb-3 w-full">
-                        <label className="text-sm" htmlFor="price">
+                        <label className="text-sm" htmlFor="discount">
                             Discount
                         </label>
                         <div className="mt-2">
                             <input
-                                id="price"
+                                id="discount"
                                 type="text"
                                 placeholder="..."
                                 className="General_Input_1"
+                                value={inputs?.discount}
+                                onChange={e => {
+                                    if (justNumberRegex.test(e.target.value)) {
+                                        onChange('discount', +e.target.value);
+                                        discountHandler(e.target.value);
+                                    } else {
+                                        if (e.target.value.length == 0) {
+                                            onChange('discount', '');
+                                            onChange(
+                                                'finalPrice',
+                                                +inputs.price
+                                            );
+                                        }
+                                    }
+                                }}
+                                disabled={
+                                    inputs?.discountType == '-1' ? true : false
+                                }
                             />
                         </div>
                     </div>
                 </div>
                 <div className="mt-3">
+                    <small className="flex items-center text-sm text-gray-400">
+                        Total Price:
+                        <span className="ms-4">
+                            {inputs.price ? inputs.price.toLocaleString() : 0} $
+                        </span>
+                    </small>
+                </div>
+                <div>
+                    <small className="flex items-center text-sm text-gray-400">
+                        Discount Price:
+                        <span className="ms-4">
+                            {inputs.discount
+                                ? inputs.discount < inputs.price
+                                    ? inputs.discount.toLocaleString()
+                                    : inputs.price
+                                : 0}{' '}
+                            $
+                        </span>
+                    </small>
+                </div>
+                <div className="mt-3">
                     <small>
-                        Final Price:{' '}
+                        Final Price:
                         <span className="ms-2 bg-gray-100 px-2 py-1 rounded-lg">
-                            0$
+                            {inputs.finalPrice.toLocaleString()} $
                         </span>
                     </small>
                 </div>
@@ -113,9 +207,9 @@ export default function AddNewProductFrom() {
                     <label
                         htmlFor="img"
                         className={`${
-                            textInputFile === 'No File'
-                                ? 'bg-inherit'
-                                : 'bg-gradient-to-r from-sky-50 to-indigo-100'
+                            dataInputFile.name
+                                ? 'bg-gradient-to-r from-sky-50 to-indigo-100'
+                                : 'bg-inherit'
                         } flex justify-between overflow-hidden hover:bg-gray-50 cursor-pointer items-center border border-gray-200 rounded-md`}
                     >
                         <Image
@@ -125,22 +219,27 @@ export default function AddNewProductFrom() {
                             height={100}
                             alt="product image"
                             className={`${
-                                textInputFile == 'No File'
-                                    ? 'ps-2'
-                                    : 'ps-0 object-cover w-[100px] h-[100px]'
+                                dataInputFile.name
+                                    ? 'ps-0 object-cover w-[100px] h-[100px]'
+                                    : 'ps-2'
                             } `}
                         />
                         <div className="w-full flex flex-col items-center justify-center">
                             <FiUploadCloud className="iconFontSize" />
-                            <p>{textInputFile}</p>
+                            <p>
+                                {dataInputFile.name
+                                    ? dataInputFile.name
+                                    : 'No File'}
+                            </p>
                         </div>
                         <input
                             id="img"
                             type="file"
                             className="hidden"
+                            name="files"
                             onChange={e => {
                                 readURL(e.target);
-                                setTextInputFile(e.target.files[0].name);
+                                setDataInputFile(e.target.files[0]);
                             }}
                             accept="image/png, image/jpeg, image/jpg"
                         />
@@ -155,12 +254,16 @@ export default function AddNewProductFrom() {
                             rows={8}
                             id="description"
                             type="text"
+                            value={inputs?.description}
+                            onChange={e =>
+                                onChange('description', e.target.value)
+                            }
                             placeholder="Enter product description ..."
                             className="General_Input_1"
                         ></textarea>
                     </div>
                 </div>
-                <SubmitBtn title="Create Product"/>
+                <SubmitBtn title="Create Product" />
             </div>
         </form>
     );
