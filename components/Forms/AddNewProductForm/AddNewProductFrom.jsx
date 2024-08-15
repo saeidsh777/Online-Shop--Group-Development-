@@ -15,10 +15,13 @@ export default function AddNewProductForm() {
     // Receiving photos from input file and creating a viewable photo
     function readURL(input) {
         if (input.files) {
-            for(let i = 0; i < input.files.length; i++) {
+            for (let i = 0; i < input.files.length && i < 4; i++) {
                 let reader = new FileReader();
                 reader.onload = function (e) {
-                    productImages.current[i].setAttribute('src', e.target.result);
+                    productImages.current[i].setAttribute(
+                        'src',
+                        e.target.result
+                    );
                 };
 
                 reader.readAsDataURL(input.files[i]);
@@ -205,13 +208,13 @@ export default function AddNewProductForm() {
                 <div>
                     <small className="flex items-center text-sm text-gray-400">
                         Discount Price:
-                        <span className="ms-4">
+                        <span className="ms-4 text-red-300">
                             {inputs.discount
                                 ? inputs.discount < inputs.price
-                                    ? inputs.discount.toLocaleString()
-                                    : inputs.price
+                                    ? '-' + inputs.discount.toLocaleString()
+                                    : '-' + inputs.price
                                 : 0}{' '}
-                            $
+                            {inputs.discountType === 'Percentage' ? '% ' : '$'}
                         </span>
                     </small>
                 </div>
@@ -235,7 +238,7 @@ export default function AddNewProductForm() {
                                     ref={el =>
                                         (productImages.current['0'] = el)
                                     }
-                                    src=""
+                                    src="/images/default-image-product.svg"
                                     width={400}
                                     height={400}
                                     alt="product image"
@@ -254,7 +257,7 @@ export default function AddNewProductForm() {
                                         ref={el =>
                                             (productImages.current['1'] = el)
                                         }
-                                        src=""
+                                        src="/images/default-image-product.svg"
                                         width={400}
                                         height={400}
                                         alt="product image"
@@ -272,7 +275,7 @@ export default function AddNewProductForm() {
                                         ref={el =>
                                             (productImages.current['2'] = el)
                                         }
-                                        src=""
+                                        src="/images/default-image-product.svg"
                                         width={400}
                                         height={400}
                                         alt="product image"
@@ -290,7 +293,7 @@ export default function AddNewProductForm() {
                                         ref={el =>
                                             (productImages.current['3'] = el)
                                         }
-                                        src=""
+                                        src="/images/default-image-product.svg"
                                         width={400}
                                         height={400}
                                         alt="product image"
@@ -328,7 +331,6 @@ export default function AddNewProductForm() {
                                 multiple={true}
                                 name="files"
                                 onChange={e => {
-                                    console.log(e.target.files);
                                     readURL(e.target);
                                     setDataInputFile(e.target.files);
                                 }}
