@@ -3,7 +3,7 @@ import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 
 const page = ({ params: { productId } }) => {
     return (
-        <div className="mt-3 flex flex-col gap-3 sm:gap-5 md:gap-7 lg:gap-8">
+        <div className="flex flex-col gap-3 sm:gap-5 md:gap-7 lg:gap-8">
             <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-5 md:gap-7 lg:gap-8">
                 <div className="p-2 md:p-3 lg:p-3.5 bg-[#F3F5F7] w-64 375:w-56 425:w-64 mx-auto sm:mx-0 rounded-lg md:w-[37.5%] flex gap-1.5 md:gap-2 lg:gap-3 sm:flex-col 896:flex-row 896:flex-[0.85] max-w-md">
                     <div className="bg-slate-400 aspect-square rounded-lg flex-[3]"></div>
