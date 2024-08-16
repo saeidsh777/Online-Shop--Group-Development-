@@ -1,7 +1,27 @@
 import DashboardBox from '@/components/Boxes/DashboardBox';
+import RelatedPorductBox from '@/components/Boxes/RelatedPorductBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
+import Link from 'next/link';
 
 const page = ({ params: { productId } }) => {
+    const relatedProducts = [
+        {
+            id: +productId + 1,
+            name: 'test ' + (+productId + 1),
+            src: 'https://picsum.photos/200',
+        },
+        {
+            id: +productId + 2,
+            name: 'test ' + (+productId + 2),
+            src: 'https://picsum.photos/200',
+        },
+        {
+            id: +productId + 3,
+            name: 'test ' + (+productId + 3),
+            src: 'https://picsum.photos/200',
+        },
+    ];
+
     return (
         <div className="flex flex-col gap-3 sm:gap-5 md:gap-7 lg:gap-8">
             <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-5 md:gap-7 lg:gap-8">
@@ -65,9 +85,14 @@ const page = ({ params: { productId } }) => {
                 <h3>Related Products</h3>
                 <hr />
                 <div className="flex items-center flex-wrap gap-4 mt-4">
-                    <div className="bg-purple-400 aspect-square w-20 425:w-24 md:w-28 896:w-32 lg:w-36 rounded-lg "></div>
-                    <div className="bg-purple-400 aspect-square w-20 425:w-24 md:w-28 896:w-32 lg:w-36 rounded-lg "></div>
-                    <div className="bg-purple-400 aspect-square w-20 425:w-24 md:w-28 896:w-32 lg:w-36 rounded-lg "></div>
+                    {relatedProducts.map(product => (
+                        <Link
+                            key={product.id}
+                            href={'/dashboard/products/' + product.id}
+                        >
+                            <RelatedPorductBox {...product} />
+                        </Link>
+                    ))}
                 </div>
             </DashboardBox>
         </div>
