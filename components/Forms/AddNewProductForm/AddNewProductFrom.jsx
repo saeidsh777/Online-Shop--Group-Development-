@@ -105,13 +105,13 @@ export default function AddNewProductForm() {
                     <div className="mt-2 relative Input_Label_Dollar">
                         <input
                             id="price"
-                            type="text"
+                            type="number"
                             placeholder="0 $"
                             className="General_Input_1"
                             value={inputs?.price}
                             onChange={e => {
                                 if (justNumberRegex.test(e.target.value)) {
-                                    onChange('price', +e.target.value);
+                                    onChange('price', e.target.value);
                                     onChange('discount', '');
                                     onChange('finalPrice', +e.target.value);
                                 } else {
@@ -154,20 +154,20 @@ export default function AddNewProductForm() {
                         <div className="mt-2">
                             <input
                                 id="discount"
-                                type="text"
+                                type="number"
                                 placeholder="..."
                                 className="General_Input_1"
                                 value={inputs?.discount}
                                 onChange={e => {
                                     if (justNumberRegex.test(e.target.value)) {
-                                        onChange('discount', +e.target.value);
+                                        onChange('discount', e.target.value);
                                         discountHandler(e.target.value);
                                     } else {
                                         if (e.target.value.length == 0) {
                                             onChange('discount', '');
                                             onChange(
                                                 'finalPrice',
-                                                +inputs.price
+                                                inputs.price
                                             );
                                         }
                                     }
@@ -211,10 +211,14 @@ export default function AddNewProductForm() {
                         <span className="ms-4 text-red-300">
                             {inputs.discount
                                 ? inputs.discount < inputs.price
-                                    ? '-' + inputs.discount.toLocaleString()
+                                    ? inputs.discountType === 'Percentage'
+                                        ? '-' +
+                                          (+inputs.price * +inputs.discount) /
+                                              100
+                                        : '-' + inputs.discount.toLocaleString()
                                     : '-' + inputs.price
-                                : 0}{' '}
-                            {inputs.discountType === 'Percentage' ? '% ' : '$'}
+                                : 0}
+                            {' $'}
                         </span>
                     </small>
                 </div>
