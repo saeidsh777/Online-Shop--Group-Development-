@@ -26,14 +26,14 @@ const page = ({ params: { productId } }) => {
         <div className="flex flex-col gap-3 sm:gap-5 md:gap-7 lg:gap-8">
             <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-5 md:gap-7 lg:gap-8">
                 <div className="p-2 md:p-3 lg:p-3.5 bg-[#F3F5F7] w-64 375:w-56 425:w-64 mx-auto sm:mx-0 rounded-lg md:w-[37.5%] flex gap-1.5 md:gap-2 lg:gap-3 sm:flex-col 896:flex-row 896:flex-[0.85] max-w-md">
-                    <div className="bg-slate-400 aspect-square rounded-lg flex-[3]"></div>
-                    <div className="grid grid-rows-3 gap-2 md:gap-3 lg:gap-3.5  sm:grid-cols-3 sm:grid-rows-1 896:grid-cols-1 896:grid-rows-3 flex-1">
+                    <div className="bg-slate-400 rounded-lg flex-[4.5] aspect-square"></div>
+                    <div className="grid grid-rows-3 gap-2 md:gap-3 lg:gap-3.5  sm:grid-cols-3 sm:grid-rows-1 896:grid-cols-1 896:grid-rows-3 flex-[1] items-stretch">
                         <div className="bg-slate-400 rounded-lg aspect-square"></div>
                         <div className="bg-slate-400 rounded-lg aspect-square"></div>
                         <div className="bg-slate-400 rounded-lg aspect-square"></div>
                     </div>
                 </div>
-                <div className="sm:flex-1 p-2 425:p-4 md:p-6 flex flex-col gap-4 sm:justify-between 896:justify-around">
+                <div className="sm:flex-1 p-2 425:p-4 md:p-6 flex flex-col gap-4 sm:justify-between 896:justify-around ">
                     <div className="flex flex-col gap-0.5 sm:gap-3">
                         <div className="flex items-center justify-between">
                             <p className="capitalize">name:</p>
