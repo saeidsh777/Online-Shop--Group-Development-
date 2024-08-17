@@ -35,6 +35,7 @@ export default function RegisterForm() {
             resetField('phoneNumber');
             resetField('password');
             toast.success(result.message);
+            localStorage.setItem("token", result.token);
             router.push('/');
         }
 

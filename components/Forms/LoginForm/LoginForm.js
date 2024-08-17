@@ -34,13 +34,14 @@ export default function LoginForm() {
             resetField('phoneNumber');
             resetField('password');
             toast.success(result.message);
+            localStorage.setItem('token', result.token);
             router.push('/');
         }
         if (res.status === 400) {
-            toast.error(result.message);
+            toast.error(result.message + "!");
         }
-        if (res.status === 200) {
-            toast.error(result.message);
+        if (res.status === 401) {
+            toast.error(result.message + '!');
         }
     };
 

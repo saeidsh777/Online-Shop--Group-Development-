@@ -3,4 +3,4 @@ export const emailRegex =
 
 export const phoneNumberRegex = /^09[0-9]{9}$/;
 
-export const justNumberRegex = /^\d*\.?\d*$/;
+export const justNumberRegex = /[\d*\.?\d*]+/;

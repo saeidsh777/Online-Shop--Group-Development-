@@ -33,10 +33,10 @@ export default function AddNewProductForm() {
     const discountHandler = value => {
         // For numeric discountType
         if (inputs.discountType === 'Numerical') {
-            if (inputs.price - value >= 0) {
-                onChange('finalPrice', inputs.price - value);
+            if (inputs.price - +value >= 0) {
+                onChange('finalPrice', +inputs.price - +value);
             } else {
-                onChange('finalPrice', inputs.price - inputs.price);
+                onChange('finalPrice', +inputs.price - +inputs.price);
             }
         }
 
@@ -55,8 +55,18 @@ export default function AddNewProductForm() {
         }
     };
 
-    const submitHandler = () => {};
+    const submitHandler = (e) => {
+        e.preventDefault();
+        const form = new FormData()
+        form.append("title",inputs.name)
+        form.append('description', inputs.description);
+        form.append('price', inputs.price);
+        form.append('category', { "categoryID": "saksal" });
+        form.append("title",inputs.name)
+        form.append('discount', inputs.discount);
 
+        console.log(Object.fromEntries(form));
+    };
     return (
         <form
             className=" grid grid-cols-1 lg:grid-cols-2 gap-3"
@@ -75,7 +85,7 @@ export default function AddNewProductForm() {
                             placeholder="Enter product name"
                             className="General_Input_1"
                             value={inputs?.name}
-                            onChange={e => onChange('name', +e.target.value)}
+                            onChange={e => onChange('name', e.target.value)}
                         />
                     </div>
                 </div>
@@ -90,7 +100,7 @@ export default function AddNewProductForm() {
                             className="General_Input_1 h-[36px]"
                             value={inputs?.category}
                             onChange={e =>
-                                onChange('category', +e.target.value)
+                                onChange('category', e.target.value)
                             }
                         >
                             <option value="-1">Select your category</option>
@@ -105,22 +115,23 @@ export default function AddNewProductForm() {
                     <div className="mt-2 relative Input_Label_Dollar">
                         <input
                             id="price"
-                            type="number"
+                            inputMode='numeric'
+                            type="text"
                             placeholder="0 $"
                             className="General_Input_1"
-                            value={inputs?.price}
+                            value={inputs.price}
                             onChange={e => {
-                                if (justNumberRegex.test(e.target.value)) {
+                                if (justNumberRegex.test(+e.target.value)) {
                                     onChange('price', e.target.value);
                                     onChange('discount', '');
                                     onChange('finalPrice', +e.target.value);
-                                } else {
                                     if (e.target.value.length == 0) {
                                         onChange('price', '');
                                         onChange('discount', '');
                                         onChange('finalPrice', 0);
                                     }
                                 }
+                                
                             }}
                         />
                     </div>
@@ -154,20 +165,20 @@ export default function AddNewProductForm() {
                         <div className="mt-2">
                             <input
                                 id="discount"
-                                type="number"
+                                inputMode='numeric'
+                                type="text"
                                 placeholder="..."
                                 className="General_Input_1"
                                 value={inputs?.discount}
                                 onChange={e => {
-                                    if (justNumberRegex.test(e.target.value)) {
+                                    if (justNumberRegex.test(+e.target.value)) {
                                         onChange('discount', e.target.value);
-                                        discountHandler(e.target.value);
-                                    } else {
+                                        discountHandler(+e.target.value);
                                         if (e.target.value.length == 0) {
                                             onChange('discount', '');
                                             onChange(
                                                 'finalPrice',
-                                                inputs.price
+                                                +inputs.price
                                             );
                                         }
                                     }
@@ -210,13 +221,13 @@ export default function AddNewProductForm() {
                         Discount Price:
                         <span className="ms-4 text-red-300">
                             {inputs.discount
-                                ? inputs.discount < inputs.price
+                                ? +inputs.discount < +inputs.price
                                     ? inputs.discountType === 'Percentage'
                                         ? '-' +
                                           (+inputs.price * +inputs.discount) /
                                               100
-                                        : '-' + inputs.discount.toLocaleString()
-                                    : '-' + inputs.price
+                                        : '-' + +inputs.discount.toLocaleString()
+                                    : '-' + +inputs.price
                                 : 0}
                             {' $'}
                         </span>
