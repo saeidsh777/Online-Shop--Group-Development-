@@ -15,11 +15,11 @@ export default function NewProductProvider({ children }) {
         finalPrice: 0,
     });
 
-    const onChange = (fieldName, value) => {
+    const onChange = (datas) => {
         setInputs(prv => {
             return {
                 ...prv,
-                [fieldName]: value,
+                ...datas,
             };
         });
     };

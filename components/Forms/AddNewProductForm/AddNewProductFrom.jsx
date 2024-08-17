@@ -17,7 +17,7 @@ export default function AddNewProductForm() {
     useEffect(() => {
         const requestHandler = async () => {
             const categories = await getAllCategory();
-            onChange('categories', categories);
+            onChange({ categories });
         };
         requestHandler();
     }, []);
@@ -44,23 +44,22 @@ export default function AddNewProductForm() {
         // For numeric discountType
         if (inputs.discountType === 'Numerical') {
             if (inputs.price - +value >= 0) {
-                onChange('finalPrice', +inputs.price - +value);
+                onChange({ finalPrice: +inputs.price - +value });
             } else {
-                onChange('finalPrice', +inputs.price - +inputs.price);
+                onChange({ finalPrice: +inputs.price - +inputs.price });
             }
         }
 
         // For numeric Percentage
         if (inputs.discountType === 'Percentage') {
             if (value >= 100) {
-                onChange('finalPrice', 0);
+                onChange({ finalPrice: 0 });
             } else if (value <= 0) {
-                onChange('finalPrice', +inputs.price);
+                onChange({ finalPrice: +inputs.price });
             } else {
-                onChange(
-                    'finalPrice',
-                    +inputs.price - (+inputs.price * +value) / 100
-                );
+                onChange({
+                    finalPrice: +inputs.price - (+inputs.price * +value) / 100,
+                });
             }
         }
     };
@@ -84,7 +83,7 @@ export default function AddNewProductForm() {
             method: 'POST',
             headers: {
                 'Content-Type': ' multipart/form-data',
-                "authorization": `Bearer ${token}`,
+                authorization: `Bearer ${token}`,
             },
             body: formFata,
         });
@@ -111,7 +110,7 @@ export default function AddNewProductForm() {
                             placeholder="Enter product name"
                             className="General_Input_1"
                             value={inputs?.name}
-                            onChange={e => onChange('name', e.target.value)}
+                            onChange={e => onChange({ name: e.target.value })}
                         />
                     </div>
                 </div>
@@ -125,7 +124,9 @@ export default function AddNewProductForm() {
                             id="category"
                             className="General_Input_1 h-[36px]"
                             value={inputs?.category}
-                            onChange={e => onChange('category', e.target.value)}
+                            onChange={e =>
+                                onChange({ category: e.target.value })
+                            }
                         >
                             <option value="-1">Select your category</option>
                             {inputs.categories.map(category => (
@@ -153,13 +154,17 @@ export default function AddNewProductForm() {
                             value={inputs.price}
                             onChange={e => {
                                 if (justNumberRegex.test(+e.target.value)) {
-                                    onChange('price', e.target.value);
-                                    onChange('discount', '');
-                                    onChange('finalPrice', +e.target.value);
+                                    onChange({
+                                        price: e.target.value,
+                                        discount: '',
+                                        finalPrice: +e.target.value,
+                                    });
                                     if (e.target.value.length == 0) {
-                                        onChange('price', '');
-                                        onChange('discount', '');
-                                        onChange('finalPrice', 0);
+                                        onChange({
+                                            price: e.target.value,
+                                            discount: '',
+                                            finalPrice: 0,
+                                        });
                                     }
                                 }
                             }}
@@ -177,9 +182,11 @@ export default function AddNewProductForm() {
                                 className="General_Input_1 h-[36px]"
                                 value={inputs?.discountType}
                                 onChange={e => {
-                                    onChange('discountType', e.target.value);
-                                    onChange('discount', '');
-                                    onChange('finalPrice', +inputs.price);
+                                    onChange({
+                                        discountType: e.target.value,
+                                        discount: '',
+                                        finalPrice: +inputs.price,
+                                    });
                                 }}
                             >
                                 <option value="-1">Select type</option>
@@ -202,14 +209,13 @@ export default function AddNewProductForm() {
                                 value={inputs?.discount}
                                 onChange={e => {
                                     if (justNumberRegex.test(+e.target.value)) {
-                                        onChange('discount', e.target.value);
+                                        onChange({ discount: e.target.value });
                                         discountHandler(+e.target.value);
                                         if (e.target.value.length == 0) {
-                                            onChange('discount', '');
-                                            onChange(
-                                                'finalPrice',
-                                                +inputs.price
-                                            );
+                                            onChange({
+                                                discount: '',
+                                                finalPrice: +inputs.price,
+                                            });
                                         }
                                     }
                                 }}
@@ -231,7 +237,7 @@ export default function AddNewProductForm() {
                             type="text"
                             value={inputs?.description}
                             onChange={e =>
-                                onChange('description', e.target.value)
+                                onChange({description: e.target.value})
                             }
                             placeholder="Enter product description ..."
                             className="General_Input_1"
