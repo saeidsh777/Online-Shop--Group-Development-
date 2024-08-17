@@ -1,16 +1,26 @@
 'use client';
 import Image from 'next/image';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
 import { NewProductContext } from '@/contexts/NewProductProvider';
 import { FiUploadCloud } from 'react-icons/fi';
 import { justNumberRegex } from '@/utils/regex';
+import { getAllCategory } from '@/utils/requests';
+import { API_BASE_URL } from '@/utils/constants';
 
 export default function AddNewProductForm() {
     const { inputs, onChange } = useContext(NewProductContext);
     const [dataInputFile, setDataInputFile] = useState([]);
     const productImages = useRef([]);
+
+    useEffect(() => {
+        const requestHandler = async () => {
+            const categories = await getAllCategory();
+            onChange('categories', categories);
+        };
+        requestHandler();
+    }, []);
 
     // Receiving photos from input file and creating a viewable photo
     function readURL(input) {
@@ -55,17 +65,33 @@ export default function AddNewProductForm() {
         }
     };
 
-    const submitHandler = (e) => {
+    const submitHandler = async e => {
         e.preventDefault();
-        const form = new FormData()
-        form.append("title",inputs.name)
-        form.append('description', inputs.description);
-        form.append('price', inputs.price);
-        form.append('category', { "categoryID": "saksal" });
-        form.append("title",inputs.name)
-        form.append('discount', inputs.discount);
 
-        console.log(Object.fromEntries(form));
+        const formFata = new FormData();
+        formFata.append('title', inputs.name);
+        formFata.append('description', inputs.description);
+        formFata.append('price', +inputs.price);
+        formFata.append('category', inputs.category);
+        inputs.discount && formFata.append('discount', +inputs.discount);
+        for (let i = 0; i < dataInputFile.length && i < 4; i++) {
+            formFata.append('images', dataInputFile[i], dataInputFile[i].name);
+        }
+
+        const token = localStorage.getItem('token');
+
+        const res = await fetch(`${API_BASE_URL}/products/create-new-product`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': ' multipart/form-data',
+                "authorization": `Bearer ${token}`,
+            },
+            body: formFata,
+        });
+        const result = await res.json();
+        console.log(res);
+        console.log(result);
+        console.log(formFata);
     };
     return (
         <form
@@ -99,12 +125,17 @@ export default function AddNewProductForm() {
                             id="category"
                             className="General_Input_1 h-[36px]"
                             value={inputs?.category}
-                            onChange={e =>
-                                onChange('category', e.target.value)
-                            }
+                            onChange={e => onChange('category', e.target.value)}
                         >
                             <option value="-1">Select your category</option>
-                            <option value="1">Mobil</option>
+                            {inputs.categories.map(category => (
+                                <option
+                                    key={category?._id}
+                                    value={category?._id}
+                                >
+                                    {category?.title}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </div>
@@ -115,7 +146,7 @@ export default function AddNewProductForm() {
                     <div className="mt-2 relative Input_Label_Dollar">
                         <input
                             id="price"
-                            inputMode='numeric'
+                            inputMode="numeric"
                             type="text"
                             placeholder="0 $"
                             className="General_Input_1"
@@ -131,7 +162,6 @@ export default function AddNewProductForm() {
                                         onChange('finalPrice', 0);
                                     }
                                 }
-                                
                             }}
                         />
                     </div>
@@ -165,7 +195,7 @@ export default function AddNewProductForm() {
                         <div className="mt-2">
                             <input
                                 id="discount"
-                                inputMode='numeric'
+                                inputMode="numeric"
                                 type="text"
                                 placeholder="..."
                                 className="General_Input_1"
@@ -226,7 +256,8 @@ export default function AddNewProductForm() {
                                         ? '-' +
                                           (+inputs.price * +inputs.discount) /
                                               100
-                                        : '-' + +inputs.discount.toLocaleString()
+                                        : '-' +
+                                          +inputs.discount.toLocaleString()
                                     : '-' + +inputs.price
                                 : 0}
                             {' $'}
@@ -257,7 +288,7 @@ export default function AddNewProductForm() {
                                     width={400}
                                     height={400}
                                     alt="product image"
-                                    className="object-fill w-[100%] h-[100%] rounded-lg"
+                                    className="object-cover w-[100%] h-[100%] rounded-lg"
                                 />
                             ) : (
                                 <small className="flex h-full w-full justify-center items-center">
@@ -276,7 +307,7 @@ export default function AddNewProductForm() {
                                         width={400}
                                         height={400}
                                         alt="product image"
-                                        className="object-fill w-[100%] h-[100%] rounded-lg"
+                                        className="object-cover w-[100%] h-[100%] rounded-lg"
                                     />
                                 ) : (
                                     <small className="flex h-full w-full justify-center items-center">
@@ -294,7 +325,7 @@ export default function AddNewProductForm() {
                                         width={400}
                                         height={400}
                                         alt="product image"
-                                        className="object-fill w-[100%] h-[100%] rounded-lg"
+                                        className="object-cover w-[100%] h-[100%] rounded-lg"
                                     />
                                 ) : (
                                     <small className="flex h-full w-full justify-center items-center">
@@ -312,7 +343,7 @@ export default function AddNewProductForm() {
                                         width={400}
                                         height={400}
                                         alt="product image"
-                                        className="object-fill w-[100%] h-[100%] rounded-lg"
+                                        className="object-cover w-[100%] h-[100%] rounded-lg"
                                     />
                                 ) : (
                                     <small className="flex h-full w-full justify-center items-center">

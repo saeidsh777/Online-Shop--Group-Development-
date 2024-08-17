@@ -7,8 +7,10 @@ export default function NewProductProvider({ children }) {
     const [inputs, setInputs] = useState({
         name: '',
         category: '',
+        categories: [],
         price: "",
         discountType: '-1',
+        description:"",
         discount: "",
         finalPrice: 0,
     });
