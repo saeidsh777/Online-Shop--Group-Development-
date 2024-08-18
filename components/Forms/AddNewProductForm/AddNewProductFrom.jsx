@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useContext, useEffect, useRef, useState } from 'react';
+import defaultImage from '../../../public/images/default-image-product.svg';
 
 import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
 import { NewProductContext } from '@/contexts/NewProductProvider';
@@ -11,8 +12,15 @@ import { API_BASE_URL } from '@/utils/constants';
 
 export default function AddNewProductForm() {
     const { inputs, onChange } = useContext(NewProductContext);
-    const [dataInputFile, setDataInputFile] = useState([]);
-    const productImages = useRef([]);
+    const [productImages, setProductImages] = useState({
+        image0: defaultImage,
+        image1: defaultImage,
+        image2: defaultImage,
+        image3: defaultImage,
+        onChange: false,
+    });
+    const dataInputFile = useRef();
+    const productImagesElm = useRef([]);
 
     useEffect(() => {
         const requestHandler = async () => {
@@ -23,20 +31,33 @@ export default function AddNewProductForm() {
     }, []);
 
     // Receiving photos from input file and creating a viewable photo
-    function readURL(input) {
-        if (input.files) {
-            for (let i = 0; i < input.files.length && i < 4; i++) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    productImages.current[i].setAttribute(
-                        'src',
-                        e.target.result
-                    );
-                };
-
-                reader.readAsDataURL(input.files[i]);
+    function readURL() {
+        let cachedURL = [];
+        const uplodedfiles = [...dataInputFile.current.files];
+        uplodedfiles.forEach(file => cachedURL.push(URL.createObjectURL(file)));
+        for (let i = 0; i < 4; i++) {
+            if (i < uplodedfiles.length) {
+                setProductImages(prv => {
+                    return {
+                        ...prv,
+                        ['image' + i]: cachedURL[i],
+                    };
+                });
+            } else {
+                setProductImages(prv => {
+                    return {
+                        ...prv,
+                        ['image' + i]: defaultImage,
+                    };
+                });
             }
         }
+        setProductImages(prv => {
+            return {
+                ...prv,
+                onChange: true,
+            };
+        });
     }
 
     // Product discount calculation
@@ -67,30 +88,37 @@ export default function AddNewProductForm() {
     const submitHandler = async e => {
         e.preventDefault();
 
-        const formFata = new FormData();
-        formFata.append('title', inputs.name);
-        formFata.append('description', inputs.description);
-        formFata.append('price', +inputs.price);
-        formFata.append('category', inputs.category);
-        inputs.discount && formFata.append('discount', +inputs.discount);
-        for (let i = 0; i < dataInputFile.length && i < 4; i++) {
-            formFata.append('images', dataInputFile[i], dataInputFile[i].name);
+        const formData = new FormData();
+        formData.append('title', inputs.name);
+        formData.append('description', inputs.description);
+        formData.append('price', +inputs.price);
+        formData.append('category', inputs.category);
+        inputs.discount && formData.append('discount', +inputs.discount);
+
+        for (let i = 0; i < dataInputFile.current.files.length; i++) {
+            formData.append(`image${i + 1}`, dataInputFile.current.files[i]);
         }
 
         const token = localStorage.getItem('token');
 
-        const res = await fetch(`${API_BASE_URL}/products/create-new-product`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': ' multipart/form-data',
-                authorization: `Bearer ${token}`,
-            },
-            body: formFata,
-        });
-        const result = await res.json();
-        console.log(res);
-        console.log(result);
-        console.log(formFata);
+        try {
+            const res = await fetch(
+                `${API_BASE_URL}/products/create-new-product`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': ' multipart/form-data',
+                        authorization: `Bearer ${token}`,
+                    },
+                    body: formData,
+                }
+            );
+            const result = await res.json();
+            console.log(res);
+            console.log(result);
+        } catch (err) {
+            console.log(err);
+        }
     };
     return (
         <form
@@ -237,7 +265,7 @@ export default function AddNewProductForm() {
                             type="text"
                             value={inputs?.description}
                             onChange={e =>
-                                onChange({description: e.target.value})
+                                onChange({ description: e.target.value })
                             }
                             placeholder="Enter product description ..."
                             className="General_Input_1"
@@ -285,77 +313,51 @@ export default function AddNewProductForm() {
                 <div className="flex flex-col gap-2 mb-3">
                     <div className="p-2 md:p-3 lg:p-3.5 bg-[#F3F5F7] w-full rounded-lg flex gap-1.5 md:gap-2 lg:gap-3 sm:flex-col 896:flex-row 896:flex-1">
                         <div className="bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2">
-                            {dataInputFile.length ? (
+                            <Image
+                                ref={el => (productImagesElm.current['0'] = el)}
+                                src={productImages.image0}
+                                width={400}
+                                height={400}
+                                alt="product image"
+                                className="object-cover w-[100%] h-[100%] rounded-lg"
+                            />
+                        </div>
+                        <div className="grid grid-rows-3 gap-2 md:gap-3 lg:gap-3.5  sm:grid-cols-3 sm:grid-rows-1 896:grid-cols-1 896:grid-rows-3 flex-1">
+                            <div className="bg-slate-400 rounded-lg aspect-square overflow-hidden p-1 md:p-2">
                                 <Image
                                     ref={el =>
-                                        (productImages.current['0'] = el)
+                                        (productImagesElm.current['1'] = el)
                                     }
-                                    src="/images/default-image-product.svg"
+                                    src={productImages.image1}
                                     width={400}
                                     height={400}
                                     alt="product image"
                                     className="object-cover w-[100%] h-[100%] rounded-lg"
                                 />
-                            ) : (
-                                <small className="flex h-full w-full justify-center items-center">
-                                    No Image
-                                </small>
-                            )}
-                        </div>
-                        <div className="grid grid-rows-3 gap-2 md:gap-3 lg:gap-3.5  sm:grid-cols-3 sm:grid-rows-1 896:grid-cols-1 896:grid-rows-3 flex-1">
-                            <div className="bg-slate-400 rounded-lg aspect-square overflow-hidden p-1 md:p-2">
-                                {dataInputFile.length ? (
-                                    <Image
-                                        ref={el =>
-                                            (productImages.current['1'] = el)
-                                        }
-                                        src="/images/default-image-product.svg"
-                                        width={400}
-                                        height={400}
-                                        alt="product image"
-                                        className="object-cover w-[100%] h-[100%] rounded-lg"
-                                    />
-                                ) : (
-                                    <small className="flex h-full w-full justify-center items-center">
-                                        No Image
-                                    </small>
-                                )}
                             </div>
                             <div className="bg-slate-400 rounded-lg aspect-square overflow-hidden p-1 md:p-2">
-                                {dataInputFile.length ? (
-                                    <Image
-                                        ref={el =>
-                                            (productImages.current['2'] = el)
-                                        }
-                                        src="/images/default-image-product.svg"
-                                        width={400}
-                                        height={400}
-                                        alt="product image"
-                                        className="object-cover w-[100%] h-[100%] rounded-lg"
-                                    />
-                                ) : (
-                                    <small className="flex h-full w-full justify-center items-center">
-                                        No Image
-                                    </small>
-                                )}
+                                <Image
+                                    ref={el =>
+                                        (productImagesElm.current['2'] = el)
+                                    }
+                                    src={productImages.image2}
+                                    width={400}
+                                    height={400}
+                                    alt="product image"
+                                    className="object-cover w-[100%] h-[100%] rounded-lg"
+                                />
                             </div>
                             <div className="bg-slate-400 rounded-lg aspect-square overflow-hidden p-1 md:p-2">
-                                {dataInputFile.length ? (
-                                    <Image
-                                        ref={el =>
-                                            (productImages.current['3'] = el)
-                                        }
-                                        src="/images/default-image-product.svg"
-                                        width={400}
-                                        height={400}
-                                        alt="product image"
-                                        className="object-cover w-[100%] h-[100%] rounded-lg"
-                                    />
-                                ) : (
-                                    <small className="flex h-full w-full justify-center items-center">
-                                        No Image
-                                    </small>
-                                )}
+                                <Image
+                                    ref={el =>
+                                        (productImagesElm.current['3'] = el)
+                                    }
+                                    src={productImages.image3}
+                                    width={400}
+                                    height={400}
+                                    alt="product image"
+                                    className="object-cover w-[100%] h-[100%] rounded-lg"
+                                />
                             </div>
                         </div>
                     </div>
@@ -363,7 +365,7 @@ export default function AddNewProductForm() {
                         <label
                             htmlFor="img"
                             className={`${
-                                dataInputFile.length
+                                productImages.onChange
                                     ? 'bg-gradient-to-r from-sky-50 to-indigo-100'
                                     : 'bg-inherit'
                             } flex w-full py-2 justify-between overflow-hidden bg-gray-200 hover:bg-gray-50 cursor-pointer items-center border border-gray-200 rounded-md`}
@@ -371,7 +373,7 @@ export default function AddNewProductForm() {
                             <div className="w-full flex flex-col items-center justify-center">
                                 <FiUploadCloud className="iconFontSize" />
                                 <p className="text-xs">
-                                    {dataInputFile.length
+                                    {productImages.onChange
                                         ? 'Uploaded File'
                                         : 'No File'}
                                 </p>
@@ -382,9 +384,9 @@ export default function AddNewProductForm() {
                                 className="hidden"
                                 multiple={true}
                                 name="files"
+                                ref={dataInputFile}
                                 onChange={e => {
-                                    readURL(e.target);
-                                    setDataInputFile(e.target.files);
+                                    readURL();
                                 }}
                                 max={4}
                                 accept="image/png, image/jpeg, image/jpg"
