@@ -9,6 +9,7 @@ export const getAllCategory = async () => {
 };
 // Request For Categories ( END )
 
+
 //* Request For Products ( START )
 export const addNewProduct = async formData => {
     try {
@@ -17,7 +18,7 @@ export const addNewProduct = async formData => {
         const res = await fetch(`${API_BASE_URL}/products/create-new-product`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'multipart/form-data;',
                 authorization: `Bearer ${token}`,
             },
             body: formData,
