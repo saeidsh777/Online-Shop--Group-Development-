@@ -1,17 +1,16 @@
 'use client';
 import Image from 'next/image';
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import defaultImage from '../../../public/images/default-image-product.svg';
 
-import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
-import { NewProductContext } from '@/contexts/NewProductProvider';
 import { FiUploadCloud } from 'react-icons/fi';
 import { AiOutlineDelete } from 'react-icons/ai';
+import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
 import { justNumberRegex } from '@/utils/regex';
-import { getAllCategory } from '@/utils/requests';
-import { API_BASE_URL } from '@/utils/constants';
+import { addNewProduct, getAllCategory, getOneProduct } from '@/utils/requests';
+import useProduct from '@/hooks/useProduct';
 
-export default function AddNewProductForm() {
+export default function AddNewProductForm({ init }) {
     const {
         inputs,
         onChange,
@@ -19,16 +18,28 @@ export default function AddNewProductForm() {
         setProductImages,
         images,
         setImages,
-    } = useContext(NewProductContext);
+    } = useProduct();
     const filesInput = useRef();
     const productImagesElm = useRef([]);
 
     useEffect(() => {
-        const requestHandler = async () => {
+        const categoriesRequestHandler = async () => {
             const categories = await getAllCategory();
             onChange({ categories });
         };
-        requestHandler();
+        categoriesRequestHandler();
+
+        if (init.type === 'edit') {
+            const getProductHandler = async () => {
+                const result = await getOneProduct(init.productId);
+                if (result.statusCode === '200') {
+                    console.log(result);
+                } else {
+                    console.log(result);
+                }
+            };
+            getProductHandler();
+        }
     }, []);
 
     useEffect(() => {
@@ -110,25 +121,11 @@ export default function AddNewProductForm() {
             formData.append(`image${i + 1}`, images[i]);
         }
 
-        const token = localStorage.getItem('token');
-
-        try {
-            const res = await fetch(
-                `${API_BASE_URL}/products/create-new-product`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        authorization: `Bearer ${token}`,
-                    },
-                    body: formData,
-                }
-            );
-            const result = await res.json();
-            console.log(res);
-            console.log(result);
-        } catch (err) {
-            console.log(err);
+        const result = await addNewProduct(formData);
+        if (result.statusCode === 201) {
+            console.log('created new product');
+        } else {
+            console.log(result.message);
         }
     };
     return (
