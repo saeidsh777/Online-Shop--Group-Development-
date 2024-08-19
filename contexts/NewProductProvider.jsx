@@ -1,5 +1,6 @@
 'use client';
 import { createContext, useState } from 'react';
+import defaultImage from '../public/images/default-image-product.svg';
 
 export const NewProductContext = createContext({});
 
@@ -8,14 +9,23 @@ export default function NewProductProvider({ children }) {
         name: '',
         category: '',
         categories: [],
-        price: "",
+        price: '',
         discountType: '-1',
-        description:"",
-        discount: "",
+        description: '',
+        discount: '',
         finalPrice: 0,
     });
 
-    const onChange = (datas) => {
+    const [productImages, setProductImages] = useState({
+        image0: defaultImage,
+        image1: defaultImage,
+        image2: defaultImage,
+        image3: defaultImage,
+    });
+
+    const [images, setImages] = useState([]);
+
+    const onChange = datas => {
         setInputs(prv => {
             return {
                 ...prv,
@@ -27,7 +37,10 @@ export default function NewProductProvider({ children }) {
     const contextValue = {
         inputs,
         onChange,
-        setInputs,
+        productImages,
+        setProductImages,
+        images,
+        setImages,
     };
 
     return (
