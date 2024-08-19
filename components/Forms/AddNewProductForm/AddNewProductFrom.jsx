@@ -31,6 +31,10 @@ export default function AddNewProductForm() {
         requestHandler();
     }, []);
 
+    useEffect(() => {
+        readURL();
+    }, [images]);
+
     // Receiving photos from input file and creating a viewable photo
     function readURL() {
         let cachedURL = [];
@@ -53,16 +57,7 @@ export default function AddNewProductForm() {
                 });
             }
         }
-        setProductImages(prv => {
-            return {
-                ...prv,
-                onChange: true,
-            };
-        });
     }
-    useEffect(() => {
-        readURL();
-    }, [images]);
 
     // Product discount calculation
     const discountHandler = value => {
@@ -90,12 +85,10 @@ export default function AddNewProductForm() {
     };
 
     const addImageHandler = files => {
-        if (images.length < 5) {
+        if (images.length < 4) {
             setImages(prv => {
                 return [...prv, ...files];
             });
-        } else {
-            console.log('full size');
         }
     };
 
@@ -116,6 +109,7 @@ export default function AddNewProductForm() {
         for (let i = 0; i < images.length; i++) {
             formData.append(`image${i + 1}`, images[i]);
         }
+
         const token = localStorage.getItem('token');
 
         try {
