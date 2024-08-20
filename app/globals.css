@@ -16,36 +16,36 @@
     }
 
     /** Inputs Styles Start **/
-    .Auth_Input{
-        @apply block w-full px-3 py-3 rounded-md border-0 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-300 sm:text-sm sm:leading-6
+    .Auth_Input {
+        @apply block w-full px-3 py-3 rounded-md border-0 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-300 sm:text-sm sm:leading-6;
     }
 
-    .General_Input_1{
-        @apply block bg-white hover:ring-blue-400 w-full p-2 rounded-md border-0 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-400 placeholder:text-gray-400 focus-visible:ring-blue-400 focus-visible:outline focus-visible:outline-blue-50 sm:text-sm sm:leading-6
+    .General_Input_1 {
+        @apply block bg-white hover:ring-blue-400 w-full p-2 rounded-md border-0 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-400 placeholder:text-gray-400 focus-visible:ring-blue-400 focus-visible:outline focus-visible:outline-blue-50 sm:text-sm sm:leading-6;
     }
-    .General_Input_1:disabled{
-        @apply bg-gray-200 hover:ring-gray-400
+    .General_Input_1:disabled {
+        @apply bg-gray-200 hover:ring-gray-400;
     }
-    
-    .Input_Label_Dollar::before{
+
+    .Input_Label_Dollar::before {
         position: absolute;
-        content: "$";
-        top: .1rem;
-        right: .1rem;
-        background-color:#e5e7eb ;
+        content: '$';
+        top: 0.1rem;
+        right: 0.1rem;
+        background-color: #e5e7eb;
         height: 90%;
         width: 2rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 0 .3rem .3rem 0;
-        -webkit-border-radius: 0 .3rem .3rem 0;
-        -moz-border-radius: 0 .3rem .3rem 0;
-        -ms-border-radius: 0 .3rem .3rem 0;
-        -o-border-radius: 0 .3rem .3rem 0;
-}
+        border-radius: 0 0.3rem 0.3rem 0;
+        -webkit-border-radius: 0 0.3rem 0.3rem 0;
+        -moz-border-radius: 0 0.3rem 0.3rem 0;
+        -ms-border-radius: 0 0.3rem 0.3rem 0;
+        -o-border-radius: 0 0.3rem 0.3rem 0;
+    }
     /* Inputs Styles END */
-    
+
     /* change sidebar flow */
     @media screen and (min-width: 1152px) {
         .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoContainer {
@@ -58,7 +58,38 @@
         }
 
         .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-linktext {
-            max-width: 0;
+            @apply max-h-0 overflow-y-hidden absolute left-[95%]  transition-all duration-300;
+        }
+
+        .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-linktext .text {
+            @apply bg-white rounded-lg shadow-lg text-center w-44 p-2.5;
+        }
+
+        .leftArrow {
+            position: absolute;
+            top: 50%; /* At the bottom of the tooltip */
+            left: -15%;
+            margin-top: -15px;
+            border-width: 15px;
+            border-style: solid;
+            border-color: transparent white transparent transparent;
+        }
+
+        .Dashboard_Sidebar:not(.active)
+            .group:hover
+            .Dashboard_Sidebar-linktext {
+            @apply duration-300 max-h-96 p-5;
+        }
+
+        .Dashboard_Sidebar.active .Dashboard_Sidebar-linktext {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+        }
+
+        .Dashboard_Sidebar.active .Dashboard_Sidebar-linktext .leftArrow {
+            display: none;
         }
 
         .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-linkSection {
