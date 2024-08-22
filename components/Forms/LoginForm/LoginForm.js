@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
-import { API_BASE_URL } from '@/utils/constants';
+import { API_BASE_URL, optionsHookForm } from '@/utils/constants';
 
 export default function LoginForm() {
     const router = useRouter();
@@ -34,13 +34,14 @@ export default function LoginForm() {
             resetField('phoneNumber');
             resetField('password');
             toast.success(result.message);
+            localStorage.setItem('token', result.token);
             router.push('/');
         }
         if (res.status === 400) {
-            toast.error(result.message);
+            toast.error(result.message + '!');
         }
-        if (res.status === 200) {
-            toast.error(result.message);
+        if (res.status === 401) {
+            toast.error(result.message + '!');
         }
     };
 
@@ -82,32 +83,36 @@ export default function LoginForm() {
                                     Phone number
                                 </label>
                                 <AuthInput
-                                    type="phoneNumber"
-                                    register={register}
+                                    type="text"
+                                    name="phoneNumber"
+                                    register={{
+                                        ...register(
+                                            'phoneNumber',
+                                            optionsHookForm.phoneNumber
+                                        ),
+                                    }}
                                     errors={errors}
                                 />
                             </div>
 
                             <div>
-                                <div className="flex items-center justify-between">
+                                <div>
                                     <label
                                         htmlFor="password"
                                         className="block text-sm font-medium leading-6 text-gray-500"
                                     >
                                         Password
                                     </label>
-                                    <div className="text-sm">
-                                        <a
-                                            href="#"
-                                            className="font-semibold text-blue-500 hover:text-blue-700"
-                                        >
-                                            Forgot password?
-                                        </a>
-                                    </div>
                                 </div>
                                 <AuthInput
                                     type="password"
-                                    register={register}
+                                    name="password"
+                                    register={{
+                                        ...register(
+                                            'password',
+                                            optionsHookForm.password
+                                        ),
+                                    }}
                                     errors={errors}
                                 />
                             </div>

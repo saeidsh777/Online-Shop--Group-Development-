@@ -22,6 +22,7 @@ export default function RootLayout({ children }) {
                     fonts +
                     ' max-425:text-xs 425:text-sm md:text-base lg:text-lg 1152:text-xl'
                 }
+                suppressHydrationWarning={true}
             >
                 {children}
             </body>

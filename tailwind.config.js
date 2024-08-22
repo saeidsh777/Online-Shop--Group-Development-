@@ -19,6 +19,7 @@ module.exports = {
                 dashboard: {
                     bg: '#F8F9FA',
                     text: '#5b6b79',
+                    title: 'rgb(29, 38, 48)',
                     sidebar: {
                         textActive: '#4680ff',
                         hover: 'rgb(243, 245, 247)',
@@ -33,6 +34,8 @@ module.exports = {
                 320: '320px',
                 375: '375px',
                 425: '425px',
+                // md < 896px < lg
+                896: '896px',
                 // lg < 1152px < xl
                 1152: '1152px',
             },

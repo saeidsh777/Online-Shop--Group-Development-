@@ -7,11 +7,10 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
-import { API_BASE_URL } from '@/utils/constants';
+import { API_BASE_URL, optionsHookForm } from '@/utils/constants';
 
 export default function RegisterForm() {
-
-    const router = useRouter()
+    const router = useRouter();
 
     const {
         register,
@@ -19,7 +18,6 @@ export default function RegisterForm() {
         handleSubmit,
         formState: { errors },
     } = useForm();
-
 
     const onSubmit = async data => {
         const res = await fetch(`${API_BASE_URL}/auth/signup`, {
@@ -37,7 +35,8 @@ export default function RegisterForm() {
             resetField('phoneNumber');
             resetField('password');
             toast.success(result.message);
-            router.push("/")
+            localStorage.setItem("token", result.token);
+            router.push('/');
         }
 
         if (res.status === 400) {
@@ -48,6 +47,7 @@ export default function RegisterForm() {
             toast.error(result.message + '!');
         }
     };
+
 
     return (
         <>
@@ -87,8 +87,14 @@ export default function RegisterForm() {
                                     Your Name
                                 </label>
                                 <AuthInput
-                                    type="name"
-                                    register={register}
+                                    type="text"
+                                    name="name"
+                                    register={{
+                                        ...register(
+                                            'name',
+                                            optionsHookForm.name
+                                        ),
+                                    }}
                                     errors={errors}
                                 />
                             </div>
@@ -101,8 +107,14 @@ export default function RegisterForm() {
                                     Email address
                                 </label>
                                 <AuthInput
-                                    type="email"
-                                    register={register}
+                                    type="text"
+                                    name="email"
+                                    register={{
+                                        ...register(
+                                            'email',
+                                            optionsHookForm.email
+                                        ),
+                                    }}
                                     errors={errors}
                                 />
                             </div>
@@ -115,32 +127,36 @@ export default function RegisterForm() {
                                     Phone Number
                                 </label>
                                 <AuthInput
-                                    type="phoneNumber"
-                                    register={register}
+                                    type="text"
+                                    name="phoneNumber"
+                                    register={{
+                                        ...register(
+                                            'phoneNumber',
+                                            optionsHookForm.phoneNumber
+                                        ),
+                                    }}
                                     errors={errors}
                                 />
                             </div>
 
                             <div>
-                                <div className="flex items-center justify-between">
+                                <div>
                                     <label
                                         htmlFor="password"
                                         className="block text-sm font-medium leading-6 text-gray-500"
                                     >
                                         Password
                                     </label>
-                                    <div className="text-sm">
-                                        <a
-                                            href="#"
-                                            className="font-semibold text-blue-500 hover:text-blue-700"
-                                        >
-                                            Forgot password?
-                                        </a>
-                                    </div>
                                 </div>
                                 <AuthInput
                                     type="password"
-                                    register={register}
+                                    name='password'
+                                    register={{
+                                        ...register(
+                                            'password',
+                                            optionsHookForm.password
+                                        ),
+                                    }}
                                     errors={errors}
                                 />
                             </div>
