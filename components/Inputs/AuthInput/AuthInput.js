@@ -1,12 +1,12 @@
 import InputValidationError from '@/components/Alert/InputValidationError/InputValidationError';
 
-export default function AuthInput({ register, type, errors }) {
+export default function AuthInput({ register, ...props }) {
     return (
         <div className="mt-2 relative">
-            <input type={type} {...register} className="Auth_Input" />
-            {errors.email && (
+            <input {...register} className="Auth_Input" {...props} />
+            {props.errors[props.name] && (
                 <InputValidationError
-                    title={errors.email.message}
+                    title={props.errors[props.name].message}
                     textColorClassName="text-red-500"
                 />
             )}

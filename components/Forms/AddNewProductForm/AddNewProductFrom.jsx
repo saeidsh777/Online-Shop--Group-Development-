@@ -7,8 +7,9 @@ import { FiUploadCloud } from 'react-icons/fi';
 import { AiOutlineDelete } from 'react-icons/ai';
 import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
 import { justNumberRegex } from '@/utils/regex';
-import { addNewProduct, getAllCategory, getOneProduct } from '@/utils/requests';
 import useProduct from '@/hooks/useProduct';
+import { getAllCategory } from '@/services/categories';
+import { addNewProduct, getOneProduct } from '@/services/product';
 
 export default function AddNewProductForm({ init }) {
     const {
@@ -24,8 +25,8 @@ export default function AddNewProductForm({ init }) {
 
     useEffect(() => {
         const categoriesRequestHandler = async () => {
-            const categories = await getAllCategory();
-            onChange({ categories });
+            const { res, result } = await getAllCategory();
+            res.status === 200 && onChange({ categories: result });
         };
         categoriesRequestHandler();
 
@@ -118,12 +119,15 @@ export default function AddNewProductForm({ init }) {
         formData.append('category', inputs.category);
         inputs.discount && formData.append('discount', +inputs.discount);
         for (let i = 0; i < images.length; i++) {
-            formData.append(`image${i + 1}`, images[i]);
+            formData.append(`images`, images[i]);
         }
 
-        const result = await addNewProduct(formData);
-        if (result.statusCode === 201) {
+        const { res, result, err } = await addNewProduct(formData);
+
+        if (res.status === 201) {
             console.log('created new product');
+        } else if (res.status === 500) {
+            console.log(err);
         } else {
             console.log(result.message);
         }

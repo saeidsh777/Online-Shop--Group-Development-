@@ -1,4 +1,4 @@
-import { emailRegex, phoneNumberRegex } from "./regex";
+import { emailRegex, phoneNumberRegex } from './regex';
 
 export const API_BASE_URL = 'http://localhost:3000';
 
@@ -22,11 +22,17 @@ export const optionsHookForm = {
 
     name: {
         required: 'Enter more than 5 characters',
-        minLength: 5,
+        minLength: {
+            value: 5,
+            message: 'Enter more than 5 characters',
+        },
     },
 
     password: {
         required: 'Enter more than 8 characters',
-        minLength: 8,
+        minLength: {
+            value: 8,
+            message: 'Enter more than 8 characters',
+        },
     },
 };

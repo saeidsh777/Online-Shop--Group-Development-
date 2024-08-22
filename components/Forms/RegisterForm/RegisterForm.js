@@ -88,6 +88,7 @@ export default function RegisterForm() {
                                 </label>
                                 <AuthInput
                                     type="text"
+                                    name="name"
                                     register={{
                                         ...register(
                                             'name',
@@ -107,6 +108,7 @@ export default function RegisterForm() {
                                 </label>
                                 <AuthInput
                                     type="text"
+                                    name="email"
                                     register={{
                                         ...register(
                                             'email',
@@ -126,6 +128,7 @@ export default function RegisterForm() {
                                 </label>
                                 <AuthInput
                                     type="text"
+                                    name="phoneNumber"
                                     register={{
                                         ...register(
                                             'phoneNumber',
@@ -137,24 +140,17 @@ export default function RegisterForm() {
                             </div>
 
                             <div>
-                                <div className="flex items-center justify-between">
+                                <div>
                                     <label
                                         htmlFor="password"
                                         className="block text-sm font-medium leading-6 text-gray-500"
                                     >
                                         Password
                                     </label>
-                                    <div className="text-sm">
-                                        <a
-                                            href="#"
-                                            className="font-semibold text-blue-500 hover:text-blue-700"
-                                        >
-                                            Forgot password?
-                                        </a>
-                                    </div>
                                 </div>
                                 <AuthInput
                                     type="password"
+                                    name='password'
                                     register={{
                                         ...register(
                                             'password',
