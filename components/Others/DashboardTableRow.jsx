@@ -21,7 +21,10 @@ const DashboardTableRow = props => {
         >
             <td class="p-4">{index + 1}</td>
             <td class="p-4">
-                <div className="flex items-center gap-4">
+                <Link
+                    href={'/dashboard/products/' + id}
+                    className="flex items-center gap-4"
+                >
                     <div className="aspect-square w-8 rounded-lg overflow-hidden">
                         <Image
                             src={imgSrc}
@@ -31,7 +34,7 @@ const DashboardTableRow = props => {
                         />
                     </div>
                     <p>{name}</p>
-                </div>
+                </Link>
             </td>
             <td class="p-4 capitalize">{category}</td>
             <td class="p-4">{price}$</td>
