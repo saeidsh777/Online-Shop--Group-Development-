@@ -16,12 +16,12 @@ const DashboardTableRow = props => {
 
     return (
         <tr
-            class={`hover:bg-gray-50 text-dashboard-text ${
+            className={`hover:bg-gray-50 text-dashboard-text ${
                 !borderB ? 'border-b' : ''
             }`}
         >
-            <td class="p-4">{index + 1}</td>
-            <td class="p-4">
+            <td className="p-4">{index + 1}</td>
+            <td className="p-4">
                 <div className="flex items-center gap-4">
                     <div className="aspect-square w-8 rounded-lg overflow-hidden">
                         <Image
@@ -34,10 +34,10 @@ const DashboardTableRow = props => {
                     <p>{name}</p>
                 </div>
             </td>
-            <td class="p-4 capitalize">{category}</td>
-            <td class="p-4">{price}$</td>
-            <td class="p-4">{discount}%</td>
-            <td class="p-4">
+            <td className="p-4 capitalize">{category}</td>
+            <td className="p-4">{price}$</td>
+            <td className="p-4">{discount}%</td>
+            <td className="p-4">
                 <div className="flex justify-center items-center gap-1.5">
                     <Link href={'/dashboard/products/' + id}>
                         <ActionIcon type={'view'}>
