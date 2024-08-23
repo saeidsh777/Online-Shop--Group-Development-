@@ -76,7 +76,10 @@ const DetailProductPage = ({ params: { productId } }) => {
                     </div>
                     <div className="ml-auto flex items-center gap-1 sm:gap-2 896:gap-3">
                         <DashboardBTN>Edit</DashboardBTN>
-                        <DeleteWrapper>
+                        <DeleteWrapper
+                            url="/products/delete-product/"
+                            id={productId}
+                        >
                             <DashboardBTN colorClasses="bg-red-600 hover:bg-red-500 text-white focus-visible:outline-red-600 ">
                                 Delete
                             </DashboardBTN>

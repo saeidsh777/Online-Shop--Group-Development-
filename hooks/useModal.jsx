@@ -3,16 +3,33 @@
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import { ModalContext } from '@/contexts/ModalProvider';
+import { API_BASE_URL } from '@/utils/constants';
 import { useContext } from 'react';
 import { FaXmark } from 'react-icons/fa6';
 
-export const DeleteWrapper = ({ children, name }) => {
+export const DeleteWrapper = ({ children, name, url, id }) => {
     const { setDeleteModal } = useModal();
+
+    // consider to move this in modal component
+    const DeleteItemHandler = close => {
+        console.log('url=> ' + API_BASE_URL + url + id);
+        // const response = await fetch(API_BASE_URL + url + id);
+        // if (response.ok) {
+        //     // toaast success
+
+        //     return;
+        // }
+
+        // toast error
+
+        // ------------- close modal
+        close();
+    };
 
     return (
         <div
             onClick={() => {
-                setDeleteModal(name);
+                setDeleteModal(name, DeleteItemHandler);
             }}
         >
             {children}
@@ -23,7 +40,7 @@ export const DeleteWrapper = ({ children, name }) => {
 const useModal = () => {
     const { CloseModal, setModal } = useContext(ModalContext);
 
-    const setDeleteModal = name => {
+    const setDeleteModal = (name, DeleteFunc) => {
         const Layout = (
             <DashboardBox className="max-w-md lg:max-w-lg lg:gap-6 flex flex-col gap-5 shadow-md">
                 <div>
@@ -45,7 +62,12 @@ const useModal = () => {
                     >
                         Cancel
                     </DashboardBTN>
-                    <DashboardBTN colorClasses="bg-red-600 hover:bg-red-500 text-white focus-visible:outline-red-600 ">
+                    <DashboardBTN
+                        onClick={() => {
+                            DeleteFunc(CloseModal);
+                        }}
+                        colorClasses="bg-red-600 hover:bg-red-500 text-white focus-visible:outline-red-600 "
+                    >
                         Delete
                     </DashboardBTN>
                 </div>
