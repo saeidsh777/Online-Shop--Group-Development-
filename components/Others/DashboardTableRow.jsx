@@ -1,3 +1,4 @@
+import { DeleteWrapper } from '@/hooks/useModal';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,12 +16,12 @@ const DashboardTableRow = props => {
 
     return (
         <tr
-            class={`hover:bg-gray-50 text-dashboard-text ${
+            className={`hover:bg-gray-50 text-dashboard-text ${
                 !borderB ? 'border-b' : ''
             }`}
         >
-            <td class="p-4">{index + 1}</td>
-            <td class="p-4">
+            <td className="p-4">{index + 1}</td>
+            <td className="p-4">
                 <Link
                     href={'/dashboard/products/' + id}
                     className="flex items-center gap-4"
@@ -36,10 +37,10 @@ const DashboardTableRow = props => {
                     <p>{name}</p>
                 </Link>
             </td>
-            <td class="p-4 capitalize">{category}</td>
-            <td class="p-4">{price}$</td>
-            <td class="p-4">{discount}%</td>
-            <td class="p-4">
+            <td className="p-4 capitalize">{category}</td>
+            <td className="p-4">{price}$</td>
+            <td className="p-4">{discount}%</td>
+            <td className="p-4">
                 <div className="flex justify-center items-center gap-1.5">
                     <Link href={'/dashboard/products/' + id}>
                         <ActionIcon type={'view'}>
@@ -79,14 +80,16 @@ const DashboardTableRow = props => {
                             strokeLinejoin="round"
                         ></path>
                     </ActionIcon>
-                    <ActionIcon type={'delete'}>
-                        <path
-                            d="M21 5.98c-3.33-.33-6.68-.5-10.02-.5-1.98 0-3.96.1-5.94.3L3 5.98M8.5 4.97l.22-1.31C8.88 2.71 9 2 10.69 2h2.62c1.69 0 1.82.75 1.97 1.67l.22 1.3M18.85 9.14l-.65 10.07C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5h3.33M9.5 12.5h5"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        ></path>
-                    </ActionIcon>
+                    <DeleteWrapper name={name}>
+                        <ActionIcon type={'delete'}>
+                            <path
+                                d="M21 5.98c-3.33-.33-6.68-.5-10.02-.5-1.98 0-3.96.1-5.94.3L3 5.98M8.5 4.97l.22-1.31C8.88 2.71 9 2 10.69 2h2.62c1.69 0 1.82.75 1.97 1.67l.22 1.3M18.85 9.14l-.65 10.07C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5h3.33M9.5 12.5h5"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            ></path>
+                        </ActionIcon>
+                    </DeleteWrapper>
                 </div>
             </td>
         </tr>

@@ -41,26 +41,26 @@ const page = () => {
                         </DashboardBTN>
                     </Link>
                 </div>
-                <div class="relative overflow-x-auto rounded-lg shadow-sm">
-                    <table class="w-full text-center">
-                        <thead class="uppercase bg-gray-100 text-[68%] text-dashboard-title/85 font-medium border-b">
+                <div className="relative overflow-x-auto rounded-lg shadow-sm">
+                    <table className="w-full text-center">
+                        <thead className="uppercase bg-gray-100 text-[68%] text-dashboard-title/85 font-medium border-b">
                             <tr>
-                                <th scope="col" class="px-6 py-3 border-r">
+                                <th scope="col" className="px-6 py-3 border-r">
                                     <span>#</span>
                                 </th>
-                                <th scope="col" class="px-10 py-3 border-x">
+                                <th scope="col" className="px-10 py-3 border-x">
                                     product
                                 </th>
-                                <th scope="col" class="px-6 py-3 border-x">
+                                <th scope="col" className="px-6 py-3 border-x">
                                     Category
                                 </th>
-                                <th scope="col" class="px-6 py-3 border-x">
+                                <th scope="col" className="px-6 py-3 border-x">
                                     Price
                                 </th>
-                                <th scope="col" class="px-6 py-3 border-x">
+                                <th scope="col" className="px-6 py-3 border-x">
                                     Discount
                                 </th>
-                                <th scope="col" class="px-6 py-3 border-l">
+                                <th scope="col" className="px-6 py-3 border-l">
                                     Actions
                                 </th>
                             </tr>
