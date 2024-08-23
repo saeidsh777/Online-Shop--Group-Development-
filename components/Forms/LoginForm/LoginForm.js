@@ -38,7 +38,7 @@ export default function LoginForm() {
             router.push('/');
         }
         if (res.status === 400) {
-            toast.error(result.message + "!");
+            toast.error(result.message + '!');
         }
         if (res.status === 401) {
             toast.error(result.message + '!');
@@ -84,6 +84,7 @@ export default function LoginForm() {
                                 </label>
                                 <AuthInput
                                     type="text"
+                                    name="phoneNumber"
                                     register={{
                                         ...register(
                                             'phoneNumber',
@@ -95,24 +96,17 @@ export default function LoginForm() {
                             </div>
 
                             <div>
-                                <div className="flex items-center justify-between">
+                                <div>
                                     <label
                                         htmlFor="password"
                                         className="block text-sm font-medium leading-6 text-gray-500"
                                     >
                                         Password
                                     </label>
-                                    <div className="text-sm">
-                                        <a
-                                            href="#"
-                                            className="font-semibold text-blue-500 hover:text-blue-700"
-                                        >
-                                            Forgot password?
-                                        </a>
-                                    </div>
                                 </div>
                                 <AuthInput
                                     type="password"
+                                    name="password"
                                     register={{
                                         ...register(
                                             'password',
