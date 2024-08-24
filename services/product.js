@@ -1,6 +1,6 @@
 import { API_BASE_URL } from '@/utils/constants';
 
-export const addNewProduct = async formData => {
+export const addNewProduct = async formDataGenarator => {
     try {
         const token = localStorage.getItem('token');
 
@@ -9,8 +9,30 @@ export const addNewProduct = async formData => {
             headers: {
                 authorization: `Bearer ${token}`,
             },
-            body: formData,
+            body: formDataGenarator(),
         });
+        const result = await res.json();
+
+        return { res, result };
+    } catch (err) {
+        return err;
+    }
+};
+
+export const editProduct = async (formDataGenarator, productId) => {
+    try {
+        const token = localStorage.getItem('token');
+
+        const res = await fetch(
+            `${API_BASE_URL}/products/update-product/${productId}`,
+            {
+                method: 'PATCH',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+                body: formDataGenarator(),
+            }
+        );
         const result = await res.json();
 
         return { res, result };

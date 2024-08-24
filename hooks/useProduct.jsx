@@ -23,6 +23,8 @@ export default function useProduct() {
 
     const [images, setImages] = useState([]);
 
+    const [editMode, setEditMode] = useState(false);
+
     const onChange = datas => {
         setInputs(prv => {
             return {
@@ -32,6 +34,22 @@ export default function useProduct() {
         });
     };
 
+    const formDataGenarator = () => {
+        const formData = new FormData();
+        formData.append('title', inputs.name);
+        formData.append('description', inputs.description);
+        formData.append('price', +inputs.price);
+        formData.append('category', inputs.category);
+        inputs.discount && formData.append('discount', +inputs.discount);
+        if (images.length > 0) {
+            console.log(images);
+            for (let i = 0; i < images.length; i++) {
+                formData.append(`images`, images[i]);
+            }
+        }
+        return formData;
+    };
+
     return {
         inputs,
         onChange,
@@ -39,5 +57,8 @@ export default function useProduct() {
         setProductImages,
         images,
         setImages,
+        editMode,
+        setEditMode,
+        formDataGenarator,
     };
 }
