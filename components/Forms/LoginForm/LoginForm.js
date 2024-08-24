@@ -1,14 +1,14 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import toast, { Toaster } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
-import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 import { API_BASE_URL, optionsHookForm } from '@/utils/constants';
+import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
+import AuthInput from '../../Inputs/AuthInput/AuthInput';
 
 export default function LoginForm() {
     const router = useRouter();
@@ -123,36 +123,6 @@ export default function LoginForm() {
                         </form>
                     </div>
                 </div>
-                <Toaster
-                    toastOptions={{
-                        success: {
-                            style: {
-                                background: '#dcfce7',
-                                color: '#15803d',
-                                fontSize: '.8rem',
-                                padding: '1rem',
-                                border: '1px solid #4ade80',
-                            },
-                            iconTheme: {
-                                primary: '#4ade80',
-                                secondary: '#15803d',
-                            },
-                        },
-                        error: {
-                            style: {
-                                background: '#fee2e2',
-                                color: '#f87171',
-                                fontSize: '.8rem',
-                                padding: '1rem',
-                                border: '1px solid #fca5a5',
-                            },
-                            iconTheme: {
-                                primary: '#f87171',
-                                secondary: '#dc2626',
-                            },
-                        },
-                    }}
-                />
             </div>
         </>
     );

@@ -3,11 +3,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import toast, { Toaster } from 'react-hot-toast';
-import { useForm } from 'react-hook-form';
-import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 import { API_BASE_URL, optionsHookForm } from '@/utils/constants';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
+import AuthInput from '../../Inputs/AuthInput/AuthInput';
 
 export default function RegisterForm() {
     const router = useRouter();
@@ -35,7 +35,7 @@ export default function RegisterForm() {
             resetField('phoneNumber');
             resetField('password');
             toast.success(result.message);
-            localStorage.setItem("token", result.token);
+            localStorage.setItem('token', result.token);
             router.push('/');
         }
 
@@ -47,7 +47,6 @@ export default function RegisterForm() {
             toast.error(result.message + '!');
         }
     };
-
 
     return (
         <>
@@ -150,7 +149,7 @@ export default function RegisterForm() {
                                 </div>
                                 <AuthInput
                                     type="password"
-                                    name='password'
+                                    name="password"
                                     register={{
                                         ...register(
                                             'password',
@@ -167,36 +166,6 @@ export default function RegisterForm() {
                         </form>
                     </div>
                 </div>
-                <Toaster
-                    toastOptions={{
-                        success: {
-                            style: {
-                                background: '#dcfce7',
-                                color: '#15803d',
-                                fontSize: '.8rem',
-                                padding: '1rem',
-                                border: '1px solid #4ade80',
-                            },
-                            iconTheme: {
-                                primary: '#4ade80',
-                                secondary: '#15803d',
-                            },
-                        },
-                        error: {
-                            style: {
-                                background: '#fee2e2',
-                                color: '#f87171',
-                                fontSize: '.8rem',
-                                padding: '1rem',
-                                border: '1px solid #fca5a5',
-                            },
-                            iconTheme: {
-                                primary: '#f87171',
-                                secondary: '#dc2626',
-                            },
-                        },
-                    }}
-                />
             </div>
         </>
     );
