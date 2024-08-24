@@ -6,9 +6,10 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import { API_BASE_URL, optionsHookForm } from '@/utils/constants';
+import { optionsHookForm } from '@/utils/constants';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
+import { login } from '@/services/auth';
 
 export default function LoginForm() {
     const router = useRouter();
@@ -21,14 +22,7 @@ export default function LoginForm() {
     } = useForm();
 
     const onSubmit = async data => {
-        const res = await fetch(`${API_BASE_URL}/auth/login`, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({ ...data }),
-        });
-        const result = await res.json();
+        const { res, result, err } = await login(data);
 
         if (res.status === 200) {
             resetField('phoneNumber');
@@ -36,11 +30,9 @@ export default function LoginForm() {
             toast.success(result.message);
             localStorage.setItem('token', result.token);
             router.push('/');
-        }
-        if (res.status === 400) {
-            toast.error(result.message + '!');
-        }
-        if (res.status === 401) {
+        } else if (res.status === 500) {
+            toast.error(err + '!');
+        } else {
             toast.error(result.message + '!');
         }
     };
