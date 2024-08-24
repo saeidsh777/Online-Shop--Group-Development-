@@ -1,6 +1,7 @@
 import { Inter, Roboto } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
+import { toastOptions } from '@/configs/toastOptions';
 
 const inter = Inter({ subsets: ['latin'] });
 const roboto = Roboto({
@@ -27,34 +28,7 @@ export default function RootLayout({ children }) {
             >
                 {children}
                 <Toaster
-                    toastOptions={{
-                        success: {
-                            style: {
-                                background: '#dcfce7',
-                                color: '#15803d',
-                                fontSize: '.8rem',
-                                padding: '1rem',
-                                border: '1px solid #4ade80',
-                            },
-                            iconTheme: {
-                                primary: '#4ade80',
-                                secondary: '#15803d',
-                            },
-                        },
-                        error: {
-                            style: {
-                                background: '#fee2e2',
-                                color: '#f87171',
-                                fontSize: '.8rem',
-                                padding: '1rem',
-                                border: '1px solid #fca5a5',
-                            },
-                            iconTheme: {
-                                primary: '#f87171',
-                                secondary: '#dc2626',
-                            },
-                        },
-                    }}
+                    toastOptions={toastOptions}
                 />
             </body>
         </html>
