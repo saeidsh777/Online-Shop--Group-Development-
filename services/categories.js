@@ -7,12 +7,13 @@ export const getAllCategory = async () => {
     return { res, result };
 };
 
-export const addCategory = async (title, Token) => {
+export const addCategory = async (title, token) => {
     const response = await fetch(API_BASE_URL + '/categories/create', {
         method: 'POST',
-        body: { title },
+        body: JSON.stringify({ title }),
         headers: {
-            authorization: `Bearer ${Token}`,
+            authorization: `Bearer ${token}`,
+            'content-type': 'application/json',
         },
     });
 
