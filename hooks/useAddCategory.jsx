@@ -2,7 +2,7 @@ import { addCategory as postCategory } from '@/services/categories';
 import toast from 'react-hot-toast';
 
 const useAddCategory = () => {
-    const AddCategory = async (title, onSuccess) => {
+    const AddCategory = async (title, onSuccess, onError) => {
         const Token = localStorage.getItem('token');
 
         if (!Token) {
@@ -16,6 +16,7 @@ const useAddCategory = () => {
             onSuccess();
             return;
         }
+        onError();
 
         // show error message with toast
         const { message } = await response.json();

@@ -8,11 +8,13 @@ import toast from 'react-hot-toast';
 
 const AddNewCategoryForm = () => {
     const inputRef = useRef(null);
+    const buttonRef = useRef(null);
     const AddCategory = useAddCategory();
 
     const formAction = event => {
         event.preventDefault();
         const title = inputRef.current.value;
+        buttonRef.current.disabled = true;
 
         // check title
         if (!title) return;
@@ -23,11 +25,16 @@ const AddNewCategoryForm = () => {
             return;
         }
 
-        const resetInputHandler = () => {
-            inputRef.current.value = '';
+        const activeButtonHandler = () => {
+            buttonRef.current.disabled = false;
         };
 
-        AddCategory(title, resetInputHandler);
+        const onSuccess = () => {
+            inputRef.current.value = '';
+            activeButtonHandler();
+        };
+
+        AddCategory(title, onSuccess, activeButtonHandler);
     };
     return (
         <form
@@ -40,7 +47,12 @@ const AddNewCategoryForm = () => {
                 name="name"
                 ref={inputRef}
             />
-            <DashboardBTN className="ml-auto">Add</DashboardBTN>
+            <DashboardBTN
+                ref={buttonRef}
+                className="ml-auto disabled:bg-blue-400 disabled:cursor-wait"
+            >
+                Add
+            </DashboardBTN>
         </form>
     );
 };
