@@ -9,7 +9,9 @@ import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
 import { justNumberRegex } from '@/utils/regex';
 import useProduct from '@/hooks/useProduct';
 import { getAllCategory } from '@/services/categories';
-import { addNewProduct, getOneProduct } from '@/services/product';
+import { addNewProduct, editProduct, getOneProduct } from '@/services/product';
+import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
+import toast from 'react-hot-toast';
 
 export default function AddNewProductForm({ init }) {
     const {
@@ -19,6 +21,9 @@ export default function AddNewProductForm({ init }) {
         setProductImages,
         images,
         setImages,
+        editMode,
+        setEditMode,
+        formDataGenarator,
     } = useProduct();
     const filesInput = useRef();
     const productImagesElm = useRef([]);
@@ -32,9 +37,29 @@ export default function AddNewProductForm({ init }) {
 
         if (init.type === 'edit') {
             const getProductHandler = async () => {
-                const result = await getOneProduct(init.productId);
-                if (result.statusCode === '200') {
-                    console.log(result);
+                const { res, result } = await getOneProduct(init.productId);
+                if (res.status === 200) {
+                    onChange({
+                        name: result.title,
+                        category: result.category.id,
+                        discount:
+                            result.discount === 0
+                                ? ''
+                                : String(result.discount),
+                        discountType:
+                            result.discount === 0 ? '-1' : 'Numerical',
+                        price: result.price,
+                        description: result.description,
+                        finalPrice: result.price - result.discount,
+                    });
+                    result.images.forEach((image, index) => {
+                        setProductImages(prv => {
+                            return {
+                                ...prv,
+                                ['image' + index]: '/' + image,
+                            };
+                        });
+                    });
                 } else {
                     console.log(result);
                 }
@@ -97,11 +122,16 @@ export default function AddNewProductForm({ init }) {
     };
 
     const addImageHandler = files => {
-        if (images.length < 4) {
-            setImages(prv => {
-                return [...prv, ...files];
+        const indexEnd = 4 - images.length;
+
+        indexEnd !== 0 &&
+            [...files].splice(0, indexEnd).forEach(file => {
+                if (images.length < 4) {
+                    setImages(prv => {
+                        return [...prv, file];
+                    });
+                }
             });
-        }
     };
 
     const deleteImageHandler = imageIndex => {
@@ -112,24 +142,46 @@ export default function AddNewProductForm({ init }) {
     const submitHandler = async e => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append('title', inputs.name);
-        formData.append('description', inputs.description);
-        formData.append('price', +inputs.price);
-        formData.append('category', inputs.category);
-        inputs.discount && formData.append('discount', +inputs.discount);
-        for (let i = 0; i < images.length; i++) {
-            formData.append(`images`, images[i]);
-        }
-
-        const { res, result, err } = await addNewProduct(formData);
-
-        if (res.status === 201) {
-            console.log('created new product');
-        } else if (res.status === 500) {
-            console.log(err);
-        } else {
-            console.log(result.message);
+        if (init.type === 'new') {
+            const { res, result, err } = await addNewProduct(formDataGenarator);
+            if (res.status === 201) {
+                onChange({
+                    name: '',
+                    category: '',
+                    price: '',
+                    discountType: '-1',
+                    description: '',
+                    discount: '',
+                    finalPrice: 0,
+                });
+                setImages([]);
+                setProductImages({
+                    image0: defaultImage,
+                    image1: defaultImage,
+                    image2: defaultImage,
+                    image3: defaultImage,
+                });
+                filesInput.current = '';
+                productImagesElm.current = [];
+                toast.success('Created New Product');
+            } else if (res.status === 500) {
+                toast.error(err.message + '!');
+            } else {
+                toast.error(result.message + '!');
+            }
+        } else if (init.type === 'edit') {
+            const { res, result, err } = await editProduct(
+                formDataGenarator,
+                init.productId
+            );
+            if (res.status === 201) {
+                setEditMode(false);
+                toast.success('Edit Product Successfully');
+            } else if (res.status === 500) {
+                toast.error(err.message + '!');
+            } else {
+                toast.error(result.message + '!');
+            }
         }
     };
     return (
@@ -150,6 +202,13 @@ export default function AddNewProductForm({ init }) {
                             placeholder="Enter product name"
                             className="General_Input_1"
                             value={inputs?.name}
+                            disabled={
+                                init.type === 'edit'
+                                    ? editMode === false
+                                        ? true
+                                        : false
+                                    : false
+                            }
                             onChange={e => onChange({ name: e.target.value })}
                         />
                     </div>
@@ -164,6 +223,13 @@ export default function AddNewProductForm({ init }) {
                             id="category"
                             className="General_Input_1 h-[36px]"
                             value={inputs?.category}
+                            disabled={
+                                init.type === 'edit'
+                                    ? editMode === false
+                                        ? true
+                                        : false
+                                    : false
+                            }
                             onChange={e =>
                                 onChange({ category: e.target.value })
                             }
@@ -189,6 +255,13 @@ export default function AddNewProductForm({ init }) {
                             id="price"
                             inputMode="numeric"
                             type="text"
+                            disabled={
+                                init.type === 'edit'
+                                    ? editMode === false
+                                        ? true
+                                        : false
+                                    : false
+                            }
                             placeholder="0 $"
                             className="General_Input_1"
                             value={inputs.price}
@@ -221,6 +294,13 @@ export default function AddNewProductForm({ init }) {
                                 id="discountType"
                                 className="General_Input_1 h-[36px]"
                                 value={inputs?.discountType}
+                                disabled={
+                                    init.type === 'edit'
+                                        ? editMode === false
+                                            ? true
+                                            : false
+                                        : false
+                                }
                                 onChange={e => {
                                     onChange({
                                         discountType: e.target.value,
@@ -260,7 +340,13 @@ export default function AddNewProductForm({ init }) {
                                     }
                                 }}
                                 disabled={
-                                    inputs?.discountType == '-1' ? true : false
+                                    init.type === 'edit'
+                                        ? editMode === false
+                                            ? true
+                                            : false
+                                        : inputs?.discountType == '-1'
+                                        ? true
+                                        : false
                                 }
                             />
                         </div>
@@ -275,6 +361,13 @@ export default function AddNewProductForm({ init }) {
                             rows={8}
                             id="description"
                             type="text"
+                            disabled={
+                                init.type === 'edit'
+                                    ? editMode === false
+                                        ? true
+                                        : false
+                                    : false
+                            }
                             value={inputs?.description}
                             onChange={e =>
                                 onChange({ description: e.target.value })
@@ -325,7 +418,7 @@ export default function AddNewProductForm({ init }) {
                 <div className="flex flex-col gap-2 mb-3">
                     <div className="p-2 md:p-3 lg:p-3.5 bg-[#F3F5F7] w-full rounded-lg flex gap-1.5 md:gap-2 lg:gap-3 sm:flex-col 896:flex-row 896:flex-1">
                         <div
-                            className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
+                            className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 ${
                                 !images[0] && 'flex justify-center items-center'
                             }`}
                         >
@@ -352,7 +445,7 @@ export default function AddNewProductForm({ init }) {
                         </div>
                         <div className="grid grid-rows-3 gap-2 md:gap-3 lg:gap-3.5  sm:grid-cols-3 sm:grid-rows-1 896:grid-cols-1 896:grid-rows-3 flex-1">
                             <div
-                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
+                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 ${
                                     !images[1] &&
                                     'flex justify-center items-center'
                                 }`}
@@ -381,7 +474,7 @@ export default function AddNewProductForm({ init }) {
                                 )}
                             </div>
                             <div
-                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
+                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 ${
                                     !images[2] &&
                                     'flex justify-center items-center'
                                 }`}
@@ -410,7 +503,7 @@ export default function AddNewProductForm({ init }) {
                                 )}
                             </div>
                             <div
-                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
+                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 ${
                                     !images[3] &&
                                     'flex justify-center items-center'
                                 }`}
@@ -464,17 +557,41 @@ export default function AddNewProductForm({ init }) {
                                 multiple={true}
                                 name="files"
                                 ref={filesInput}
+                                disabled={
+                                    init.type === 'edit'
+                                        ? editMode
+                                            ? false
+                                            : true
+                                        : false
+                                }
                                 onChange={e => {
                                     addImageHandler(e.target.files);
                                 }}
-                                max={4}
                                 accept="image/png, image/jpeg, image/jpg"
                             />
                         </label>
                     </div>
                 </div>
-
-                <SubmitBtn title="Create Product" />
+                {init.type === 'edit' ? (
+                    <>
+                        {editMode ? (
+                            <div className="flex items-center gap-3">
+                                <SubmitBtn
+                                    title="Cancel"
+                                    className="bg-gray-400 hover:bg-gray-500"
+                                    onClick={() => setEditMode(false)}
+                                />
+                                <SubmitBtn title="Save" />
+                            </div>
+                        ) : (
+                            <DashboardBTN onClick={() => setEditMode(true)}>
+                                Edit
+                            </DashboardBTN>
+                        )}
+                    </>
+                ) : (
+                    <SubmitBtn title="Create Product" />
+                )}
             </div>
         </form>
     );

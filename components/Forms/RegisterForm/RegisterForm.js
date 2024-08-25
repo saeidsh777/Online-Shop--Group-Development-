@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { API_BASE_URL, optionsHookForm } from '@/utils/constants';
+import { optionsHookForm } from '@/utils/constants';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
+import { registerAuth } from '@/services/auth';
 
 export default function RegisterForm() {
     const router = useRouter();
@@ -20,14 +21,7 @@ export default function RegisterForm() {
     } = useForm();
 
     const onSubmit = async data => {
-        const res = await fetch(`${API_BASE_URL}/auth/signup`, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({ ...data }),
-        });
-        const result = await res.json();
+        const { res, result, err } = await registerAuth(data);
 
         if (res.status === 201) {
             resetField('name');
@@ -37,13 +31,9 @@ export default function RegisterForm() {
             toast.success(result.message);
             localStorage.setItem('token', result.token);
             router.push('/');
-        }
-
-        if (res.status === 400) {
-            toast.error(result.message + '!');
-        }
-
-        if (res.status === 401) {
+        } else if (res.status === 500) {
+            toast.error(err + '!');
+        } else {
             toast.error(result.message + '!');
         }
     };

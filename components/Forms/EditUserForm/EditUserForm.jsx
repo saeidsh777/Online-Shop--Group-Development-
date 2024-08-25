@@ -18,7 +18,6 @@ export default function EditUserForm() {
         reset,
         handleSubmit,
         formState: { errors },
-        formState,
     } = useForm({
         defaultValues: {
             name: 'Loading Name...',
