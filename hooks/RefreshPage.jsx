@@ -13,7 +13,7 @@ const RefreshPage = () => {
                 {'=> '}
                 <Link
                     href="/dashboard"
-                    className="font-bold underline underline-offset-auto hover:no-underline"
+                    className="font-bold underline underline-offset-auto hover:no-underline text-blue-600"
                 >
                     Go Home
                 </Link>
@@ -24,7 +24,7 @@ const RefreshPage = () => {
             href={{
                 query: 'tryRefresh',
             }}
-            className="font-bold underline underline-offset-auto hover:no-underline"
+            className="font-bold underline underline-offset-auto hover:no-underline  text-blue-600"
         >
             Refresh
         </Link>
