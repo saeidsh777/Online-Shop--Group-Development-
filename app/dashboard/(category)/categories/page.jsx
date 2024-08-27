@@ -1,3 +1,4 @@
+import CategoryBox from '@/components/Boxes/CategoryBox';
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
@@ -25,8 +26,25 @@ const page = () => {
                         </DashboardBTN>
                     </Link>
                 </div>
-                <div className="relative rounded-lg shadow-sm bg-dashboard-text/10 p-2">
-                    hello
+                <div className="flex flex-col gap-2 425:gap-2.5 sm:gap-3 896:gap-3.5">
+                    <CategoryBox name="Mobile">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing
+                        elit. Nobis praesentium quod odit voluptates
+                        accusantium, natus ab fugiat blanditiis? Voluptates,
+                        est.
+                    </CategoryBox>
+                    <CategoryBox name="Laptop">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing
+                        elit. Nobis praesentium quod odit voluptates
+                        accusantium, natus ab fugiat blanditiis? Voluptates,
+                        est.
+                    </CategoryBox>
+                    <CategoryBox name="chicken">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing
+                        elit. Nobis praesentium quod odit voluptates
+                        accusantium, natus ab fugiat blanditiis? Voluptates,
+                        est.
+                    </CategoryBox>
                 </div>
             </DashboardBox>
         </div>

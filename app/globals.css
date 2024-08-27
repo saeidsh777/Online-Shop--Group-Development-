@@ -20,7 +20,7 @@
         @apply block w-full px-3 py-3 rounded-md border-0 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-300 sm:text-sm sm:leading-6;
     }
     .Auth_Input:disabled {
-        @apply text-gray-300 ring-gray-200
+        @apply text-gray-300 ring-gray-200;
     }
 
     .General_Input_1 {
@@ -48,6 +48,28 @@
         -o-border-radius: 0 0.3rem 0.3rem 0;
     }
     /* Inputs Styles END */
+
+    /* Category box START */
+    .categroyLable:has(~ input:checked) {
+        padding-bottom: 4px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .categroyLable:has(~ input:checked) svg {
+        transform: rotate(90deg);
+    }
+
+    .categroy .categoryBody {
+        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .categroy:has(input:checked) .categoryBody {
+        max-height: 10rem;
+        border: 1px solid rgb(243 244 246);
+        border-top: 0;
+        background-color: transparent;
+    }
+    /* Category box END */
 
     /* change sidebar flow */
     @media screen and (min-width: 1152px) {
