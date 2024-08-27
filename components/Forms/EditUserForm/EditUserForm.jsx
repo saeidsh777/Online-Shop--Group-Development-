@@ -140,7 +140,13 @@ export default function EditUserForm() {
                         </DashboardBTN>
                     </div>
                 ) : (
-                    <DashboardBTN onClick={() => setEditMode(true)}>
+                    <DashboardBTN
+                        onClick={() => setEditMode(true)}
+                        disabled={
+                            Object.keys(userData).length === 0 ? true : false
+                        }
+                        className="disabled:bg-gray-300"
+                    >
                         Edit
                     </DashboardBTN>
                 )}
