@@ -7,7 +7,7 @@ import RefreshPage from '@/hooks/RefreshPage';
 import { getAllProducts } from '@/services/product';
 import Link from 'next/link';
 
-const ProductsListPage = async () => {
+const ProductListPage = async () => {
     const { result: Data, res: response } = await getAllProducts();
 
     return (
@@ -85,7 +85,7 @@ const ProductsListPage = async () => {
                                                 // check for last item (to remove border-b)
                                                 // true means no border-b
                                                 borderB={
-                                                    products.length - 1 ===
+                                                    Data.length - 1 ===
                                                     index
                                                 }
                                             />
@@ -122,4 +122,4 @@ const ProductsListPage = async () => {
         </div>
     );
 };
-export default ProductsListPage;
+export default ProductListPage;
