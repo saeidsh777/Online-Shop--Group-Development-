@@ -6,7 +6,7 @@ import { optionsHookForm } from '@/utils/constants';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
+ 
 export default function EditUserForm() {
     const searchParams = useSearchParams();
     const userEmail = searchParams.get('email');
