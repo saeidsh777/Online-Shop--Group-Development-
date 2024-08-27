@@ -2,10 +2,10 @@ import DashboardBox from '@/components/Boxes/DashboardBox';
 import RelatedPorductBox from '@/components/Boxes/RelatedPorductBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import { DeleteWrapper } from '@/hooks/useModal';
-import { getOneProduct } from '@/services/product';
+// import { getOneProduct } from '@/services/product';
 import Link from 'next/link';
 
-const DetailProductPage = async ({ params: { productId } }) => {
+const DetailProductPage = ({ params: { productId } }) => {
     const relatedProducts = [
         {
             id: +productId + 1,
@@ -24,7 +24,7 @@ const DetailProductPage = async ({ params: { productId } }) => {
         },
     ];
 
-    const { res, result } = await getOneProduct(productId);
+    // const { res, result } = await getOneProduct(productId);
 
     return (
         <div className="flex flex-col gap-3 sm:gap-5 md:gap-7 lg:gap-8">
