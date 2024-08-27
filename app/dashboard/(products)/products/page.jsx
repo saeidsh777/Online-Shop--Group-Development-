@@ -15,7 +15,7 @@ const ProductsListPage = async () => {
             <SectionTitel title={'List of products'} />
             <DashboardBox>
                 {response.ok ? (
-                    !Data.length ? (
+                    Data.length ? (
                         <>
                             <div className="flex sm:items-center justify-between mb-6 flex-col gap-1.5 sm:flex-row">
                                 <div className="w-full max-w-xs 896:max-w-sm">
