@@ -8,7 +8,19 @@ import { getAllProducts } from '@/services/product';
 import Link from 'next/link';
 
 const ProductListPage = async () => {
-    const { result: Data, res: response } = await getAllProducts();
+    const result = await getAllProducts();
+
+    if (result === 'error')
+        return (
+            <div>
+                <h3 className="text-center font-medium text-[120%] mb-5">
+                    Oops something went wrong!{' '}
+                </h3>
+                <RefreshPage />
+            </div>
+        );
+
+    const { result: Data, res: response } = result;
 
     return (
         <div>
@@ -85,8 +97,7 @@ const ProductListPage = async () => {
                                                 // check for last item (to remove border-b)
                                                 // true means no border-b
                                                 borderB={
-                                                    Data.length - 1 ===
-                                                    index
+                                                    Data.length - 1 === index
                                                 }
                                             />
                                         ))}
