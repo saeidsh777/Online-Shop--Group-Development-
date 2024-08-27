@@ -12,10 +12,10 @@ const ProductsListPage = async () => {
 
     return (
         <div>
-            <SectionTitel title={'Product List'} />
+            <SectionTitel title={'List of products'} />
             <DashboardBox>
                 {response.ok ? (
-                    Data.length ? (
+                    !Data.length ? (
                         <>
                             <div className="flex sm:items-center justify-between mb-6 flex-col gap-1.5 sm:flex-row">
                                 <div className="w-full max-w-xs 896:max-w-sm">
@@ -24,7 +24,11 @@ const ProductsListPage = async () => {
                                         placeholder="Search..."
                                     />
                                 </div>
-                                <Link href={'/dashboard/add-new-product'}>
+
+                                <Link
+                                    href={'/dashboard/add-new-product'}
+                                    className="w-fit"
+                                >
                                     <DashboardBTN paddingClasses="p-2 sm:px-3 md:py-2.5">
                                         <p className="pr-2.5">+</p>Add Product
                                     </DashboardBTN>
