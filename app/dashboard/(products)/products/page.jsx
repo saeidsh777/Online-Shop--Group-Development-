@@ -85,7 +85,7 @@ const ProductsListPage = async () => {
                                                 // check for last item (to remove border-b)
                                                 // true means no border-b
                                                 borderB={
-                                                    products.length - 1 ===
+                                                    product.length - 1 ===
                                                     index
                                                 }
                                             />
