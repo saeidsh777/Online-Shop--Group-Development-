@@ -49,7 +49,7 @@ export const getOneProduct = async productId => {
 };
 
 export const getAllProducts = async () => {
-    const res = await fetch(`${API_BASE_URL}/products`);
+    const res = await fetch(`${API_BASE_URL}/products`,{cache:"no-store"});
     const result = await res.json();
 
     console.log('helllo-------------------------------------------');
