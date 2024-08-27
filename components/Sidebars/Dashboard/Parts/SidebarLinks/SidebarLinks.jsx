@@ -1,5 +1,5 @@
 import { BsBox } from 'react-icons/bs';
-import { MdOutlineAddBox } from 'react-icons/md';
+import { MdOutlineAddBox, MdOutlineCategory } from 'react-icons/md';
 import { TbCategoryPlus, TbGraph, TbListDetails } from 'react-icons/tb';
 import SidebarLink from './Components/SidebarLink';
 import SidebarLinkSection from './Components/SidebarLinkSection';
@@ -14,7 +14,7 @@ const SidebarLinks = () => {
                 <SidebarLink href={'/add-new-product'} text={'Add product'}>
                     <MdOutlineAddBox />
                 </SidebarLink>
-                <SidebarLink href={'/products'} text={'Products list'}>
+                <SidebarLink href={'/products'} text={'Product list'}>
                     <TbListDetails />
                 </SidebarLink>
                 <SidebarLink href={'/products/12'} text={'Product page'}>
@@ -24,6 +24,9 @@ const SidebarLinks = () => {
             <SidebarLinkSection title={'category'}>
                 <SidebarLink href={'/add-new-category'} text={'Add category'}>
                     <TbCategoryPlus />
+                </SidebarLink>
+                <SidebarLink href={'/categories'} text={'Category list'}>
+                    <MdOutlineCategory />
                 </SidebarLink>
             </SidebarLinkSection>
         </div>
