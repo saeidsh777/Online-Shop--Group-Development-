@@ -8,6 +8,7 @@ import useAddCategory from '@/hooks/useAddCategory';
 import { useReducer, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import {
+    CiCircleMinus,
     CiCircleMore,
     CiCirclePlus,
     CiCircleRemove,
@@ -71,11 +72,12 @@ const AddNewCategoryForm = () => {
                     name="name"
                     ref={inputRef}
                 />
-                <div className="w-1/3 425:w-3/12 md:w-1/5">
+                <div className="w-[45%] 425:w-1/3 md:w-1/4">
                     <button className="flex items-center m-auto  justify-center gap-2 text-dashboard-sidebar-textActive border rounded-lg transition-all duration-300 border-transparent hover:border-dashboard-sidebar-textActive hover:py-2 hover:px-1 425:hover:py-2.5 sm:hover:py-3 lg:hover:py-3.5 sm:hover:px-2 md:hover:px-2.5 lg:hover:px-3">
                         <CiCirclePlus className="iconFontSize" /> Add field
                     </button>
                     <button className="flex items-center m-auto  justify-center gap-2 text-red-500 border rounded-lg transition-all duration-300 border-transparent hover:border-red-500 hover:py-2 hover:px-1 425:hover:py-2.5 sm:hover:py-3 lg:hover:py-3.5 sm:hover:px-2 md:hover:px-2.5 lg:hover:px-3">
+                        <CiCircleMinus className="iconFontSize" />
                         Remove fields
                     </button>
                 </div>
