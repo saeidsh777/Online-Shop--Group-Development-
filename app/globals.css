@@ -47,6 +47,11 @@
         -ms-border-radius: 0 0.3rem 0.3rem 0;
         -o-border-radius: 0 0.3rem 0.3rem 0;
     }
+
+    .showRingsOnlyOnFocus:not(:focus) {
+        box-shadow: none;
+        border: none;
+    }
     /* Inputs Styles END */
 
     /* Category box START */

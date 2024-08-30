@@ -91,7 +91,7 @@ const AddNewCategoryForm = () => {
                         <tr className="flex items-center border-b pb-1">
                             <td className="px-1 py-0.5 flex-[2.6] 425:flex-[2.6] md:flex-1  flex items-center justify-center">
                                 <DashboardInput
-                                    className="p-2 sm:p-2.5 lg:p-3 lg:px-5 1152:px-6 1152:py-5 flex-1 ring-0 shadow-none text-center "
+                                    className="p-2 sm:p-2.5 lg:p-3 lg:px-5 1152:px-6 1152:py-5 flex-1 text-center showRingsOnlyOnFocus"
                                     placeholder="Field name..."
                                     name="name"
                                     ref={inputRef}
