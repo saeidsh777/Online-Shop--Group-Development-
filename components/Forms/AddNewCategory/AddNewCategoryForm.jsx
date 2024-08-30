@@ -3,11 +3,19 @@
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
+import Tooltip from '@/components/Others/Tooltip';
 import useAddCategory from '@/hooks/useAddCategory';
 import { useReducer, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import { CiCirclePlus, CiSquarePlus } from 'react-icons/ci';
+import {
+    CiCircleMore,
+    CiCirclePlus,
+    CiCircleRemove,
+    CiEraser,
+    CiSquarePlus,
+} from 'react-icons/ci';
 import { MdCheckBoxOutlineBlank, MdOutlineCheckBox } from 'react-icons/md';
+import { RxEraser, RxReset } from 'react-icons/rx';
 
 const reducerFunc = (state, action) => {
     switch (action.type) {
@@ -85,10 +93,13 @@ const AddNewCategoryForm = () => {
                             <th className="px-1 py-0.5 flex-1 max-w-16  425:max-w-20 lg:max-w-24 xl:max-w-28">
                                 Optional
                             </th>
+                            <th className="px-1 py-0.5 flex-1 max-w-16  425:max-w-20 lg:max-w-24 xl:max-w-28 max-sm:hidden">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
                     <tbody className="flex flex-col gap-2 mt-2">
-                        <tr className="flex items-center border-b pb-1">
+                        <tr className="flex items-center sm:border-b sm:pb-1">
                             <td className="px-1 py-0.5 flex-[2.6] 425:flex-[2.6] md:flex-1  flex items-center justify-center">
                                 <DashboardInput
                                     className="p-2 sm:p-2.5 lg:p-3 lg:px-5 1152:px-6 1152:py-5 flex-1 text-center showRingsOnlyOnFocus"
@@ -100,7 +111,7 @@ const AddNewCategoryForm = () => {
                             <td className="px-1 py-0.5 flex-[1.4] 425:flex-[1.6] md:flex-[0.75]  flex items-center justify-center">
                                 <div className="flex flex-wrap gap-1">
                                     <p className="whitespace-nowrap flex items-center cursor-pointer text-dashboard-sidebar-textActive grow">
-                                        <CiSquarePlus className="iconFontSize" />{' '}
+                                        <CiSquarePlus className="iconFontSize" />
                                         Tag
                                     </p>
                                 </div>
@@ -113,7 +124,7 @@ const AddNewCategoryForm = () => {
                                     {isChecked ? (
                                         <MdOutlineCheckBox className="iconFontSize text-dashboard-sidebar-textActive" />
                                     ) : (
-                                        <MdCheckBoxOutlineBlank className="iconFontSize text-dashboard-title/20" />
+                                        <MdCheckBoxOutlineBlank className="iconFontSize text-dashboard-text/50" />
                                     )}
                                 </label>
                                 <input
@@ -126,68 +137,43 @@ const AddNewCategoryForm = () => {
                                     }}
                                 />
                             </td>
+                            <td className="px-1 py-0.5 flex-1 max-w-16  425:max-w-20 lg:max-w-24 xl:max-w-28 flex items-center gap-1.5 justify-center max-sm:hidden border-l-2">
+                                <Tooltip text={'Remove'}>
+                                    <RxEraser className="iconFontSize text-dashboard-text/60 hover:text-dashboard-text transition-colors duration-300 cursor-pointer" />
+                                </Tooltip>
+                                <Tooltip text={'Reset'}>
+                                    <RxReset className="iconFontSize text-dashboard-text/60 hover:text-dashboard-text transition-colors duration-300 cursor-pointer" />
+                                </Tooltip>
+                            </td>
+                        </tr>
+                        <tr className="border-b pb-1 sm:hidden">
+                            <td
+                                colSpan={3}
+                                className="flex items-center justify-between mt-4"
+                            >
+                                <p className="font-semibold">Field actions:</p>
+                                <button className="flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors duration-300">
+                                    <CiCircleRemove className="iconFontSize" />
+                                    Remove
+                                </button>
+                                <button className="flex items-center gap-1.5 text-gray-500 hover:text-gray-600 transition-colors duration-300">
+                                    <CiEraser className="iconFontSize" />
+                                    Reset
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colSpan={3} className="text-center pt-3">
                                 <button className="flex items-center m-auto  justify-center gap-2 text-dashboard-sidebar-textActive/80 transition-colors duration-300  hover:text-dashboard-sidebar-textActive">
-                                    <CiCirclePlus className="iconFontSize" />{' '}
-                                    Add more
+                                    <CiCircleMore className="iconFontSize" />{' '}
+                                    Add more field
                                 </button>
                             </td>
                         </tr>
                     </tfoot>
                 </table>
-                {/* <div className="flex justify-between gap-1.5">
-                    <div className="px-1 py-0.5 flex-1 max-w-72">
-                        <div className="flex justify-center w-full mb-1">
-                            <p>Name</p>
-                        </div>
-                        <DashboardInput
-                            className="p-2 sm:p-2.5 lg:p-3 lg:px-5 1152:px-6 1152:py-5"
-                            placeholder="Field name..."
-                            name="name"
-                            ref={inputRef}
-                        />
-                    </div>
-                    <div className="px-1 py-0.5 max-w-[30%]">
-                        <div className="flex justify-center w-full mb-1">
-                            <p>Tags</p>
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                            <p className="whitespace-nowrap flex items-center cursor-pointer text-dashboard-sidebar-textActive grow">
-                                <CiSquarePlus className="iconFontSize" /> Tag
-                            </p>
-                        </div>
-                    </div>
-                    <div className="px-1 py-0.5 w-fit flex flex-col items-center">
-                        <div className="flex justify-center w-full mb-1">
-                            <label htmlFor="optionalFild">Optional</label>
-                        </div>
-                        <div>
-                            <label
-                                htmlFor="optionalFild"
-                                className="cursor-pointer"
-                            >
-                                {isChecked ? (
-                                    <MdOutlineCheckBox className="iconFontSize text-dashboard-sidebar-textActive" />
-                                ) : (
-                                    <MdCheckBoxOutlineBlank className="iconFontSize text-dashboard-title/20" />
-                                )}
-                            </label>
-                            <input
-                                type="checkbox"
-                                id="optionalFild"
-                                value={isChecked}
-                                className="hidden"
-                                onChange={e => {
-                                    setChecked(e.target.checked);
-                                }}
-                            />
-                        </div>
-                    </div>
-                </div> */}
             </DashboardBox>
             <DashboardBTN
                 ref={buttonRef}
