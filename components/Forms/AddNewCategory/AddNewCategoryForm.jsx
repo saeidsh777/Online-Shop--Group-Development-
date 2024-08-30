@@ -3,108 +3,17 @@
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
 import useAddCategory from '@/hooks/useAddCategory';
-import { useCallback, useReducer, useRef } from 'react';
+import useField from '@/hooks/useField';
+import { useRef } from 'react';
 import toast from 'react-hot-toast';
 import FieldButton from './Components/FieldButton/FieldButton';
 import FieldsBox from './Components/FieldsBox';
-
-const reducerFunc = (state, action) => {
-    switch (action.type) {
-        case 'ADD_FIELD':
-            const newField = {
-                id: new Date().getTime(),
-                name: '',
-                isOptional: false,
-                tags: [],
-            };
-            return [...state, newField];
-        case 'REMOVE_FIELDS':
-            return [];
-        case 'REMOVE_FIELD':
-            return state.filter(field => field.id !== action.payload);
-        case 'CHANGE_NAME':
-            return state.map(field => {
-                if (field.id === action.payload.id) {
-                    field.name = action.payload.value;
-                }
-                return field;
-            });
-        case 'CHANGE_OPTIONAL_STATUS':
-            return state.map(field => {
-                if (field.id === action.payload.id) {
-                    field.isOptional = action.payload.value;
-                }
-                return field;
-            });
-        case 'RESET_FIELD':
-            return state.map(field => {
-                if (field.id === action.payload) {
-                    field = {
-                        id: action.payload,
-                        name: '',
-                        isOptional: false,
-                        tags: [],
-                    };
-                }
-                return field;
-            });
-        default:
-            return state;
-    }
-};
 
 const AddNewCategoryForm = () => {
     const inputRef = useRef(null);
     const buttonRef = useRef(null);
     const AddCategory = useAddCategory();
-    const [data, dispatch] = useReducer(reducerFunc, []);
-
-    const AddField = useCallback(() => {
-        dispatch({ type: 'ADD_FIELD' });
-    }, [dispatch]);
-
-    const RemoveFields = useCallback(() => {
-        dispatch({ type: 'REMOVE_FIELDS' });
-    }, [dispatch]);
-
-    const FieldDispatchers = {
-        ChangeName: useCallback(
-            (id, value) => {
-                dispatch({
-                    type: 'CHANGE_NAME',
-                    payload: { id, value },
-                });
-            },
-            [dispatch]
-        ),
-        ToggleOptional: useCallback(
-            ({ target: { checked } }, id) => {
-                dispatch({
-                    type: 'CHANGE_OPTIONAL_STATUS',
-                    payload: {
-                        id,
-                        value: checked,
-                    },
-                });
-            },
-            [dispatch]
-        ),
-        Remove: useCallback(
-            id => {
-                dispatch({ type: 'REMOVE_FIELD', payload: id });
-            },
-            [dispatch]
-        ),
-        Reset: useCallback(
-            id => {
-                dispatch({
-                    type: 'RESET_FIELD',
-                    payload: id,
-                });
-            },
-            [dispatch]
-        ),
-    };
+    const { Fields, FieldsIsActive, Dispatchers } = useField();
 
     const formAction = event => {
         event.preventDefault();
@@ -147,18 +56,18 @@ const AddNewCategoryForm = () => {
                 />
 
                 <FieldButton
-                    Length={data.length}
-                    Add={AddField}
-                    Remove={RemoveFields}
+                    IsActive={FieldsIsActive}
+                    Add={Dispatchers.AddField}
+                    Remove={Dispatchers.RemoveFields}
                 />
             </div>
 
-            {data.length ? (
+            {FieldsIsActive ? (
                 <FieldsBox
                     {...{
-                        AddField,
-                        fields: data,
-                        ...FieldDispatchers,
+                        AddField: Dispatchers.AddField,
+                        fields: Fields,
+                        ...Dispatchers.FieldDispatchers,
                     }}
                 />
             ) : null}

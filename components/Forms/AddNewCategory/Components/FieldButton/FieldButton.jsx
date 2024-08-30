@@ -1,10 +1,10 @@
 import { CiCircleMinus, CiCirclePlus } from 'react-icons/ci';
 import Button from './Button';
 
-const FieldButton = ({ Length, Add, Remove }) => {
+const FieldButton = ({ IsActive, Add, Remove }) => {
     return (
         <div className="w-[45%] 425:w-1/3 md:w-1/4">
-            {Length ? (
+            {IsActive ? (
                 <Button func={Remove} color="red">
                     <CiCircleMinus className="iconFontSize" />
                     Remove fields
