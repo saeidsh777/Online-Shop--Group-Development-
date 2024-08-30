@@ -31,6 +31,15 @@ const useField = () => {
                     }
                     return field;
                 });
+            case 'REMOVE_TAG':
+                return state.map(field => {
+                    if (field.id === action.payload.id) {
+                        field.tags = [...field.tags].filter(
+                            tag => tag !== action.payload.tag
+                        );
+                    }
+                    return field;
+                });
             case 'CHANGE_OPTIONAL_STATUS':
                 return state.map(field => {
                     if (field.id === action.payload.id) {
@@ -74,6 +83,9 @@ const useField = () => {
         }, []),
         AddTag: useCallback((tag, id) => {
             Dispatch({ type: 'ADD_TAG', payload: { id, tag } });
+        }, []),
+        RemovTag: useCallback((tag, id) => {
+            Dispatch({ type: 'REMOVE_TAG', payload: { id, tag } });
         }, []),
         ToggleOptional: useCallback(({ target: { checked } }, id) => {
             Dispatch({

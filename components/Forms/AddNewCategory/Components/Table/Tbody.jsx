@@ -3,12 +3,25 @@ import Tooltip from '@/components/Others/Tooltip';
 import { AddTagWrapper } from '@/hooks/useModal';
 import { Fragment } from 'react';
 import toast from 'react-hot-toast';
-import { CiCircleRemove, CiEraser, CiSquarePlus } from 'react-icons/ci';
+import {
+    CiCircleRemove,
+    CiEraser,
+    CiSquareMinus,
+    CiSquarePlus,
+} from 'react-icons/ci';
 import { MdCheckBoxOutlineBlank, MdOutlineCheckBox } from 'react-icons/md';
 import { RxEraser, RxReset } from 'react-icons/rx';
 
 const Tbody = props => {
-    const { fields, ChangeName, AddTag, ToggleOptional, Remove, Reset } = props;
+    const {
+        fields,
+        ChangeName,
+        AddTag,
+        ToggleOptional,
+        Remove,
+        Reset,
+        RemovTag,
+    } = props;
     return (
         <tbody className="flex flex-col gap-2 mt-2">
             {fields.map((field, index) => (
@@ -26,13 +39,22 @@ const Tbody = props => {
                             />
                         </td>
                         <td className="px-1 py-0.5 flex-[1.4] 425:flex-[1.6] md:flex-[0.75]  flex items-center justify-center">
-                            <div className="flex flex-wrap gap-1">
+                            <div className="flex flex-wrap gap-1 items-center">
                                 {field.tags.map(tag => (
                                     <div
-                                        className="bg-dashboard-text/20 rounded-lg py-0.5 px-1 grow text-center"
+                                        className="bg-gray-200/75 rounded-lg py-1 px-2 grow text-center relative group overflow-hidden cursor-pointer flex items-center justify-center gap-1.5"
+                                        onClick={() => {
+                                            RemovTag(tag, field.id);
+                                        }}
                                         key={tag}
                                     >
                                         {tag}
+                                        <p className="">
+                                            <CiSquareMinus className="iconFontSize text-red-500" />
+                                        </p>
+                                        <p className="absolute -top-full  left-0  transition-all duration-300 group-hover:top-0 w-full h-full flex items-center justify-center bg-gray-200">
+                                            <CiSquareMinus className="iconFontSize text-red-500 translate-y-[300%] transition-transform duration-300 group-hover:translate-y-0" />
+                                        </p>
                                     </div>
                                 ))}
                                 <AddTagWrapper
@@ -53,7 +75,7 @@ const Tbody = props => {
                                         AddTag(newTag, field.id);
                                     }}
                                 >
-                                    <p className="whitespace-nowrap flex items-center cursor-pointer text-dashboard-sidebar-textActive grow">
+                                    <p className="whitespace-nowrap flex items-center cursor-pointer text-dashboard-sidebar-textActive grow hover:bg-dashboard-sidebar-textActive hover:text-white transition-colors duration-300 p-1 rounded-lg">
                                         <CiSquarePlus className="iconFontSize" />
                                         Tag
                                     </p>
