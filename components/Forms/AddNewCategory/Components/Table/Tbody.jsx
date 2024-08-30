@@ -2,11 +2,13 @@ import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
 import Tooltip from '@/components/Others/Tooltip';
 import { AddTagWrapper } from '@/hooks/useModal';
 import { Fragment } from 'react';
+import toast from 'react-hot-toast';
 import { CiCircleRemove, CiEraser, CiSquarePlus } from 'react-icons/ci';
 import { MdCheckBoxOutlineBlank, MdOutlineCheckBox } from 'react-icons/md';
 import { RxEraser, RxReset } from 'react-icons/rx';
 
-const Tbody = ({ fields, ChangeName, ToggleOptional, Remove, Reset }) => {
+const Tbody = props => {
+    const { fields, ChangeName, AddTag, ToggleOptional, Remove, Reset } = props;
     return (
         <tbody className="flex flex-col gap-2 mt-2">
             {fields.map((field, index) => (
@@ -24,18 +26,39 @@ const Tbody = ({ fields, ChangeName, ToggleOptional, Remove, Reset }) => {
                             />
                         </td>
                         <td className="px-1 py-0.5 flex-[1.4] 425:flex-[1.6] md:flex-[0.75]  flex items-center justify-center">
-                            <AddTagWrapper
-                                func={tag => {
-                                    console.log(tag);
-                                }}
-                            >
-                                <div className="flex flex-wrap gap-1">
+                            <div className="flex flex-wrap gap-1">
+                                {field.tags.map(tag => (
+                                    <div
+                                        className="bg-dashboard-text/20 rounded-lg py-0.5 px-1 grow text-center"
+                                        key={tag}
+                                    >
+                                        {tag}
+                                    </div>
+                                ))}
+                                <AddTagWrapper
+                                    func={newTag => {
+                                        const isExist = field.tags.some(
+                                            tag => tag === newTag
+                                        );
+                                        if (isExist) {
+                                            toast.error(
+                                                `This tag is already existed in tag list! 
+                                                tags can not be duplicated`,
+                                                {
+                                                    duration: 1500,
+                                                }
+                                            );
+                                            return;
+                                        }
+                                        AddTag(newTag, field.id);
+                                    }}
+                                >
                                     <p className="whitespace-nowrap flex items-center cursor-pointer text-dashboard-sidebar-textActive grow">
                                         <CiSquarePlus className="iconFontSize" />
                                         Tag
                                     </p>
-                                </div>
-                            </AddTagWrapper>
+                                </AddTagWrapper>
+                            </div>
                         </td>
                         <td className="px-1 py-0.5 flex-1 max-w-16  425:max-w-20 lg:max-w-24 xl:max-w-28 flex items-center justify-center">
                             <label

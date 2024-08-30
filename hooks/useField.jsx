@@ -22,6 +22,15 @@ const useField = () => {
                     }
                     return field;
                 });
+            case 'ADD_TAG':
+                return state.map(field => {
+                    if (field.id === action.payload.id) {
+                        field.tags = [
+                            ...new Set([...field.tags, action.payload.tag]),
+                        ];
+                    }
+                    return field;
+                });
             case 'CHANGE_OPTIONAL_STATUS':
                 return state.map(field => {
                     if (field.id === action.payload.id) {
@@ -50,49 +59,40 @@ const useField = () => {
 
     const AddField = useCallback(() => {
         Dispatch({ type: 'ADD_FIELD' });
-    }, [Dispatch]);
+    }, []);
 
     const RemoveFields = useCallback(() => {
         Dispatch({ type: 'REMOVE_FIELDS' });
-    }, [Dispatch]);
+    }, []);
 
     const FieldDispatchers = {
-        ChangeName: useCallback(
-            (id, value) => {
-                Dispatch({
-                    type: 'CHANGE_NAME',
-                    payload: { id, value },
-                });
-            },
-            [Dispatch]
-        ),
-        ToggleOptional: useCallback(
-            ({ target: { checked } }, id) => {
-                Dispatch({
-                    type: 'CHANGE_OPTIONAL_STATUS',
-                    payload: {
-                        id,
-                        value: checked,
-                    },
-                });
-            },
-            [Dispatch]
-        ),
-        Remove: useCallback(
-            id => {
-                Dispatch({ type: 'REMOVE_FIELD', payload: id });
-            },
-            [Dispatch]
-        ),
-        Reset: useCallback(
-            id => {
-                Dispatch({
-                    type: 'RESET_FIELD',
-                    payload: id,
-                });
-            },
-            [Dispatch]
-        ),
+        ChangeName: useCallback((id, value) => {
+            Dispatch({
+                type: 'CHANGE_NAME',
+                payload: { id, value },
+            });
+        }, []),
+        AddTag: useCallback((tag, id) => {
+            Dispatch({ type: 'ADD_TAG', payload: { id, tag } });
+        }, []),
+        ToggleOptional: useCallback(({ target: { checked } }, id) => {
+            Dispatch({
+                type: 'CHANGE_OPTIONAL_STATUS',
+                payload: {
+                    id,
+                    value: checked,
+                },
+            });
+        }, []),
+        Remove: useCallback(id => {
+            Dispatch({ type: 'REMOVE_FIELD', payload: id });
+        }, []),
+        Reset: useCallback(id => {
+            Dispatch({
+                type: 'RESET_FIELD',
+                payload: id,
+            });
+        }, []),
     };
 
     return {
