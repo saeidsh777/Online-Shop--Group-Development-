@@ -1,5 +1,6 @@
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
 import Tooltip from '@/components/Others/Tooltip';
+import { AddTagWrapper } from '@/hooks/useModal';
 import { Fragment } from 'react';
 import { CiCircleRemove, CiEraser, CiSquarePlus } from 'react-icons/ci';
 import { MdCheckBoxOutlineBlank, MdOutlineCheckBox } from 'react-icons/md';
@@ -23,12 +24,18 @@ const Tbody = ({ fields, ChangeName, ToggleOptional, Remove, Reset }) => {
                             />
                         </td>
                         <td className="px-1 py-0.5 flex-[1.4] 425:flex-[1.6] md:flex-[0.75]  flex items-center justify-center">
-                            <div className="flex flex-wrap gap-1">
-                                <p className="whitespace-nowrap flex items-center cursor-pointer text-dashboard-sidebar-textActive grow">
-                                    <CiSquarePlus className="iconFontSize" />
-                                    Tag
-                                </p>
-                            </div>
+                            <AddTagWrapper
+                                func={tag => {
+                                    console.log(tag);
+                                }}
+                            >
+                                <div className="flex flex-wrap gap-1">
+                                    <p className="whitespace-nowrap flex items-center cursor-pointer text-dashboard-sidebar-textActive grow">
+                                        <CiSquarePlus className="iconFontSize" />
+                                        Tag
+                                    </p>
+                                </div>
+                            </AddTagWrapper>
                         </td>
                         <td className="px-1 py-0.5 flex-1 max-w-16  425:max-w-20 lg:max-w-24 xl:max-w-28 flex items-center justify-center">
                             <label
