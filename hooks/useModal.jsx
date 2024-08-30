@@ -31,7 +31,7 @@ export const DeleteWrapper = ({ children, name, func }) => {
 };
 
 export const AddTagWrapper = ({ children, func }) => {
-    const { setTagModal } = useModal();
+    const { setTagModal, CloseModal } = useModal();
     const inputRef = useRef(null);
 
     const AddTagHandler = close => {
@@ -50,6 +50,10 @@ export const AddTagWrapper = ({ children, func }) => {
     const InputModal = (
         <DashboardInput
             ref={inputRef}
+            onKeyDown={event => {
+                if (event.code !== 'Enter') return;
+                AddTagHandler(CloseModal);
+            }}
             placeholder="Enter tag value"
             className="p-2 sm:p-2.5 lg:p-3 lg:px-5 1152:px-6 1152:py-5"
         />
@@ -59,6 +63,9 @@ export const AddTagWrapper = ({ children, func }) => {
         <div
             onClick={() => {
                 setTagModal(InputModal, AddTagHandler);
+                setTimeout(() => {
+                    inputRef.current.focus();
+                }, 200);
             }}
         >
             {children}
@@ -140,7 +147,7 @@ const useModal = () => {
 
         setModal(Layout);
     };
-    return { setDeleteModal, setTagModal };
+    return { setDeleteModal, setTagModal, CloseModal };
 };
 
 export default useModal;
