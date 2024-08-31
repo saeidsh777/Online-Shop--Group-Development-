@@ -9,20 +9,20 @@ import toast from 'react-hot-toast';
 import { FaXmark } from 'react-icons/fa6';
 
 // wrap Wrapper components around the button you want to useModal on it
-export const DeleteWrapper = ({ children, name, func }) => {
+export const DeleteWrapper = ({ children, text, func }) => {
     const { setDeleteModal } = useModal();
 
     // consider to move this in modal component
-    const DeleteItemHandler = close => {
-        func();
-        // ------------- close modal
-        close();
+    const DeleteItemHandler = async close => {
+        close(); // close modal
+
+        await func();
     };
 
     return (
         <div
             onClick={() => {
-                setDeleteModal(name, DeleteItemHandler);
+                setDeleteModal(text, DeleteItemHandler);
             }}
         >
             {children}
@@ -76,7 +76,7 @@ export const AddTagWrapper = ({ children, func }) => {
 const useModal = () => {
     const { CloseModal, setModal } = useContext(ModalContext);
 
-    const setDeleteModal = (name, func) => {
+    const setDeleteModal = (text, func) => {
         const Layout = (
             <DashboardBox className="max-w-md lg:max-w-lg lg:gap-6 flex flex-col gap-5 shadow-md">
                 <div>
@@ -88,9 +88,7 @@ const useModal = () => {
                     </div>
                     <hr />
                 </div>
-                <p className="text-justify">
-                    This action delete {name} permanently! Are you sure?
-                </p>
+                <p className="text-justify">{text}</p>
                 <div className="flex items-center gap-3 ml-auto">
                     <DashboardBTN
                         colorClasses="bg-gray-600 hover:bg-gray-500 text-white focus-visible:outline-gray-600 "

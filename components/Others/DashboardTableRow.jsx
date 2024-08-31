@@ -83,9 +83,11 @@ const DashboardTableRow = props => {
                         </ActionIcon>
                     </Link>
                     <DeleteWrapper
-                        name={name}
-                        url="/products/delete-product/"
-                        id={id}
+                        // change productid to product name
+                        text={`This action delete ${productId} permanently! Are you sure?`}
+                        func={async () => {
+                            'use server';
+                        }}
                     >
                         <ActionIcon type={'delete'}>
                             <path
