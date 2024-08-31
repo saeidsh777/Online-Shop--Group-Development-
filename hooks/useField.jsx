@@ -59,6 +59,13 @@ const useField = () => {
                     }
                     return field;
                 });
+            case 'ADD_ERROR':
+                return state.map(field => {
+                    if (field.id === action.payload.id) {
+                        field.error = true;
+                    }
+                    return field;
+                });
             default:
                 return state;
         }
@@ -104,6 +111,9 @@ const useField = () => {
                 type: 'RESET_FIELD',
                 payload: id,
             });
+        }, []),
+        AddError: useCallback(id => {
+            Dispatch({ type: 'ADD_ERROR', payload: { id } });
         }, []),
     };
 
