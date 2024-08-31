@@ -1,6 +1,6 @@
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
 import Tooltip from '@/components/Others/Tooltip';
-import { AddTagWrapper } from '@/hooks/useModal';
+import { AddTagWrapper, DeleteWrapper } from '@/hooks/useModal';
 import { Fragment } from 'react';
 import toast from 'react-hot-toast';
 import {
@@ -113,12 +113,26 @@ const Tbody = props => {
                         </td>
                         <td className="px-1 py-0.5 flex-1 max-w-16  425:max-w-20 lg:max-w-24 xl:max-w-28 flex items-center gap-1.5 justify-center max-sm:hidden border-l-2">
                             <Tooltip text={'Remove'}>
-                                <RxEraser
-                                    onClick={() => {
+                                <DeleteWrapper
+                                    text={
+                                        <span>
+                                            Are you sure that you want delete
+                                            this field?
+                                            <br />
+                                            this field is not empty!
+                                        </span>
+                                    }
+                                    func={() => {
                                         Remove(field.id);
                                     }}
-                                    className="iconFontSize text-dashboard-text/60 hover:text-dashboard-text transition-colors duration-300 cursor-pointer"
-                                />
+                                    condition={
+                                        field.name ||
+                                        field.tags.length ||
+                                        field.isOptional
+                                    }
+                                >
+                                    <RxEraser className="iconFontSize text-dashboard-text/60 hover:text-dashboard-text transition-colors duration-300 cursor-pointer" />
+                                </DeleteWrapper>
                             </Tooltip>
                             <Tooltip text={'Reset'}>
                                 <RxReset
@@ -136,16 +150,32 @@ const Tbody = props => {
                             className="flex items-center justify-between mt-4"
                         >
                             <p className="font-semibold">Field actions:</p>
-                            <button
-                                type="button"
-                                onClick={() => {
+                            <DeleteWrapper
+                                text={
+                                    <span>
+                                        Are you sure that you want delete this
+                                        field?
+                                        <br />
+                                        this field is not empty!
+                                    </span>
+                                }
+                                func={() => {
                                     Remove(field.id);
                                 }}
-                                className="flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors duration-300"
+                                condition={
+                                    field.name ||
+                                    field.tags.length ||
+                                    field.isOptional
+                                }
                             >
-                                <CiCircleRemove className="iconFontSize" />
-                                Remove
-                            </button>
+                                <button
+                                    type="button"
+                                    className="flex items-center gap-1.5 text-red-500 hover:text-red-600 transition-colors duration-300"
+                                >
+                                    <CiCircleRemove className="iconFontSize" />
+                                    Remove
+                                </button>
+                            </DeleteWrapper>
                             <button
                                 type="button"
                                 onClick={() => {

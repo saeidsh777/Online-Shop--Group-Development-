@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { FaXmark } from 'react-icons/fa6';
 
 // wrap Wrapper components around the button you want to useModal on it
-export const DeleteWrapper = ({ children, text, func }) => {
+export const DeleteWrapper = ({ children, text, func, condition }) => {
     const { setDeleteModal } = useModal();
 
     // consider to move this in modal component
@@ -21,8 +21,16 @@ export const DeleteWrapper = ({ children, text, func }) => {
 
     return (
         <div
-            onClick={() => {
-                setDeleteModal(text, DeleteItemHandler);
+            onClick={async () => {
+                // useModal conditional
+                // if condition is undefind => become true by this parameter (condition ?? true)
+                // or if its exist used for conditionaly useModal
+                (condition ?? true) && setDeleteModal(text, DeleteItemHandler);
+
+                // and if condition existed and the value is false runs the func that have been passed without showing modal
+                if (condition !== undefined) {
+                    !condition && (await func());
+                }
             }}
         >
             {children}
