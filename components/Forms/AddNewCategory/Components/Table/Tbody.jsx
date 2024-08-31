@@ -26,10 +26,18 @@ const Tbody = props => {
         <tbody className="flex flex-col gap-2 mt-2">
             {fields.map((field, index) => (
                 <Fragment key={index}>
-                    <tr className="flex items-center sm:border-b sm:pb-1">
+                    <tr
+                        className={`flex items-center sm:border-b sm:pb-1 ${
+                            field.error
+                                ? !field.name
+                                    ? 'max-sm:border-b border-b-red-500'
+                                    : ''
+                                : ''
+                        }`}
+                    >
                         <td className="px-1 py-0.5 flex-[2.6] 425:flex-[2.6] md:flex-1  flex items-center justify-center">
                             <DashboardInput
-                                className="p-2 sm:p-2.5 lg:p-3 lg:px-5 1152:px-6 1152:py-5 flex-1 text-center showRingsOnlyOnFocus"
+                                className="p-2 sm:p-2.5 lg:p-3 lg:px-5 1152:px-6 1152:py-5 flex-1 text-center showRingsOnlyOnFocus bg-transparent"
                                 placeholder="Field name..."
                                 name="name"
                                 value={field.name}
