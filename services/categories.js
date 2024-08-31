@@ -20,6 +20,10 @@ export const addCategory = async (title, token) => {
 
         return response;
     } catch (e) {
-        return e instanceof Error ? e.message : 'Error';
+        return e instanceof Error
+            ? typeof e.message === 'string'
+                ? e.message
+                : 'Error'
+            : 'Error';
     }
 };
