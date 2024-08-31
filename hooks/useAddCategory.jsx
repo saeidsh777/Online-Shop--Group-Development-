@@ -42,7 +42,7 @@ const useAddCategory = () => {
         return HasError ? 'Error' : FormatedData;
     };
 
-    const AddCategory = async (title, onSuccess, onError) => {
+    const AddCategory = async (Data, onSuccess, onError) => {
         const Token = localStorage.getItem('token');
 
         if (!Token) {
@@ -50,7 +50,7 @@ const useAddCategory = () => {
             return;
         }
 
-        const response = await postCategory(title, Token);
+        const response = await postCategory(Data, Token);
 
         if (typeof response === 'string') {
             onError();
@@ -60,7 +60,7 @@ const useAddCategory = () => {
         }
 
         if (response.ok) {
-            toast.success(title + ' category added successfully');
+            toast.success(Data.title + ' category added successfully');
             onSuccess();
             return;
         }
@@ -84,6 +84,7 @@ const useAddCategory = () => {
 
         const onSuccess = () => {
             inputRef.current.value = '';
+            Dispatchers.RemoveFields();
             activeButtonHandler();
         };
 
@@ -114,7 +115,12 @@ const useAddCategory = () => {
             return;
         }
 
-        // AddCategory(title, onSuccess, activeButtonHandler);
+        const Data = { title };
+        if (FormatedFields.length) {
+            Data.productVariantsSchema = FormatedFields;
+        }
+
+        AddCategory(Data, onSuccess, activeButtonHandler);
     };
 
     const FieldButton = (
