@@ -108,7 +108,7 @@ const ProductListPage = async () => {
                     ) : (
                         <div>
                             <h3 className="text-center font-medium text-[120%] mb-5">
-                                Products list is empty {':('}
+                                Product list is empty {':('}
                             </h3>
                             <p>
                                 Would you like to add a product? click{' '}
