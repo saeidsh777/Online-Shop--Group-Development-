@@ -10,38 +10,6 @@ const useAddCategory = () => {
     const buttonRef = useRef(null);
     const { Fields, FieldsIsActive, Dispatchers } = useField();
 
-    const FieldFormater = fields => {
-        const SingleFieldErrorCatcher = field => {
-            if (field.name) return false;
-
-            Dispatchers.FieldDispatchers.AddError(field.id);
-            return true;
-        };
-
-        const FormatedData = fields.map(field => {
-            const HasError = SingleFieldErrorCatcher(field);
-            if (HasError) {
-                return 'Error';
-            }
-
-            let fieldObj = {};
-            if ('name' in field && field.name) {
-                fieldObj.variantName = field.name;
-            }
-            if ('isOptional' in field && field.isOptional) {
-                fieldObj.optional = true;
-            }
-            if ('tags' in field && field.tags.length) {
-                fieldObj.variantOptions = field.tags;
-            }
-
-            return fieldObj;
-        });
-
-        const HasError = FormatedData.some(field => field === 'Error');
-        return HasError ? 'Error' : FormatedData;
-    };
-
     const AddCategory = async (Data, onSuccess, onError) => {
         const Token = localStorage.getItem('token');
 
@@ -106,7 +74,7 @@ const useAddCategory = () => {
         }
 
         // check fields
-        const FormatedFields = FieldFormater(Fields);
+        const FormatedFields = Dispatchers.FieldsFormater(Fields);
         if (FormatedFields === 'Error') {
             toast.error(
                 'You cannot add a field with an empty name \nPlease select a name for the fields underlined in red'

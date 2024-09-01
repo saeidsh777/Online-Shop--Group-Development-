@@ -112,10 +112,39 @@ const useField = () => {
                 payload: id,
             });
         }, []),
-        AddError: useCallback(id => {
-            Dispatch({ type: 'ADD_ERROR', payload: { id } });
-        }, []),
     };
+
+    const FieldsFormater = useCallback(fields => {
+        const SingleFieldErrorCatcher = field => {
+            if (field.name) return false;
+
+            Dispatch({ type: 'ADD_ERROR', payload: { id: field.id } });
+            return true;
+        };
+
+        const FormatedData = fields.map(field => {
+            const HasError = SingleFieldErrorCatcher(field);
+            if (HasError) {
+                return 'Error';
+            }
+
+            let fieldObj = {};
+            if ('name' in field && field.name) {
+                fieldObj.variantName = field.name;
+            }
+            if ('isOptional' in field && field.isOptional) {
+                fieldObj.optional = true;
+            }
+            if ('tags' in field && field.tags.length) {
+                fieldObj.variantOptions = field.tags;
+            }
+
+            return fieldObj;
+        });
+
+        const HasError = FormatedData.some(field => field === 'Error');
+        return HasError ? 'Error' : FormatedData;
+    }, []);
 
     return {
         Fields,
@@ -123,6 +152,7 @@ const useField = () => {
         Dispatchers: {
             AddField,
             RemoveFields,
+            FieldsFormater,
             FieldDispatchers,
         },
     };
