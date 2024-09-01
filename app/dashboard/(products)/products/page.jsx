@@ -1,7 +1,7 @@
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
-import DashboardTableRow from '@/components/Others/DashboardTableRow';
+import DashboardTableRow from '@/components/Table/DashboardTableRow';
 import SectionTitel from '@/components/Titels/SectionTitel/SectionTitel';
 import RefreshPage from '@/hooks/RefreshPage';
 import { getAllProducts } from '@/services/product';
