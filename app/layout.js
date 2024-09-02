@@ -1,7 +1,7 @@
+import { toastOptions } from '@/configs/toastOptions';
 import { Inter, Roboto } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
-import { toastOptions } from '@/configs/toastOptions';
 
 const inter = Inter({ subsets: ['latin'] });
 const roboto = Roboto({
@@ -27,9 +27,7 @@ export default function RootLayout({ children }) {
                 suppressHydrationWarning={true}
             >
                 {children}
-                <Toaster
-                    toastOptions={toastOptions}
-                />
+                <Toaster toastOptions={toastOptions} />
             </body>
         </html>
     );

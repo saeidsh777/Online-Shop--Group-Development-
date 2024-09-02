@@ -2,16 +2,15 @@
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import defaultImage from '../../../public/images/default-image-product.svg';
-
-import { FiUploadCloud } from 'react-icons/fi';
-import { AiOutlineDelete } from 'react-icons/ai';
-import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
-import { justNumberRegex } from '@/utils/regex';
-import useProduct from '@/hooks/useProduct';
-import { getAllCategory } from '@/services/categories';
-import { addNewProduct, editProduct, getOneProduct } from '@/services/product';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
+import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
+import useProduct from '@/hooks/useProduct';
+import { getAllCategories } from '@/services/categories';
+import { addNewProduct, editProduct, getOneProduct } from '@/services/product';
+import { justNumberRegex } from '@/utils/regex';
 import toast from 'react-hot-toast';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { FiUploadCloud } from 'react-icons/fi';
 
 export default function AddNewProductForm({ init }) {
     const {
@@ -30,7 +29,7 @@ export default function AddNewProductForm({ init }) {
 
     useEffect(() => {
         const categoriesRequestHandler = async () => {
-            const { res, result } = await getAllCategory();
+            const { res, result } = await getAllCategories();
             res.status === 200 && onChange({ categories: result });
         };
         categoriesRequestHandler();

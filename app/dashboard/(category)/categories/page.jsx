@@ -3,9 +3,15 @@ import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
 import SectionTitel from '@/components/Titels/SectionTitel/SectionTitel';
+import { getAllCategories } from '@/services/categories';
 import Link from 'next/link';
 
-const page = () => {
+const page = async () => {
+    const categories = await getAllCategories();
+    console.log('---------------');
+    console.log(categories);
+    console.log('---------------');
+
     return (
         <div>
             <SectionTitel title={'List of categories'} />
@@ -27,24 +33,9 @@ const page = () => {
                     </Link>
                 </div>
                 <div className="flex flex-col gap-2 425:gap-2.5 sm:gap-3 896:gap-3.5">
-                    <CategoryBox name="Mobile">
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Nobis praesentium quod odit voluptates
-                        accusantium, natus ab fugiat blanditiis? Voluptates,
-                        est.
-                    </CategoryBox>
-                    <CategoryBox name="Laptop">
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Nobis praesentium quod odit voluptates
-                        accusantium, natus ab fugiat blanditiis? Voluptates,
-                        est.
-                    </CategoryBox>
-                    <CategoryBox name="chicken">
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Nobis praesentium quod odit voluptates
-                        accusantium, natus ab fugiat blanditiis? Voluptates,
-                        est.
-                    </CategoryBox>
+                    {categories.result.map((category, index) => (
+                        <CategoryBox key={category.id} {...category} />
+                    ))}
                 </div>
             </DashboardBox>
         </div>

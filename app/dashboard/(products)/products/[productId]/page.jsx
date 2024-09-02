@@ -82,8 +82,11 @@ const DetailProductPage = ({ params: { productId } }) => {
                             <DashboardBTN>Edit</DashboardBTN>
                         </Link>
                         <DeleteWrapper
-                            url="/products/delete-product/"
-                            id={productId}
+                            // change productid to product name
+                            text={`This action delete ${productId} permanently! Are you sure?`}
+                            func={async () => {
+                                'use server';
+                            }}
                         >
                             <DashboardBTN colorClasses="bg-red-600 hover:bg-red-500 text-white focus-visible:outline-red-600 ">
                                 Delete

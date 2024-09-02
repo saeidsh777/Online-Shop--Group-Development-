@@ -49,9 +49,13 @@ export const getOneProduct = async productId => {
 };
 
 export const getAllProducts = async () => {
-    const res = await fetch(`${API_BASE_URL}/products`,{cache:"no-store"});
-    const result = await res.json();
+    try {
+        const res = await fetch(`${API_BASE_URL}/products`);
+        const result = await res.json();
 
-    console.log('helllo-------------------------------------------');
-    return { res, result };
+        console.log('helllo-------------------------------------------');
+        return { res, result };
+    } catch (e) {
+        return 'error';
+    }
 };

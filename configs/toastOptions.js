@@ -11,6 +11,7 @@ export const toastOptions = {
             primary: '#4ade80',
             secondary: '#15803d',
         },
+        duration: 3000,
     },
     error: {
         style: {
@@ -24,5 +25,6 @@ export const toastOptions = {
             primary: '#f87171',
             secondary: '#dc2626',
         },
+        duration: 3000,
     },
 };

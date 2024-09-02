@@ -1,14 +1,26 @@
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
-import DashboardTableRow from '@/components/Others/DashboardTableRow';
+import DashboardTableRow from '@/components/Table/DashboardTableRow';
 import SectionTitel from '@/components/Titels/SectionTitel/SectionTitel';
 import RefreshPage from '@/hooks/RefreshPage';
 import { getAllProducts } from '@/services/product';
 import Link from 'next/link';
 
-const ProductsListPage = async () => {
-    const { result: Data, res: response } = await getAllProducts();
+const ProductListPage = async () => {
+    const result = await getAllProducts();
+
+    if (result === 'error')
+        return (
+            <div>
+                <h3 className="text-center font-medium text-[120%] mb-5">
+                    Oops something went wrong!{' '}
+                </h3>
+                <RefreshPage />
+            </div>
+        );
+
+    const { result: Data, res: response } = result;
 
     return (
         <div>
@@ -85,8 +97,7 @@ const ProductsListPage = async () => {
                                                 // check for last item (to remove border-b)
                                                 // true means no border-b
                                                 borderB={
-                                                    product.length - 1 ===
-                                                    index
+                                                    Data.length - 1 === index
                                                 }
                                             />
                                         ))}
@@ -97,7 +108,7 @@ const ProductsListPage = async () => {
                     ) : (
                         <div>
                             <h3 className="text-center font-medium text-[120%] mb-5">
-                                Products list is empty {':('}
+                                Product list is empty {':('}
                             </h3>
                             <p>
                                 Would you like to add a product? click{' '}
@@ -122,4 +133,4 @@ const ProductsListPage = async () => {
         </div>
     );
 };
-export default ProductsListPage;
+export default ProductListPage;

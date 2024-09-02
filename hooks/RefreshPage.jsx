@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-const RefreshPage = () => {
+const RefreshButton = () => {
     const Params = useSearchParams();
 
     if (Params.has('tryRefresh'))
@@ -28,6 +29,14 @@ const RefreshPage = () => {
         >
             Refresh
         </Link>
+    );
+};
+
+const RefreshPage = () => {
+    return (
+        <Suspense fallback={'loading...'}>
+            <RefreshButton />
+        </Suspense>
     );
 };
 export default RefreshPage;

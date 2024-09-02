@@ -47,6 +47,11 @@
         -ms-border-radius: 0 0.3rem 0.3rem 0;
         -o-border-radius: 0 0.3rem 0.3rem 0;
     }
+
+    .showRingsOnlyOnFocus:not(:focus) {
+        box-shadow: none;
+        border: none;
+    }
     /* Inputs Styles END */
 
     /* Category box START */
@@ -65,10 +70,17 @@
     }
     .categroy:has(input:checked) .categoryBody {
         max-height: 10rem;
-        border: 1px solid rgb(243 244 246);
-        border-top: 0;
         background-color: transparent;
     }
+
+    .categroy:has(input:checked) label {
+        border-bottom: 1px solid rgb(70, 128, 255);
+    }
+
+    .categroy:has(input:checked) {
+        border: 1px solid rgb(70, 128, 255);
+    }
+
     /* Category box END */
 
     /* change sidebar flow */
