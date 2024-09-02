@@ -1,18 +1,18 @@
 'use client';
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import defaultImage from '../../../public/images/default-image-product.svg';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
-import useProduct from '@/hooks/useProduct';
 import { getAllCategories } from '@/services/categories';
 import { addNewProduct, editProduct, getOneProduct } from '@/services/product';
 import { justNumberRegex } from '@/utils/regex';
 import toast from 'react-hot-toast';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FiUploadCloud } from 'react-icons/fi';
+import { ProductContext } from '@/contexts/ProductProvider';
 
-export default function AddNewProductForm({ init }) {
+export default function AddNewProductForm() {
     const {
         inputs,
         onChange,
@@ -20,51 +20,17 @@ export default function AddNewProductForm({ init }) {
         setProductImages,
         images,
         setImages,
-        editMode,
-        setEditMode,
         formDataGenarator,
-    } = useProduct();
+    } = useContext(ProductContext);
     const filesInput = useRef();
     const productImagesElm = useRef([]);
 
     useEffect(() => {
         const categoriesRequestHandler = async () => {
-            const { res, result } = await getAllCategories();
+            const { res, result, err } = await getAllCategories();
             res.status === 200 && onChange({ categories: result });
         };
         categoriesRequestHandler();
-
-        if (init.type === 'edit') {
-            const getProductHandler = async () => {
-                const { res, result } = await getOneProduct(init.productId);
-                if (res.status === 200) {
-                    onChange({
-                        name: result.title,
-                        category: result.category.id,
-                        discount:
-                            result.discount === 0
-                                ? ''
-                                : String(result.discount),
-                        discountType:
-                            result.discount === 0 ? '-1' : 'Numerical',
-                        price: result.price,
-                        description: result.description,
-                        finalPrice: result.price - result.discount,
-                    });
-                    result.images.forEach((image, index) => {
-                        setProductImages(prv => {
-                            return {
-                                ...prv,
-                                ['image' + index]: '/' + image,
-                            };
-                        });
-                    });
-                } else {
-                    console.log(result);
-                }
-            };
-            getProductHandler();
-        }
     }, []);
 
     useEffect(() => {
@@ -201,13 +167,6 @@ export default function AddNewProductForm({ init }) {
                             placeholder="Enter product name"
                             className="General_Input_1"
                             value={inputs?.name}
-                            disabled={
-                                init.type === 'edit'
-                                    ? editMode === false
-                                        ? true
-                                        : false
-                                    : false
-                            }
                             onChange={e => onChange({ name: e.target.value })}
                         />
                     </div>
@@ -222,13 +181,6 @@ export default function AddNewProductForm({ init }) {
                             id="category"
                             className="General_Input_1 h-[36px]"
                             value={inputs?.category}
-                            disabled={
-                                init.type === 'edit'
-                                    ? editMode === false
-                                        ? true
-                                        : false
-                                    : false
-                            }
                             onChange={e =>
                                 onChange({ category: e.target.value })
                             }
@@ -254,13 +206,6 @@ export default function AddNewProductForm({ init }) {
                             id="price"
                             inputMode="numeric"
                             type="text"
-                            disabled={
-                                init.type === 'edit'
-                                    ? editMode === false
-                                        ? true
-                                        : false
-                                    : false
-                            }
                             placeholder="0 $"
                             className="General_Input_1"
                             value={inputs.price}
@@ -293,13 +238,6 @@ export default function AddNewProductForm({ init }) {
                                 id="discountType"
                                 className="General_Input_1 h-[36px]"
                                 value={inputs?.discountType}
-                                disabled={
-                                    init.type === 'edit'
-                                        ? editMode === false
-                                            ? true
-                                            : false
-                                        : false
-                                }
                                 onChange={e => {
                                     onChange({
                                         discountType: e.target.value,
@@ -338,15 +276,6 @@ export default function AddNewProductForm({ init }) {
                                         }
                                     }
                                 }}
-                                disabled={
-                                    init.type === 'edit'
-                                        ? editMode === false
-                                            ? true
-                                            : false
-                                        : inputs?.discountType == '-1'
-                                        ? true
-                                        : false
-                                }
                             />
                         </div>
                     </div>
@@ -360,13 +289,6 @@ export default function AddNewProductForm({ init }) {
                             rows={8}
                             id="description"
                             type="text"
-                            disabled={
-                                init.type === 'edit'
-                                    ? editMode === false
-                                        ? true
-                                        : false
-                                    : false
-                            }
                             value={inputs?.description}
                             onChange={e =>
                                 onChange({ description: e.target.value })
@@ -417,7 +339,7 @@ export default function AddNewProductForm({ init }) {
                 <div className="flex flex-col gap-2 mb-3">
                     <div className="p-2 md:p-3 lg:p-3.5 bg-[#F3F5F7] w-full rounded-lg flex gap-1.5 md:gap-2 lg:gap-3 sm:flex-col 896:flex-row 896:flex-1">
                         <div
-                            className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 ${
+                            className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
                                 !images[0] && 'flex justify-center items-center'
                             }`}
                         >
@@ -444,7 +366,7 @@ export default function AddNewProductForm({ init }) {
                         </div>
                         <div className="grid grid-rows-3 gap-2 md:gap-3 lg:gap-3.5  sm:grid-cols-3 sm:grid-rows-1 896:grid-cols-1 896:grid-rows-3 flex-1">
                             <div
-                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 ${
+                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
                                     !images[1] &&
                                     'flex justify-center items-center'
                                 }`}
@@ -473,7 +395,7 @@ export default function AddNewProductForm({ init }) {
                                 )}
                             </div>
                             <div
-                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 ${
+                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
                                     !images[2] &&
                                     'flex justify-center items-center'
                                 }`}
@@ -502,7 +424,7 @@ export default function AddNewProductForm({ init }) {
                                 )}
                             </div>
                             <div
-                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 ${
+                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
                                     !images[3] &&
                                     'flex justify-center items-center'
                                 }`}
@@ -556,13 +478,6 @@ export default function AddNewProductForm({ init }) {
                                 multiple={true}
                                 name="files"
                                 ref={filesInput}
-                                disabled={
-                                    init.type === 'edit'
-                                        ? editMode
-                                            ? false
-                                            : true
-                                        : false
-                                }
                                 onChange={e => {
                                     addImageHandler(e.target.files);
                                 }}
@@ -571,7 +486,7 @@ export default function AddNewProductForm({ init }) {
                         </label>
                     </div>
                 </div>
-                {init.type === 'edit' ? (
+                {/* {init.type === 'edit' ? (
                     <>
                         {editMode ? (
                             <div className="flex items-center gap-3">
@@ -590,7 +505,7 @@ export default function AddNewProductForm({ init }) {
                     </>
                 ) : (
                     <SubmitBtn title="Create Product" />
-                )}
+                )} */}
             </div>
         </form>
     );

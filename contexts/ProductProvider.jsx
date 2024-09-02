@@ -1,8 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import defaultImage from '../public/images/default-image-product.svg';
 
-export default function useProduct() {
+export const ProductContext = createContext();
+
+export default function ProductProvider({children}) {
     const [inputs, setInputs] = useState({
         name: '',
         category: '',
@@ -22,8 +24,6 @@ export default function useProduct() {
     });
 
     const [images, setImages] = useState([]);
-
-    const [editMode, setEditMode] = useState(false);
 
     const onChange = datas => {
         setInputs(prv => {
@@ -50,15 +50,19 @@ export default function useProduct() {
         return formData;
     };
 
-    return {
+    const contextValues = {
         inputs,
         onChange,
         productImages,
         setProductImages,
         images,
         setImages,
-        editMode,
-        setEditMode,
         formDataGenarator,
     };
+
+    return (
+        <ProductContext.Provider value={contextValues}>
+            {children}
+        </ProductContext.Provider>
+    );
 }
