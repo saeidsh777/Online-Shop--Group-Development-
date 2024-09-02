@@ -1,9 +1,11 @@
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import RelatedPorductBox from '@/components/Boxes/RelatedPorductBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
+import { DeleteWrapper } from '@/hooks/useModal';
+// import { getOneProduct } from '@/services/product';
 import Link from 'next/link';
 
-const page = ({ params: { productId } }) => {
+const DetailProductPage = ({ params: { productId } }) => {
     const relatedProducts = [
         {
             id: +productId + 1,
@@ -21,6 +23,8 @@ const page = ({ params: { productId } }) => {
             src: 'https://picsum.photos/200',
         },
     ];
+
+    // const { res, result } = await getOneProduct(productId);
 
     return (
         <div className="flex flex-col gap-3 sm:gap-5 md:gap-7 lg:gap-8">
@@ -74,10 +78,20 @@ const page = ({ params: { productId } }) => {
                         </div>
                     </div>
                     <div className="ml-auto flex items-center gap-1 sm:gap-2 896:gap-3">
-                        <DashboardBTN>Edit</DashboardBTN>
-                        <DashboardBTN colorClasses="bg-red-600 hover:bg-red-500 text-white focus-visible:outline-red-600 ">
-                            Delete
-                        </DashboardBTN>
+                        <Link href={`/dashboard/products/${productId}/edit`}>
+                            <DashboardBTN>Edit</DashboardBTN>
+                        </Link>
+                        <DeleteWrapper
+                            // change productid to product name
+                            text={`This action delete ${productId} permanently! Are you sure?`}
+                            func={async () => {
+                                'use server';
+                            }}
+                        >
+                            <DashboardBTN colorClasses="bg-red-600 hover:bg-red-500 text-white focus-visible:outline-red-600 ">
+                                Delete
+                            </DashboardBTN>
+                        </DeleteWrapper>
                     </div>
                 </div>
             </div>
@@ -98,4 +112,4 @@ const page = ({ params: { productId } }) => {
         </div>
     );
 };
-export default page;
+export default DetailProductPage;

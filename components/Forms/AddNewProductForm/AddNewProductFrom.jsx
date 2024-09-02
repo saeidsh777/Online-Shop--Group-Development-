@@ -1,46 +1,40 @@
 'use client';
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import defaultImage from '../../../public/images/default-image-product.svg';
-
-import { FiUploadCloud } from 'react-icons/fi';
-import { AiOutlineDelete } from 'react-icons/ai';
+import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
+import { getAllCategories } from '@/services/categories';
+import { addNewProduct, editProduct, getOneProduct } from '@/services/product';
 import { justNumberRegex } from '@/utils/regex';
-import useProduct from '@/hooks/useProduct';
-import { getAllCategory } from '@/services/categories';
-import { addNewProduct, getOneProduct } from '@/services/product';
+import toast from 'react-hot-toast';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { FiUploadCloud } from 'react-icons/fi';
+import { ProductContext } from '@/contexts/ProductProvider';
 
-export default function AddNewProductForm({ init }) {
+export default function AddNewProductForm() {
     const {
-        inputs,
-        onChange,
+        fixedInputs,
+        onChangeFixedInputs,
+        categories,
+        setCategories,
         productImages,
         setProductImages,
         images,
         setImages,
-    } = useProduct();
+        formDataGenarator,
+    } = useContext(ProductContext);
     const filesInput = useRef();
     const productImagesElm = useRef([]);
 
     useEffect(() => {
         const categoriesRequestHandler = async () => {
-            const { res, result } = await getAllCategory();
-            res.status === 200 && onChange({ categories: result });
+            const { res, result, err } = await getAllCategories();
+            res.status === 200
+                ? setCategories(result)
+                : toast.error(String(err));
         };
         categoriesRequestHandler();
-
-        if (init.type === 'edit') {
-            const getProductHandler = async () => {
-                const result = await getOneProduct(init.productId);
-                if (result.statusCode === '200') {
-                    console.log(result);
-                } else {
-                    console.log(result);
-                }
-            };
-            getProductHandler();
-        }
     }, []);
 
     useEffect(() => {
@@ -72,36 +66,41 @@ export default function AddNewProductForm({ init }) {
     }
 
     // Product discount calculation
-    const discountHandler = value => {
-        // For numeric discountType
-        if (inputs.discountType === 'Numerical') {
-            if (inputs.price - +value >= 0) {
-                onChange({ finalPrice: +inputs.price - +value });
-            } else {
-                onChange({ finalPrice: +inputs.price - +inputs.price });
-            }
-        }
+    // const discountHandler = value => {
+    //     // For numeric discountType
+    //     if (inputs.discountType === 'Numerical') {
+    //         if (inputs.price - +value >= 0) {
+    //             onChange({ finalPrice: +inputs.price - +value });
+    //         } else {
+    //             onChange({ finalPrice: +inputs.price - +inputs.price });
+    //         }
+    //     }
 
-        // For numeric Percentage
-        if (inputs.discountType === 'Percentage') {
-            if (value >= 100) {
-                onChange({ finalPrice: 0 });
-            } else if (value <= 0) {
-                onChange({ finalPrice: +inputs.price });
-            } else {
-                onChange({
-                    finalPrice: +inputs.price - (+inputs.price * +value) / 100,
-                });
-            }
-        }
-    };
+    //     // For numeric Percentage
+    //     if (inputs.discountType === 'Percentage') {
+    //         if (value >= 100) {
+    //             onChange({ finalPrice: 0 });
+    //         } else if (value <= 0) {
+    //             onChange({ finalPrice: +inputs.price });
+    //         } else {
+    //             onChange({
+    //                 finalPrice: +inputs.price - (+inputs.price * +value) / 100,
+    //             });
+    //         }
+    //     }
+    // };
 
     const addImageHandler = files => {
-        if (images.length < 4) {
-            setImages(prv => {
-                return [...prv, ...files];
+        const indexEnd = 4 - images.length;
+
+        indexEnd !== 0 &&
+            [...files].splice(0, indexEnd).forEach(file => {
+                if (images.length < 4) {
+                    setImages(prv => {
+                        return [...prv, file];
+                    });
+                }
             });
-        }
     };
 
     const deleteImageHandler = imageIndex => {
@@ -109,34 +108,56 @@ export default function AddNewProductForm({ init }) {
         setImages(newImage);
     };
 
-    const submitHandler = async e => {
-        e.preventDefault();
+    // const submitHandler = async e => {
+    //     e.preventDefault();
 
-        const formData = new FormData();
-        formData.append('title', inputs.name);
-        formData.append('description', inputs.description);
-        formData.append('price', +inputs.price);
-        formData.append('category', inputs.category);
-        inputs.discount && formData.append('discount', +inputs.discount);
-        for (let i = 0; i < images.length; i++) {
-            formData.append(`images`, images[i]);
-        }
-
-        const { res, result, err } = await addNewProduct(formData);
-
-        if (res.status === 201) {
-            console.log('created new product');
-        } else if (res.status === 500) {
-            console.log(err);
-        } else {
-            console.log(result.message);
-        }
-    };
+    //     if (init.type === 'new') {
+    //         const { res, result, err } = await addNewProduct(formDataGenarator);
+    //         if (res.status === 201) {
+    //             onChange({
+    //                 name: '',
+    //                 category: '',
+    //                 price: '',
+    //                 discountType: '-1',
+    //                 description: '',
+    //                 discount: '',
+    //                 finalPrice: 0,
+    //             });
+    //             setImages([]);
+    //             setProductImages({
+    //                 image0: defaultImage,
+    //                 image1: defaultImage,
+    //                 image2: defaultImage,
+    //                 image3: defaultImage,
+    //             });
+    //             filesInput.current = '';
+    //             productImagesElm.current = [];
+    //             toast.success('Created New Product');
+    //         } else if (res.status === 500) {
+    //             toast.error(err.message + '!');
+    //         } else {
+    //             toast.error(result.message + '!');
+    //         }
+    //     } else if (init.type === 'edit') {
+    //         const { res, result, err } = await editProduct(
+    //             formDataGenarator,
+    //             init.productId
+    //         );
+    //         if (res.status === 201) {
+    //             setEditMode(false);
+    //             toast.success('Edit Product Successfully');
+    //         } else if (res.status === 500) {
+    //             toast.error(err.message + '!');
+    //         } else {
+    //             toast.error(result.message + '!');
+    //         }
+    //     }
+    // };
     return (
         <form
             className=" grid grid-cols-1 lg:grid-cols-2 gap-3"
             name="add-new-product"
-            onSubmit={submitHandler}
+            // onSubmit={submitHandler}
         >
             <div className="p-4 border border-gray-200 rounded-xl">
                 <div className="mb-3">
@@ -149,8 +170,10 @@ export default function AddNewProductForm({ init }) {
                             type="text"
                             placeholder="Enter product name"
                             className="General_Input_1"
-                            value={inputs?.name}
-                            onChange={e => onChange({ name: e.target.value })}
+                            value={fixedInputs?.name}
+                            onChange={e =>
+                                onChangeFixedInputs({ name: e.target.value })
+                            }
                         />
                     </div>
                 </div>
@@ -163,13 +186,15 @@ export default function AddNewProductForm({ init }) {
                         <select
                             id="category"
                             className="General_Input_1 h-[36px]"
-                            value={inputs?.category}
+                            value={fixedInputs?.category}
                             onChange={e =>
-                                onChange({ category: e.target.value })
+                                onChangeFixedInputs({
+                                    category: e.target.value,
+                                })
                             }
                         >
                             <option value="-1">Select your category</option>
-                            {inputs.categories.map(category => (
+                            {categories.map(category => (
                                 <option
                                     key={category?._id}
                                     value={category?._id}
@@ -180,7 +205,7 @@ export default function AddNewProductForm({ init }) {
                         </select>
                     </div>
                 </div>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <label className="text-sm" htmlFor="price">
                         Price
                     </label>
@@ -259,9 +284,6 @@ export default function AddNewProductForm({ init }) {
                                         }
                                     }
                                 }}
-                                disabled={
-                                    inputs?.discountType == '-1' ? true : false
-                                }
                             />
                         </div>
                     </div>
@@ -318,7 +340,7 @@ export default function AddNewProductForm({ init }) {
                             {inputs.finalPrice.toLocaleString()} $
                         </span>
                     </small>
-                </div>
+                </div> */}
             </div>
 
             <div className="p-4 border flex flex-col justify-between border-gray-200 rounded-xl">
@@ -467,14 +489,31 @@ export default function AddNewProductForm({ init }) {
                                 onChange={e => {
                                     addImageHandler(e.target.files);
                                 }}
-                                max={4}
                                 accept="image/png, image/jpeg, image/jpg"
                             />
                         </label>
                     </div>
                 </div>
-
-                <SubmitBtn title="Create Product" />
+                {/* {init.type === 'edit' ? (
+                    <>
+                        {editMode ? (
+                            <div className="flex items-center gap-3">
+                                <SubmitBtn
+                                    title="Cancel"
+                                    className="bg-gray-400 hover:bg-gray-500"
+                                    onClick={() => setEditMode(false)}
+                                />
+                                <SubmitBtn title="Save" />
+                            </div>
+                        ) : (
+                            <DashboardBTN onClick={() => setEditMode(true)}>
+                                Edit
+                            </DashboardBTN>
+                        )}
+                    </>
+                ) : (
+                    <SubmitBtn title="Create Product" />
+                )} */}
             </div>
         </form>
     );

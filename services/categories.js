@@ -1,8 +1,31 @@
-import { API_BASE_URL } from '@/utils/constants';
+import { API_BASE_URL, responseAndResult } from '@/utils/constants';
 
-export const getAllCategory = async () => {
-    const res = await fetch(`${API_BASE_URL}/categories/all`);
-    const result = await res.json();
+export const getAllCategories = async () => {
+    try {
+        const res = await fetch(`${API_BASE_URL}/categories/all`, {
+            cache: 'no-store',
+        });
+        const result = await res.json();
 
-    return { res, result };
+        return { res, result };
+    } catch (err) {
+        return { err, ...responseAndResult };
+    }
+};
+
+export const addCategory = async (Data, token) => {
+    try {
+        const response = await fetch(API_BASE_URL + '/categories/create', {
+            method: 'POST',
+            body: JSON.stringify(Data),
+            headers: {
+                authorization: `Bearer ${token}`,
+                'content-type': 'application/json',
+            },
+        });
+
+        return response;
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
 };

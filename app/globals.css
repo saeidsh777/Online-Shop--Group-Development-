@@ -20,7 +20,7 @@
         @apply block w-full px-3 py-3 rounded-md border-0 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-300 sm:text-sm sm:leading-6;
     }
     .Auth_Input:disabled {
-        @apply text-gray-300 ring-gray-200
+        @apply text-gray-300 ring-gray-200;
     }
 
     .General_Input_1 {
@@ -47,7 +47,51 @@
         -ms-border-radius: 0 0.3rem 0.3rem 0;
         -o-border-radius: 0 0.3rem 0.3rem 0;
     }
+
+    .showRingsOnlyOnFocus:not(:focus) {
+        box-shadow: none;
+        border: none;
+    }
     /* Inputs Styles END */
+
+    /* Category box START */
+    .categroyLable:has(~ input:checked) {
+        @apply pb-1 md:pb-2 lg:pb-2.5;
+    }
+
+    .categroyLable:has(~ input:checked) svg {
+        transform: rotate(90deg);
+    }
+
+    .categroy .categoryBody,
+    .categroy .categoryFooter {
+        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+            max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .categroy:has(input:checked) .categoryBody {
+        max-height: 20rem;
+        background-color: transparent;
+        animation: changeOverflowAfter2 0s forwards;
+        animation-delay: 0.3s;
+    }
+
+    @keyframes changeOverflowAfter2 {
+        0% {
+        }
+        100% {
+            overflow-y: auto;
+        }
+    }
+
+    .categroy:has(input:checked) {
+        border: 1px solid rgb(70, 128, 255);
+    }
+    .categroy:has(input:checked) .categoryFooter {
+        max-height: 10rem;
+        max-width: 100dvw;
+    }
+
+    /* Category box END */
 
     /* change sidebar flow */
     @media screen and (min-width: 1152px) {

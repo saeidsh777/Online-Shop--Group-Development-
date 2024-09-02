@@ -6,7 +6,7 @@ import { optionsHookForm } from '@/utils/constants';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
+ 
 export default function EditUserForm() {
     const searchParams = useSearchParams();
     const userEmail = searchParams.get('email');
@@ -18,7 +18,6 @@ export default function EditUserForm() {
         reset,
         handleSubmit,
         formState: { errors },
-        formState,
     } = useForm({
         defaultValues: {
             name: 'Loading Name...',
@@ -141,7 +140,13 @@ export default function EditUserForm() {
                         </DashboardBTN>
                     </div>
                 ) : (
-                    <DashboardBTN onClick={() => setEditMode(true)}>
+                    <DashboardBTN
+                        onClick={() => setEditMode(true)}
+                        disabled={
+                            Object.keys(userData).length === 0 ? true : false
+                        }
+                        className="disabled:bg-gray-300"
+                    >
                         Edit
                     </DashboardBTN>
                 )}
