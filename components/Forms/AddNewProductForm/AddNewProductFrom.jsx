@@ -30,7 +30,9 @@ export default function AddNewProductForm() {
     useEffect(() => {
         const categoriesRequestHandler = async () => {
             const { res, result, err } = await getAllCategories();
-            res.status === 200 && setCategories(result);
+            res.status === 200
+                ? setCategories(result)
+                : toast.error(String(err));
         };
         categoriesRequestHandler();
     }, []);
