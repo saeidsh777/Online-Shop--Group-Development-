@@ -11,7 +11,7 @@ const FieldsBox = props => {
             <table className="w-full">
                 <Thead />
                 <Tbody {...otherProps} />
-                <Tfoot AddField={AddField} />
+                <Tfoot AddField={AddField} col={4} />
             </table>
         </DashboardBox>
     );

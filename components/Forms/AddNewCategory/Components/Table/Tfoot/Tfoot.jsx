@@ -1,10 +1,10 @@
 import AddMoreField from './AddMoreField';
 
-const Tfoot = ({ AddField }) => {
+const Tfoot = ({ AddField, col }) => {
     return (
         <tfoot>
             <tr>
-                <td colSpan={3} className="text-center pt-3">
+                <td colSpan={col} className="text-center pt-3">
                     <AddMoreField AddField={AddField} />
                 </td>
             </tr>
