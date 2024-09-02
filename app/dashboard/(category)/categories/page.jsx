@@ -10,7 +10,7 @@ import Link from 'next/link';
 const page = async () => {
     const categories = await getAllCategories();
 
-    if (categories === 'error')
+    if (categories.err)
         return (
             <div>
                 <h3 className="text-center font-medium text-[120%] mb-5">

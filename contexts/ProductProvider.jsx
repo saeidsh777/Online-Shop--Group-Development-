@@ -1,18 +1,21 @@
 'use client';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import defaultImage from '../public/images/default-image-product.svg';
 
-export default function useProduct() {
-    const [inputs, setInputs] = useState({
+export const ProductContext = createContext();
+
+export default function ProductProvider({ children }) {
+    const [fixedInputs, setFixedInputs] = useState({
         name: '',
-        category: '',
-        categories: [],
+        category: '-1',
+        description: '',
         price: '',
         discountType: '-1',
-        description: '',
         discount: '',
         finalPrice: 0,
     });
+
+    const [categories, setCategories] = useState([]);
 
     const [productImages, setProductImages] = useState({
         image0: defaultImage,
@@ -23,10 +26,8 @@ export default function useProduct() {
 
     const [images, setImages] = useState([]);
 
-    const [editMode, setEditMode] = useState(false);
-
-    const onChange = datas => {
-        setInputs(prv => {
+    const onChangeFixedInputs = datas => {
+        setFixedInputs(prv => {
             return {
                 ...prv,
                 ...datas,
@@ -50,15 +51,21 @@ export default function useProduct() {
         return formData;
     };
 
-    return {
-        inputs,
-        onChange,
+    const contextValues = {
+        fixedInputs,
+        onChangeFixedInputs,
+        categories,
+        setCategories,
         productImages,
         setProductImages,
         images,
         setImages,
-        editMode,
-        setEditMode,
         formDataGenarator,
     };
+
+    return (
+        <ProductContext.Provider value={contextValues}>
+            {children}
+        </ProductContext.Provider>
+    );
 }

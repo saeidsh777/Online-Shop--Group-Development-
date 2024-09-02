@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/utils/constants';
+import { API_BASE_URL, responseAndResult } from '@/utils/constants';
 
 export const getAllCategories = async () => {
     try {
@@ -8,8 +8,8 @@ export const getAllCategories = async () => {
         const result = await res.json();
 
         return { res, result };
-    } catch (e) {
-        return e instanceof Error ? e.message : 'Error';
+    } catch (err) {
+        return { err, ...responseAndResult };
     }
 };
 
