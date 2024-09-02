@@ -3,11 +3,22 @@ import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
 import SectionTitel from '@/components/Titels/SectionTitel/SectionTitel';
+import RefreshPage from '@/hooks/RefreshPage';
 import { getAllCategories } from '@/services/categories';
 import Link from 'next/link';
 
 const page = async () => {
     const categories = await getAllCategories();
+
+    if (categories === 'error')
+        return (
+            <div>
+                <h3 className="text-center font-medium text-[120%] mb-5">
+                    Oops something went wrong!{' '}
+                </h3>
+                <RefreshPage />
+            </div>
+        );
 
     return (
         <div>
