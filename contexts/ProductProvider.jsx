@@ -4,17 +4,18 @@ import defaultImage from '../public/images/default-image-product.svg';
 
 export const ProductContext = createContext();
 
-export default function ProductProvider({children}) {
-    const [inputs, setInputs] = useState({
+export default function ProductProvider({ children }) {
+    const [fixedInputs, setFixedInputs] = useState({
         name: '',
-        category: '',
-        categories: [],
+        category: '-1',
+        description: '',
         price: '',
         discountType: '-1',
-        description: '',
         discount: '',
         finalPrice: 0,
     });
+
+    const [categories, setCategories] = useState([]);
 
     const [productImages, setProductImages] = useState({
         image0: defaultImage,
@@ -25,8 +26,8 @@ export default function ProductProvider({children}) {
 
     const [images, setImages] = useState([]);
 
-    const onChange = datas => {
-        setInputs(prv => {
+    const onChangeFixedInputs = datas => {
+        setFixedInputs(prv => {
             return {
                 ...prv,
                 ...datas,
@@ -51,8 +52,10 @@ export default function ProductProvider({children}) {
     };
 
     const contextValues = {
-        inputs,
-        onChange,
+        fixedInputs,
+        onChangeFixedInputs,
+        categories,
+        setCategories,
         productImages,
         setProductImages,
         images,

@@ -1,12 +1,16 @@
-import { API_BASE_URL } from '@/utils/constants';
+import { API_BASE_URL, responseAndResult } from '@/utils/constants';
 
 export const getAllCategories = async () => {
-    const res = await fetch(`${API_BASE_URL}/categories/all`, {
-        cache: 'no-store',
-    });
-    const result = await res.json();
+    try {
+        const res = await fetch(`${API_BASE_URL}/categories/all`, {
+            cache: 'no-store',
+        });
+        const result = await res.json();
 
-    return { res, result };
+        return { res, result };
+    } catch (err) {
+        return { err, ...responseAndResult };
+    }
 };
 
 export const addCategory = async (Data, token) => {

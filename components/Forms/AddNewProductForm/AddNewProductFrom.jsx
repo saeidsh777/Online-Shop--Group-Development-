@@ -14,8 +14,10 @@ import { ProductContext } from '@/contexts/ProductProvider';
 
 export default function AddNewProductForm() {
     const {
-        inputs,
-        onChange,
+        fixedInputs,
+        onChangeFixedInputs,
+        categories,
+        setCategories,
         productImages,
         setProductImages,
         images,
@@ -28,7 +30,7 @@ export default function AddNewProductForm() {
     useEffect(() => {
         const categoriesRequestHandler = async () => {
             const { res, result, err } = await getAllCategories();
-            res.status === 200 && onChange({ categories: result });
+            res.status === 200 && setCategories(result);
         };
         categoriesRequestHandler();
     }, []);
@@ -62,29 +64,29 @@ export default function AddNewProductForm() {
     }
 
     // Product discount calculation
-    const discountHandler = value => {
-        // For numeric discountType
-        if (inputs.discountType === 'Numerical') {
-            if (inputs.price - +value >= 0) {
-                onChange({ finalPrice: +inputs.price - +value });
-            } else {
-                onChange({ finalPrice: +inputs.price - +inputs.price });
-            }
-        }
+    // const discountHandler = value => {
+    //     // For numeric discountType
+    //     if (inputs.discountType === 'Numerical') {
+    //         if (inputs.price - +value >= 0) {
+    //             onChange({ finalPrice: +inputs.price - +value });
+    //         } else {
+    //             onChange({ finalPrice: +inputs.price - +inputs.price });
+    //         }
+    //     }
 
-        // For numeric Percentage
-        if (inputs.discountType === 'Percentage') {
-            if (value >= 100) {
-                onChange({ finalPrice: 0 });
-            } else if (value <= 0) {
-                onChange({ finalPrice: +inputs.price });
-            } else {
-                onChange({
-                    finalPrice: +inputs.price - (+inputs.price * +value) / 100,
-                });
-            }
-        }
-    };
+    //     // For numeric Percentage
+    //     if (inputs.discountType === 'Percentage') {
+    //         if (value >= 100) {
+    //             onChange({ finalPrice: 0 });
+    //         } else if (value <= 0) {
+    //             onChange({ finalPrice: +inputs.price });
+    //         } else {
+    //             onChange({
+    //                 finalPrice: +inputs.price - (+inputs.price * +value) / 100,
+    //             });
+    //         }
+    //     }
+    // };
 
     const addImageHandler = files => {
         const indexEnd = 4 - images.length;
@@ -104,56 +106,56 @@ export default function AddNewProductForm() {
         setImages(newImage);
     };
 
-    const submitHandler = async e => {
-        e.preventDefault();
+    // const submitHandler = async e => {
+    //     e.preventDefault();
 
-        if (init.type === 'new') {
-            const { res, result, err } = await addNewProduct(formDataGenarator);
-            if (res.status === 201) {
-                onChange({
-                    name: '',
-                    category: '',
-                    price: '',
-                    discountType: '-1',
-                    description: '',
-                    discount: '',
-                    finalPrice: 0,
-                });
-                setImages([]);
-                setProductImages({
-                    image0: defaultImage,
-                    image1: defaultImage,
-                    image2: defaultImage,
-                    image3: defaultImage,
-                });
-                filesInput.current = '';
-                productImagesElm.current = [];
-                toast.success('Created New Product');
-            } else if (res.status === 500) {
-                toast.error(err.message + '!');
-            } else {
-                toast.error(result.message + '!');
-            }
-        } else if (init.type === 'edit') {
-            const { res, result, err } = await editProduct(
-                formDataGenarator,
-                init.productId
-            );
-            if (res.status === 201) {
-                setEditMode(false);
-                toast.success('Edit Product Successfully');
-            } else if (res.status === 500) {
-                toast.error(err.message + '!');
-            } else {
-                toast.error(result.message + '!');
-            }
-        }
-    };
+    //     if (init.type === 'new') {
+    //         const { res, result, err } = await addNewProduct(formDataGenarator);
+    //         if (res.status === 201) {
+    //             onChange({
+    //                 name: '',
+    //                 category: '',
+    //                 price: '',
+    //                 discountType: '-1',
+    //                 description: '',
+    //                 discount: '',
+    //                 finalPrice: 0,
+    //             });
+    //             setImages([]);
+    //             setProductImages({
+    //                 image0: defaultImage,
+    //                 image1: defaultImage,
+    //                 image2: defaultImage,
+    //                 image3: defaultImage,
+    //             });
+    //             filesInput.current = '';
+    //             productImagesElm.current = [];
+    //             toast.success('Created New Product');
+    //         } else if (res.status === 500) {
+    //             toast.error(err.message + '!');
+    //         } else {
+    //             toast.error(result.message + '!');
+    //         }
+    //     } else if (init.type === 'edit') {
+    //         const { res, result, err } = await editProduct(
+    //             formDataGenarator,
+    //             init.productId
+    //         );
+    //         if (res.status === 201) {
+    //             setEditMode(false);
+    //             toast.success('Edit Product Successfully');
+    //         } else if (res.status === 500) {
+    //             toast.error(err.message + '!');
+    //         } else {
+    //             toast.error(result.message + '!');
+    //         }
+    //     }
+    // };
     return (
         <form
             className=" grid grid-cols-1 lg:grid-cols-2 gap-3"
             name="add-new-product"
-            onSubmit={submitHandler}
+            // onSubmit={submitHandler}
         >
             <div className="p-4 border border-gray-200 rounded-xl">
                 <div className="mb-3">
@@ -166,8 +168,10 @@ export default function AddNewProductForm() {
                             type="text"
                             placeholder="Enter product name"
                             className="General_Input_1"
-                            value={inputs?.name}
-                            onChange={e => onChange({ name: e.target.value })}
+                            value={fixedInputs?.name}
+                            onChange={e =>
+                                onChangeFixedInputs({ name: e.target.value })
+                            }
                         />
                     </div>
                 </div>
@@ -180,13 +184,15 @@ export default function AddNewProductForm() {
                         <select
                             id="category"
                             className="General_Input_1 h-[36px]"
-                            value={inputs?.category}
+                            value={fixedInputs?.category}
                             onChange={e =>
-                                onChange({ category: e.target.value })
+                                onChangeFixedInputs({
+                                    category: e.target.value,
+                                })
                             }
                         >
                             <option value="-1">Select your category</option>
-                            {inputs.categories.map(category => (
+                            {categories.map(category => (
                                 <option
                                     key={category?._id}
                                     value={category?._id}
@@ -197,7 +203,7 @@ export default function AddNewProductForm() {
                         </select>
                     </div>
                 </div>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <label className="text-sm" htmlFor="price">
                         Price
                     </label>
@@ -332,7 +338,7 @@ export default function AddNewProductForm() {
                             {inputs.finalPrice.toLocaleString()} $
                         </span>
                     </small>
-                </div>
+                </div> */}
             </div>
 
             <div className="p-4 border flex flex-col justify-between border-gray-200 rounded-xl">
