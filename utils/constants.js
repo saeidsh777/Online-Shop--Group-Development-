@@ -36,3 +36,14 @@ export const optionsHookForm = {
         },
     },
 };
+
+export const responseAndResult = {
+    res: {
+        status: 500,
+        message: 'The server is not available',
+    },
+    result: {
+        status: 500,
+        message: 'The server is not available',
+    },
+};
