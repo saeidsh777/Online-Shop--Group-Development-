@@ -1,7 +1,9 @@
 import { API_BASE_URL } from '@/utils/constants';
 
 export const getAllCategories = async () => {
-    const res = await fetch(`${API_BASE_URL}/categories/all`);
+    const res = await fetch(`${API_BASE_URL}/categories/all`, {
+        cache: 'no-store',
+    });
     const result = await res.json();
 
     return { res, result };
@@ -20,10 +22,6 @@ export const addCategory = async (Data, token) => {
 
         return response;
     } catch (e) {
-        return e instanceof Error
-            ? typeof e.message === 'string'
-                ? e.message
-                : 'Error'
-            : 'Error';
+        return e instanceof Error ? e.message : 'Error';
     }
 };
