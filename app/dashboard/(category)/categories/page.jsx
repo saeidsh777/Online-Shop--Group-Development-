@@ -8,9 +8,6 @@ import Link from 'next/link';
 
 const page = async () => {
     const categories = await getAllCategories();
-    console.log('---------------');
-    console.log(categories);
-    console.log('---------------');
 
     return (
         <div>
@@ -33,7 +30,7 @@ const page = async () => {
                     </Link>
                 </div>
                 <div className="flex flex-col gap-2 425:gap-2.5 sm:gap-3 896:gap-3.5">
-                    {categories.result.map((category, index) => (
+                    {categories.result.map(category => (
                         <CategoryBox key={category.id} {...category} />
                     ))}
                 </div>
