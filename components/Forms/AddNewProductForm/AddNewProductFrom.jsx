@@ -11,6 +11,9 @@ import toast from 'react-hot-toast';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FiUploadCloud } from 'react-icons/fi';
 import { ProductContext } from '@/contexts/ProductProvider';
+import DashboardBox from '@/components/Boxes/DashboardBox';
+import Step from '@/components/Others/Step/Step';
+import Link from 'next/link';
 
 export default function AddNewProductForm() {
     const {
@@ -22,6 +25,9 @@ export default function AddNewProductForm() {
         setProductImages,
         images,
         setImages,
+        step,
+        setStep,
+        onChangeCategory,
         formDataGenarator,
     } = useContext(ProductContext);
     const filesInput = useRef();
@@ -30,6 +36,7 @@ export default function AddNewProductForm() {
     useEffect(() => {
         const categoriesRequestHandler = async () => {
             const { res, result, err } = await getAllCategories();
+            console.log(result);
             res.status === 200
                 ? setCategories(result)
                 : toast.error(String(err));
@@ -40,6 +47,10 @@ export default function AddNewProductForm() {
     useEffect(() => {
         readURL();
     }, [images]);
+
+    useEffect(() => {
+        console.log(fixedInputs.category);
+    }, [fixedInputs.category]);
 
     // Receiving photos from input file and creating a viewable photo
     function readURL() {
@@ -154,58 +165,318 @@ export default function AddNewProductForm() {
     //     }
     // };
     return (
-        <form
-            className=" grid grid-cols-1 lg:grid-cols-2 gap-3"
-            name="add-new-product"
-            // onSubmit={submitHandler}
-        >
-            <div className="p-4 border border-gray-200 rounded-xl">
-                <div className="mb-3">
-                    <label className="text-sm" htmlFor="name">
-                        Product Name
-                    </label>
-                    <div className="mt-2">
-                        <input
-                            id="name"
-                            type="text"
-                            placeholder="Enter product name"
-                            className="General_Input_1"
-                            value={fixedInputs?.name}
-                            onChange={e =>
-                                onChangeFixedInputs({ name: e.target.value })
-                            }
-                        />
-                    </div>
-                </div>
+        <>
+            <Step />
+            <DashboardBox>
+                <form
+                    className=" grid grid-cols-1 lg:grid-cols-2 gap-3"
+                    name="add-new-product"
+                    // onSubmit={submitHandler}
+                >
+                    {step === 1 && (
+                        <>
+                            <div className="p-4 border border-gray-200 rounded-xl">
+                                <div className="mb-3">
+                                    <label className="text-sm" htmlFor="name">
+                                        Product Name
+                                    </label>
+                                    <div className="mt-2">
+                                        <input
+                                            id="name"
+                                            type="text"
+                                            placeholder="Enter product name"
+                                            className="General_Input_1"
+                                            value={fixedInputs?.name}
+                                            onChange={e =>
+                                                onChangeFixedInputs({
+                                                    name: e.target.value,
+                                                })
+                                            }
+                                        />
+                                    </div>
+                                </div>
 
-                <div className="mb-3">
-                    <label className="text-sm" htmlFor="category">
-                        Category
-                    </label>
-                    <div className="mt-2">
-                        <select
-                            id="category"
-                            className="General_Input_1 h-[36px]"
-                            value={fixedInputs?.category}
-                            onChange={e =>
-                                onChangeFixedInputs({
-                                    category: e.target.value,
-                                })
-                            }
+                                <div className="mb-3">
+                                    <label
+                                        className="text-sm"
+                                        htmlFor="category"
+                                    >
+                                        Category
+                                    </label>
+                                    <div className="mt-2">
+                                        <select
+                                            id="category"
+                                            className="General_Input_1 h-[36px]"
+                                            value={fixedInputs.category._id}
+                                            onChange={e => onChangeCategory(e)}
+                                        >
+                                            <option value="-1">
+                                                Select your category
+                                            </option>
+                                            {categories.map(category => (
+                                                <option
+                                                    key={category._id}
+                                                    value={category._id}
+                                                >
+                                                    {category.title}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="mb-5 bg-gray-50 p-2 rounded-md">
+                                    <p className="font-bold text-sm">
+                                        <span className="text-red-500">*</span>{' '}
+                                        What to do if you do not find the
+                                        desired category:
+                                    </p>
+
+                                    <ul className="mt-1">
+                                        <li className="text-sm">
+                                            1- Go to{' '}
+                                            <Link
+                                                href="/dashboard/add-new-category"
+                                                className="font-bold underline"
+                                            >
+                                                Add New Category
+                                            </Link>
+                                        </li>
+                                        <li className="text-sm">
+                                            2- Enter your category name
+                                        </li>
+                                        <li className="text-sm">
+                                            3- If you have a product variety,
+                                            create and confirm
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label
+                                        className="text-sm"
+                                        htmlFor="description"
+                                    >
+                                        Product Description
+                                    </label>
+                                    <div className="mt-2">
+                                        <textarea
+                                            rows={10}
+                                            id="description"
+                                            type="text"
+                                            value={fixedInputs.description}
+                                            onChange={e =>
+                                                onChangeFixedInputs({
+                                                    description: e.target.value,
+                                                })
+                                            }
+                                            placeholder="Enter product description ..."
+                                            className="General_Input_1"
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="p-4 border flex flex-col justify-between border-gray-200 rounded-xl">
+                                <div className="flex flex-col gap-2 mb-3">
+                                    <div className="p-2 md:p-3 lg:p-3.5 bg-[#F3F5F7] w-full rounded-lg flex gap-1.5 md:gap-2 lg:gap-3   896:flex-1">
+                                        <div
+                                            className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
+                                                !images[0] &&
+                                                'flex justify-center items-center'
+                                            }`}
+                                        >
+                                            <Image
+                                                ref={el =>
+                                                    (productImagesElm.current[
+                                                        '0'
+                                                    ] = el)
+                                                }
+                                                src={productImages.image0}
+                                                width={400}
+                                                height={400}
+                                                alt="product image"
+                                                className={`object-cover rounded-lg ${
+                                                    images[0]
+                                                        ? 'w-[100%] h-[100%]'
+                                                        : 'w-[80%] h-[70%]'
+                                                }`}
+                                            />
+                                            {images[0] && (
+                                                <span
+                                                    className="absolute bottom-0 right-0 p-3 rounded-md bg-red-100 bg-opacity-80 text-red-500 cursor-pointer"
+                                                    onClick={() =>
+                                                        deleteImageHandler(0)
+                                                    }
+                                                >
+                                                    <AiOutlineDelete />
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="grid grid-rows-3 gap-2 md:gap-3 lg:gap-3.5 sm:grid-rows-1 896:grid-cols-1 896:grid-rows-3 flex-1">
+                                            <div
+                                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
+                                                    !images[1] &&
+                                                    'flex justify-center items-center'
+                                                }`}
+                                            >
+                                                <Image
+                                                    ref={el =>
+                                                        (productImagesElm.current[
+                                                            '1'
+                                                        ] = el)
+                                                    }
+                                                    src={productImages.image1}
+                                                    width={400}
+                                                    height={400}
+                                                    alt="product image"
+                                                    className={`object-cover rounded-lg ${
+                                                        images[1]
+                                                            ? 'w-[100%] h-[100%]'
+                                                            : 'w-[90%] h-[90%]'
+                                                    }`}
+                                                />
+                                                {images[1] && (
+                                                    <span
+                                                        className="absolute bottom-0 right-0 p-3 rounded-md bg-red-100 bg-opacity-80 text-red-500 cursor-pointer"
+                                                        onClick={() =>
+                                                            deleteImageHandler(
+                                                                1
+                                                            )
+                                                        }
+                                                    >
+                                                        <AiOutlineDelete />
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div
+                                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
+                                                    !images[2] &&
+                                                    'flex justify-center items-center'
+                                                }`}
+                                            >
+                                                <Image
+                                                    ref={el =>
+                                                        (productImagesElm.current[
+                                                            '2'
+                                                        ] = el)
+                                                    }
+                                                    src={productImages.image2}
+                                                    width={400}
+                                                    height={400}
+                                                    alt="product image"
+                                                    className={`object-cover rounded-lg ${
+                                                        images[2]
+                                                            ? 'w-[100%] h-[100%]'
+                                                            : 'w-[90%] h-[90%]'
+                                                    }`}
+                                                />
+                                                {images[2] && (
+                                                    <span
+                                                        className="absolute bottom-0 right-0 p-3 rounded-md bg-red-100 bg-opacity-80 text-red-500 cursor-pointer"
+                                                        onClick={() =>
+                                                            deleteImageHandler(
+                                                                2
+                                                            )
+                                                        }
+                                                    >
+                                                        <AiOutlineDelete />
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div
+                                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
+                                                    !images[3] &&
+                                                    'flex justify-center items-center'
+                                                }`}
+                                            >
+                                                <Image
+                                                    ref={el =>
+                                                        (productImagesElm.current[
+                                                            '3'
+                                                        ] = el)
+                                                    }
+                                                    src={productImages.image3}
+                                                    width={400}
+                                                    height={400}
+                                                    alt="product image"
+                                                    className={`object-cover rounded-lg ${
+                                                        images[3]
+                                                            ? 'w-[100%] h-[100%]'
+                                                            : 'w-[90%] h-[90%]'
+                                                    }`}
+                                                />
+                                                {images[3] && (
+                                                    <span
+                                                        className="absolute bottom-0 right-0 p-3 rounded-md bg-red-100 bg-opacity-80 text-red-500 cursor-pointer"
+                                                        onClick={() =>
+                                                            deleteImageHandler(
+                                                                3
+                                                            )
+                                                        }
+                                                    >
+                                                        <AiOutlineDelete />
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label
+                                            htmlFor="img"
+                                            className={`${
+                                                images.length
+                                                    ? 'bg-gradient-to-r from-sky-50 to-indigo-100'
+                                                    : 'bg-inherit'
+                                            } flex w-full py-2 justify-between overflow-hidden bg-gray-200 hover:bg-gray-50 cursor-pointer items-center border border-gray-200 rounded-md`}
+                                        >
+                                            <div className="w-full flex flex-col items-center justify-center">
+                                                <FiUploadCloud className="iconFontSize" />
+                                                <p className="text-xs">
+                                                    {images.length
+                                                        ? `Uploaded ${images.length} File`
+                                                        : 'No File'}
+                                                </p>
+                                            </div>
+                                            <input
+                                                id="img"
+                                                type="file"
+                                                className="hidden"
+                                                multiple={true}
+                                                name="files"
+                                                ref={filesInput}
+                                                onChange={e => {
+                                                    addImageHandler(
+                                                        e.target.files
+                                                    );
+                                                }}
+                                                accept="image/png, image/jpeg, image/jpg"
+                                            />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    <div className="flex items-center gap-2">
+                        <DashboardBTN
+                            type="button"
+                            disabled={step <= 1 ? true : false}
+                            className="disabled:bg-gray-400"
+                            onClick={() => setStep(prv => prv - 1)}
                         >
-                            <option value="-1">Select your category</option>
-                            {categories.map(category => (
-                                <option
-                                    key={category?._id}
-                                    value={category?._id}
-                                >
-                                    {category?.title}
-                                </option>
-                            ))}
-                        </select>
+                            Back
+                        </DashboardBTN>
+                        <DashboardBTN
+                            type="button"
+                            disabled={step >= 3 ? true : false}
+                            className="disabled:bg-gray-400"
+                            onClick={() => setStep(prv => prv + 1)}
+                        >
+                            Next
+                        </DashboardBTN>
                     </div>
-                </div>
-                {/* <div className="mb-3">
+                    {/* <div className="mb-3">
                     <label className="text-sm" htmlFor="price">
                         Price
                     </label>
@@ -235,8 +506,8 @@ export default function AddNewProductForm() {
                             }}
                         />
                     </div>
-                </div>
-                <div className="flex flex-col md:flex-row gap-2">
+                </div> */}
+                    {/* <div className="flex flex-col md:flex-row gap-2">
                     <div className="mb-3 w-full md:w-[30%]">
                         <label className="text-sm" htmlFor="discountType">
                             Discount Type
@@ -287,34 +558,17 @@ export default function AddNewProductForm() {
                             />
                         </div>
                     </div>
-                </div>
-                <div className="mb-3">
-                    <label className="text-sm" htmlFor="description">
-                        Product Description
-                    </label>
-                    <div className="mt-2">
-                        <textarea
-                            rows={8}
-                            id="description"
-                            type="text"
-                            value={inputs?.description}
-                            onChange={e =>
-                                onChange({ description: e.target.value })
-                            }
-                            placeholder="Enter product description ..."
-                            className="General_Input_1"
-                        ></textarea>
-                    </div>
-                </div>
-                <div className="mt-3">
+                </div> */}
+
+                    {/* <div className="mt-3">
                     <small className="flex items-center text-sm text-gray-400">
                         Total Price:
                         <span className="ms-4">
                             {inputs.price ? inputs.price.toLocaleString() : 0} $
                         </span>
                     </small>
-                </div>
-                <div>
+                </div> */}
+                    {/* <div>
                     <small className="flex items-center text-sm text-gray-400">
                         Discount Price:
                         <span className="ms-4 text-red-300">
@@ -331,9 +585,9 @@ export default function AddNewProductForm() {
                             {' $'}
                         </span>
                     </small>
-                </div>
+                </div> */}
 
-                <div className="mt-3">
+                    {/* <div className="mt-3">
                     <small>
                         Final Price:
                         <span className="ms-2 bg-gray-100 px-2 py-1 rounded-lg">
@@ -341,180 +595,8 @@ export default function AddNewProductForm() {
                         </span>
                     </small>
                 </div> */}
-            </div>
-
-            <div className="p-4 border flex flex-col justify-between border-gray-200 rounded-xl">
-                <div className="flex flex-col gap-2 mb-3">
-                    <div className="p-2 md:p-3 lg:p-3.5 bg-[#F3F5F7] w-full rounded-lg flex gap-1.5 md:gap-2 lg:gap-3 sm:flex-col 896:flex-row 896:flex-1">
-                        <div
-                            className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
-                                !images[0] && 'flex justify-center items-center'
-                            }`}
-                        >
-                            <Image
-                                ref={el => (productImagesElm.current['0'] = el)}
-                                src={productImages.image0}
-                                width={400}
-                                height={400}
-                                alt="product image"
-                                className={`object-cover rounded-lg ${
-                                    images[0]
-                                        ? 'w-[100%] h-[100%]'
-                                        : 'w-[80%] h-[70%]'
-                                }`}
-                            />
-                            {images[0] && (
-                                <span
-                                    className="absolute bottom-0 right-0 p-3 rounded-md bg-red-100 bg-opacity-80 text-red-500 cursor-pointer"
-                                    onClick={() => deleteImageHandler(0)}
-                                >
-                                    <AiOutlineDelete />
-                                </span>
-                            )}
-                        </div>
-                        <div className="grid grid-rows-3 gap-2 md:gap-3 lg:gap-3.5  sm:grid-cols-3 sm:grid-rows-1 896:grid-cols-1 896:grid-rows-3 flex-1">
-                            <div
-                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
-                                    !images[1] &&
-                                    'flex justify-center items-center'
-                                }`}
-                            >
-                                <Image
-                                    ref={el =>
-                                        (productImagesElm.current['1'] = el)
-                                    }
-                                    src={productImages.image1}
-                                    width={400}
-                                    height={400}
-                                    alt="product image"
-                                    className={`object-cover rounded-lg ${
-                                        images[1]
-                                            ? 'w-[100%] h-[100%]'
-                                            : 'w-[90%] h-[90%]'
-                                    }`}
-                                />
-                                {images[1] && (
-                                    <span
-                                        className="absolute bottom-0 right-0 p-3 rounded-md bg-red-100 bg-opacity-80 text-red-500 cursor-pointer"
-                                        onClick={() => deleteImageHandler(1)}
-                                    >
-                                        <AiOutlineDelete />
-                                    </span>
-                                )}
-                            </div>
-                            <div
-                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
-                                    !images[2] &&
-                                    'flex justify-center items-center'
-                                }`}
-                            >
-                                <Image
-                                    ref={el =>
-                                        (productImagesElm.current['2'] = el)
-                                    }
-                                    src={productImages.image2}
-                                    width={400}
-                                    height={400}
-                                    alt="product image"
-                                    className={`object-cover rounded-lg ${
-                                        images[2]
-                                            ? 'w-[100%] h-[100%]'
-                                            : 'w-[90%] h-[90%]'
-                                    }`}
-                                />
-                                {images[2] && (
-                                    <span
-                                        className="absolute bottom-0 right-0 p-3 rounded-md bg-red-100 bg-opacity-80 text-red-500 cursor-pointer"
-                                        onClick={() => deleteImageHandler(2)}
-                                    >
-                                        <AiOutlineDelete />
-                                    </span>
-                                )}
-                            </div>
-                            <div
-                                className={`bg-slate-400 aspect-square rounded-lg flex-[3] overflow-hidden p-1 md:p-2 relative ${
-                                    !images[3] &&
-                                    'flex justify-center items-center'
-                                }`}
-                            >
-                                <Image
-                                    ref={el =>
-                                        (productImagesElm.current['3'] = el)
-                                    }
-                                    src={productImages.image3}
-                                    width={400}
-                                    height={400}
-                                    alt="product image"
-                                    className={`object-cover rounded-lg ${
-                                        images[3]
-                                            ? 'w-[100%] h-[100%]'
-                                            : 'w-[90%] h-[90%]'
-                                    }`}
-                                />
-                                {images[3] && (
-                                    <span
-                                        className="absolute bottom-0 right-0 p-3 rounded-md bg-red-100 bg-opacity-80 text-red-500 cursor-pointer"
-                                        onClick={() => deleteImageHandler(3)}
-                                    >
-                                        <AiOutlineDelete />
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <label
-                            htmlFor="img"
-                            className={`${
-                                images.length
-                                    ? 'bg-gradient-to-r from-sky-50 to-indigo-100'
-                                    : 'bg-inherit'
-                            } flex w-full py-2 justify-between overflow-hidden bg-gray-200 hover:bg-gray-50 cursor-pointer items-center border border-gray-200 rounded-md`}
-                        >
-                            <div className="w-full flex flex-col items-center justify-center">
-                                <FiUploadCloud className="iconFontSize" />
-                                <p className="text-xs">
-                                    {images.length
-                                        ? `Uploaded ${images.length} File`
-                                        : 'No File'}
-                                </p>
-                            </div>
-                            <input
-                                id="img"
-                                type="file"
-                                className="hidden"
-                                multiple={true}
-                                name="files"
-                                ref={filesInput}
-                                onChange={e => {
-                                    addImageHandler(e.target.files);
-                                }}
-                                accept="image/png, image/jpeg, image/jpg"
-                            />
-                        </label>
-                    </div>
-                </div>
-                {/* {init.type === 'edit' ? (
-                    <>
-                        {editMode ? (
-                            <div className="flex items-center gap-3">
-                                <SubmitBtn
-                                    title="Cancel"
-                                    className="bg-gray-400 hover:bg-gray-500"
-                                    onClick={() => setEditMode(false)}
-                                />
-                                <SubmitBtn title="Save" />
-                            </div>
-                        ) : (
-                            <DashboardBTN onClick={() => setEditMode(true)}>
-                                Edit
-                            </DashboardBTN>
-                        )}
-                    </>
-                ) : (
-                    <SubmitBtn title="Create Product" />
-                )} */}
-            </div>
-        </form>
+                </form>
+            </DashboardBox>
+        </>
     );
 }
