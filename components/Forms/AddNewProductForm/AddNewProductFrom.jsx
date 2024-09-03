@@ -22,7 +22,6 @@ export default function AddNewProductForm() {
         setCategories,
         step,
         setStep,
-        models,
         setModels,
         onChangeCategory,
         formDataGenarator,
@@ -31,16 +30,58 @@ export default function AddNewProductForm() {
     useEffect(() => {
         const categoriesRequestHandler = async () => {
             const { res, result, err } = await getAllCategories();
-            console.log(result);
             res.status === 200
                 ? setCategories(result)
                 : toast.error(String(err));
         };
         categoriesRequestHandler();
+
+        setModels([
+            {
+                id: crypto.randomUUID(),
+                categoryFiels: [],
+                detialFields: [],
+                fixedFields: {
+                    price: '',
+                    discountType: '-1',
+                    discount: '',
+                    finalPrice: 0,
+                },
+            },
+        ]);
     }, []);
 
     useEffect(() => {
-        console.log(fixedInputs.category);
+        const category = fixedInputs.category;
+        if (category._id !== '-1') {
+            const { productVariantsSchema } = category;
+            let model = {
+                _id: crypto.randomUUID(),
+                categoryFiels: productVariantsSchema,
+                detialFields: [],
+                fixedFields: {
+                    price: '',
+                    discountType: '-1',
+                    discount: '',
+                    finalPrice: 0,
+                },
+            };
+            setModels([model]);
+        } else {
+            setModels([
+                {
+                    _id: crypto.randomUUID(),
+                    categoryFiels: [],
+                    detialFields: [],
+                    fixedFields: {
+                        price: '',
+                        discountType: '-1',
+                        discount: '',
+                        finalPrice: 0,
+                    },
+                },
+            ]);
+        }
     }, [fixedInputs.category]);
 
     // Product discount calculation

@@ -7,12 +7,8 @@ export const ProductContext = createContext();
 export default function ProductProvider({ children }) {
     const [fixedInputs, setFixedInputs] = useState({
         name: '',
-        category: {},
+        category: { _id: '-1' },
         description: '',
-        price: '',
-        discountType: '-1',
-        discount: '',
-        finalPrice: 0,
     });
 
     const [categories, setCategories] = useState([]);
