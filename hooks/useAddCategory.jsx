@@ -4,42 +4,23 @@ import { addCategory as postCategory } from '@/services/categories';
 import { useRef } from 'react';
 import toast from 'react-hot-toast';
 import useField from './useField';
+import useResponse from './useResponse';
+import useToken from './useToken';
 
 const useAddCategory = () => {
     const inputRef = useRef(null);
     const buttonRef = useRef(null);
     const { Fields, FieldsIsActive, Dispatchers } = useField();
+    const responseHandler = useResponse();
 
     const AddCategory = async (Data, onSuccess, onError) => {
-        const Token = localStorage.getItem('token');
-
-        if (!Token) {
-            alert('Token not found please login/register first');
-            return;
-        }
+        const Token = useToken();
+        if (!Token) return;
 
         const response = await postCategory(Data, Token);
 
-        if (typeof response === 'string') {
-            onError();
-            toast.error(response);
-
-            return;
-        }
-
-        if (response.ok) {
-            toast.success(Data.title + ' category added successfully');
-            onSuccess();
-            return;
-        }
-        onError();
-
-        // show error message with toast
-        const { message } = await response.json();
-        const error_message =
-            typeof message === 'string' ? message : message[0];
-
-        toast.error(error_message);
+        const successText = Data.title + ' category added successfully';
+        await responseHandler(response, successText, onError, onSuccess);
     };
 
     const formAction = event => {
