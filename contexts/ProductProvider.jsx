@@ -7,15 +7,15 @@ export const ProductContext = createContext();
 export default function ProductProvider({ children }) {
     const [fixedInputs, setFixedInputs] = useState({
         name: '',
-        category: '-1',
+        category: { _id: '-1' },
         description: '',
-        price: '',
-        discountType: '-1',
-        discount: '',
-        finalPrice: 0,
     });
 
     const [categories, setCategories] = useState([]);
+
+    const [step, setStep] = useState(1);
+
+    const [models, setModels] = useState([]);
 
     const [productImages, setProductImages] = useState({
         image0: defaultImage,
@@ -33,6 +33,27 @@ export default function ProductProvider({ children }) {
                 ...datas,
             };
         });
+    };
+
+    const onChangeCategory = e => {
+        const newCategory = categories.find(item => item.id === e.target.value);
+        newCategory
+            ? setFixedInputs(prv => {
+                  return {
+                      ...prv,
+                      category: {
+                          ...newCategory,
+                      },
+                  };
+              })
+            : setFixedInputs(prv => {
+                  return {
+                      ...prv,
+                      category: {
+                          _id: '-1',
+                      },
+                  };
+              });
     };
 
     const formDataGenarator = () => {
@@ -60,6 +81,11 @@ export default function ProductProvider({ children }) {
         setProductImages,
         images,
         setImages,
+        step,
+        setStep,
+        models,
+        setModels,
+        onChangeCategory,
         formDataGenarator,
     };
 
