@@ -47,3 +47,23 @@ export const deleteCategory = async (id, token) => {
         return e instanceof Error ? e.message : 'Error';
     }
 };
+
+export const updateCategory = async (Data, id, token) => {
+    try {
+        const response = await fetch(
+            API_BASE_URL + '/categories/update/' + id,
+            {
+                method: 'POST',
+                body: JSON.stringify(Data),
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
+                },
+            }
+        );
+
+        return response;
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
+};
