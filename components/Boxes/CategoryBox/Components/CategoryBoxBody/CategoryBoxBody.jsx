@@ -1,4 +1,3 @@
-import Tfoot from '@/components/Forms/AddNewCategory/Components/Table/Tfoot/Tfoot';
 import Tooltip from '@/components/Others/Tooltip';
 import ActionIcon from '@/components/Table/ActionIcons';
 import { MdCheckBoxOutlineBlank, MdOutlineCheckBox } from 'react-icons/md';
@@ -138,7 +137,6 @@ const CategoryBoxBody = ({ Schemas, Category }) => {
                             </tr>
                         )}
                     </tbody>
-                    <Tfoot col={5} />
                 </table>
             </div>
         </div>
