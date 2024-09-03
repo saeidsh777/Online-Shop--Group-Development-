@@ -34,9 +34,14 @@ const RefreshButton = () => {
 
 const RefreshPage = () => {
     return (
-        <Suspense fallback={'loading...'}>
-            <RefreshButton />
-        </Suspense>
+        <div>
+            <h3 className="text-center font-medium text-[120%] mb-5">
+                Oops something went wrong!{' '}
+            </h3>
+            <Suspense fallback={'loading...'}>
+                <RefreshButton />
+            </Suspense>
+        </div>
     );
 };
 export default RefreshPage;
