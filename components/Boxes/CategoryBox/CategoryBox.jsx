@@ -1,4 +1,4 @@
-import CategoryBoxBody from './Components/CategoryBoxBody';
+import CategoryBoxBody from './Components/CategoryBoxBody/CategoryBoxBody';
 import CategoryBoxFooter from './Components/CategoryBoxFooter/CategoryBoxFooter';
 
 const CategoryBox = ({ title, productVariantsSchema: Schemas, _id }) => {
