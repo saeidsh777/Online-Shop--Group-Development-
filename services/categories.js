@@ -53,7 +53,7 @@ export const updateCategory = async (Data, id, token) => {
         const response = await fetch(
             API_BASE_URL + '/categories/update/' + id,
             {
-                method: 'POST',
+                method: 'PUT',
                 body: JSON.stringify(Data),
                 headers: {
                     authorization: `Bearer ${token}`,

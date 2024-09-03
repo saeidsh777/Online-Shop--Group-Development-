@@ -1,7 +1,9 @@
 import CategoryBoxBody from './Components/CategoryBoxBody/CategoryBoxBody';
 import CategoryBoxFooter from './Components/CategoryBoxFooter/CategoryBoxFooter';
 
-const CategoryBox = ({ title, productVariantsSchema: Schemas, _id }) => {
+const CategoryBox = ({ ...Category }) => {
+    const { title, productVariantsSchema: Schemas, _id } = Category;
+
     return (
         <div className="flex flex-col categroy shadow-md rounded-lg border border-gray-100 transition-all duration-300">
             <label
@@ -28,7 +30,7 @@ const CategoryBox = ({ title, productVariantsSchema: Schemas, _id }) => {
             </label>
 
             <input type="checkbox" name={title} id={title} className="hidden" />
-            <CategoryBoxBody Schemas={Schemas} />
+            <CategoryBoxBody Schemas={Schemas} Category={Category} />
             <CategoryBoxFooter categoryID={_id} categoryName={title} />
         </div>
     );

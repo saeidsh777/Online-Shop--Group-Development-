@@ -19,7 +19,7 @@ const useResponse = () => {
             onSuccess && onSuccess();
             return;
         }
-        onError();
+        onError && onError();
 
         // show error message with toast
         const { message } = await response.json();
