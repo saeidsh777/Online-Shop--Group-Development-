@@ -1,4 +1,5 @@
 import Tfoot from '@/components/Forms/AddNewCategory/Components/Table/Tfoot/Tfoot';
+import Tooltip from '@/components/Others/Tooltip';
 import ActionIcon from '@/components/Table/ActionIcons';
 import { MdCheckBoxOutlineBlank, MdOutlineCheckBox } from 'react-icons/md';
 import DeleteField from './Components/DeleteField';
@@ -16,14 +17,27 @@ const TableRow = ({ index, RowLength, Category, ...field }) => {
             </td>
             <td className="p-1 425:p-1.5 md:p-2 lg:p-2.5">
                 <div className="flex flex-wrap gap-1">
-                    {field.variantOptions.map(option => (
-                        <div
-                            className="bg-gray-200/75 rounded-lg py-1 px-2 grow text-center relative group overflow-hidden  flex items-center justify-center gap-1.5"
-                            key={option}
-                        >
-                            {option}
+                    {field.variantOptions.length ? (
+                        field.variantOptions.map(option => (
+                            <div
+                                className="bg-gray-200/75 rounded-lg py-1 px-2 grow text-center relative group overflow-hidden  flex items-center justify-center gap-1.5"
+                                key={option}
+                            >
+                                {option}
+                            </div>
+                        ))
+                    ) : (
+                        <div className="mx-auto">
+                            <Tooltip
+                                text={'It could be any string'}
+                                TooltipClass="w-40"
+                            >
+                                <span className="font-light uppercase cursor-pointer">
+                                    Not bounded
+                                </span>
+                            </Tooltip>
                         </div>
-                    ))}
+                    )}
                 </div>
             </td>
             <td className="p-1 425:p-1.5 md:p-2 lg:p-2.5">
