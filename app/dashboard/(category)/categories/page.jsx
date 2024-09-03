@@ -1,4 +1,4 @@
-import CategoryBox from '@/components/Boxes/CategoryBox';
+import CategoryBox from '@/components/Boxes/CategoryBox/CategoryBox';
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
