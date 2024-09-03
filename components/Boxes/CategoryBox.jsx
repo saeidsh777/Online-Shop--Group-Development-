@@ -1,9 +1,16 @@
+'use client';
+import useDeleteCategory from '@/hooks/useDeleteCategory';
 import { DeleteWrapper } from '@/hooks/useModal';
 import { MdCheckBoxOutlineBlank, MdOutlineCheckBox } from 'react-icons/md';
 import Tfoot from '../Forms/AddNewCategory/Components/Table/Tfoot/Tfoot';
 import ActionIcon from '../Table/ActionIcons';
 
-const CategoryBox = ({ title, productVariantsSchema: Schemas }) => {
+const CategoryBox = ({
+    title,
+    productVariantsSchema: Schemas,
+    _id: categoryID,
+}) => {
+    const DeleteCategory = useDeleteCategory();
     return (
         <div className="flex flex-col categroy shadow-md rounded-lg border border-gray-100 transition-all duration-300">
             <label
@@ -121,7 +128,6 @@ const CategoryBox = ({ title, productVariantsSchema: Schemas }) => {
                                                     text={`This action delete ${field.variantName} permanently!
                                                     Are you sure?`}
                                                     func={async () => {
-                                                        'use server';
                                                         // add how to delete the product
                                                     }}
                                                 >
@@ -180,17 +186,24 @@ const CategoryBox = ({ title, productVariantsSchema: Schemas }) => {
                         </ActionIcon>
                         Edit Category
                     </div>
-                    <div className="flex items-center gap-1 cursor-pointer pl-1 pr-3 rounded-lg text-[#dc2626] hover:bg-red-200">
-                        <ActionIcon type={'delete'} tooltip={false}>
-                            <path
-                                d="M21 5.98c-3.33-.33-6.68-.5-10.02-.5-1.98 0-3.96.1-5.94.3L3 5.98M8.5 4.97l.22-1.31C8.88 2.71 9 2 10.69 2h2.62c1.69 0 1.82.75 1.97 1.67l.22 1.3M18.85 9.14l-.65 10.07C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5h3.33M9.5 12.5h5"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            ></path>
-                        </ActionIcon>
-                        Delete Category
-                    </div>
+                    <DeleteWrapper
+                        text={`This action delete ${title} category permanently! Are you sure?`}
+                        func={async () => {
+                            await DeleteCategory(categoryID);
+                        }}
+                    >
+                        <div className="flex items-center gap-1 cursor-pointer pl-1 pr-3 rounded-lg text-[#dc2626] hover:bg-red-200">
+                            <ActionIcon type={'delete'} tooltip={false}>
+                                <path
+                                    d="M21 5.98c-3.33-.33-6.68-.5-10.02-.5-1.98 0-3.96.1-5.94.3L3 5.98M8.5 4.97l.22-1.31C8.88 2.71 9 2 10.69 2h2.62c1.69 0 1.82.75 1.97 1.67l.22 1.3M18.85 9.14l-.65 10.07C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5h3.33M9.5 12.5h5"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                ></path>
+                            </ActionIcon>
+                            Delete Category
+                        </div>
+                    </DeleteWrapper>
                 </div>
             </div>
         </div>

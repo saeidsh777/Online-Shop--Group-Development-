@@ -29,3 +29,21 @@ export const addCategory = async (Data, token) => {
         return e instanceof Error ? e.message : 'Error';
     }
 };
+
+export const deleteCategory = async (id, token) => {
+    try {
+        const response = await fetch(
+            API_BASE_URL + '/categories/delete/' + id,
+            {
+                method: 'DELETE',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        return response;
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
+};
