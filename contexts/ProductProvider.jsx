@@ -19,6 +19,8 @@ export default function ProductProvider({ children }) {
 
     const [step, setStep] = useState(1);
 
+    const [models, setModels] = useState([]);
+
     const [productImages, setProductImages] = useState({
         image0: defaultImage,
         image1: defaultImage,
@@ -37,7 +39,7 @@ export default function ProductProvider({ children }) {
         });
     };
 
-    const onChangeCategory = (e) => {
+    const onChangeCategory = e => {
         const newCategory = categories.find(item => item.id === e.target.value);
         newCategory
             ? setFixedInputs(prv => {
@@ -85,6 +87,8 @@ export default function ProductProvider({ children }) {
         setImages,
         step,
         setStep,
+        models,
+        setModels,
         onChangeCategory,
         formDataGenarator,
     };
