@@ -13,6 +13,20 @@ export const getAllCategories = async () => {
     }
 };
 
+export const getSingleCategory = async id => {
+    try {
+        const response = await fetch(API_BASE_URL + '/categories/' + id);
+        if (response.ok) {
+            const result = await response.json();
+            return result;
+        }
+
+        return 'Error';
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
+};
+
 export const addCategory = async (Data, token) => {
     try {
         const response = await fetch(API_BASE_URL + '/categories/create', {
