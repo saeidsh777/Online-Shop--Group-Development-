@@ -19,7 +19,7 @@ const useDeleteCategory = () => {
 
         await responseHandler(
             response,
-            'Category delete successfuly',
+            'Category deleted successfuly',
             undefined,
             onSuccess
         );
