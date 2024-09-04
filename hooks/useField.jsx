@@ -1,6 +1,23 @@
 import { useCallback, useReducer } from 'react';
 
-const useField = () => {
+const useField = DefaultValue => {
+    const FormatDefaultCategory = Data => {
+        const Fields = Data.productVariantsSchema.map(field => {
+            return {
+                id: field._id,
+                name: field.variantName,
+                isOptional: field.optional ?? false,
+                tags: field.variantOptions,
+            };
+        });
+
+        return Fields;
+    };
+
+    const initialValue = DefaultValue
+        ? FormatDefaultCategory(DefaultValue)
+        : [];
+
     const Reducer = useCallback((state, action) => {
         switch (action.type) {
             case 'ADD_FIELD':
@@ -71,7 +88,7 @@ const useField = () => {
         }
     }, []);
 
-    const [Fields, Dispatch] = useReducer(Reducer, []);
+    const [Fields, Dispatch] = useReducer(Reducer, initialValue);
 
     const AddField = useCallback(() => {
         Dispatch({ type: 'ADD_FIELD' });
