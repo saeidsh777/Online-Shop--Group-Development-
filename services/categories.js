@@ -29,3 +29,41 @@ export const addCategory = async (Data, token) => {
         return e instanceof Error ? e.message : 'Error';
     }
 };
+
+export const deleteCategory = async (id, token) => {
+    try {
+        const response = await fetch(
+            API_BASE_URL + '/categories/delete/' + id,
+            {
+                method: 'DELETE',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        return response;
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
+};
+
+export const updateCategory = async (Data, id, token) => {
+    try {
+        const response = await fetch(
+            API_BASE_URL + '/categories/update/' + id,
+            {
+                method: 'PUT',
+                body: JSON.stringify(Data),
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
+                },
+            }
+        );
+
+        return response;
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
+};

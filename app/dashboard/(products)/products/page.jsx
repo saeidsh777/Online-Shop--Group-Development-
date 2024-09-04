@@ -1,6 +1,7 @@
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
+import ListIsEmpty from '@/components/Others/ListIsEmpty';
 import DashboardTableRow from '@/components/Table/DashboardTableRow';
 import SectionTitel from '@/components/Titels/SectionTitel/SectionTitel';
 import RefreshPage from '@/hooks/RefreshPage';
@@ -10,15 +11,7 @@ import Link from 'next/link';
 const ProductListPage = async () => {
     const result = await getAllProducts();
 
-    if (result === 'error')
-        return (
-            <div>
-                <h3 className="text-center font-medium text-[120%] mb-5">
-                    Oops something went wrong!{' '}
-                </h3>
-                <RefreshPage />
-            </div>
-        );
+    if (result === 'error') return <RefreshPage />;
 
     const { result: Data, res: response } = result;
 
@@ -106,28 +99,13 @@ const ProductListPage = async () => {
                             </div>
                         </>
                     ) : (
-                        <div>
-                            <h3 className="text-center font-medium text-[120%] mb-5">
-                                Product list is empty {':('}
-                            </h3>
-                            <p>
-                                Would you like to add a product? click{' '}
-                                <Link
-                                    href="/dashboard/add-new-product"
-                                    className="text-blue-600 underline underline-offset-auto hover:no-underline"
-                                >
-                                    here
-                                </Link>
-                            </p>
-                        </div>
+                        <ListIsEmpty
+                            name="Product"
+                            href="/dashboard/add-new-product"
+                        />
                     )
                 ) : (
-                    <div>
-                        <h3 className="text-center font-medium text-[120%] mb-5">
-                            Oops something went wrong!{' '}
-                        </h3>
-                        <RefreshPage />
-                    </div>
+                    <RefreshPage />
                 )}
             </DashboardBox>
         </div>
