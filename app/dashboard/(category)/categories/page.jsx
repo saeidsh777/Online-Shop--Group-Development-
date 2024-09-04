@@ -15,7 +15,7 @@ const page = async ({ searchParams }) => {
 
     const { result: Data } = categories;
 
-    const rendredCategories = data =>
+    const rendreCategories = data =>
         data.map(category => <CategoryBox key={category.id} {...category} />);
 
     const filterCategoryHandler = (datas, search) => {
@@ -32,7 +32,7 @@ const page = async ({ searchParams }) => {
                         results found for ‘
                         <span className="text-black">{search}</span>’:
                     </p>
-                    {rendredCategories(filtredCategory)}
+                    {rendreCategories(filtredCategory)}
                 </>
             );
 
@@ -80,7 +80,7 @@ const page = async ({ searchParams }) => {
                                       Data,
                                       searchParams.search
                                   )
-                                : rendredCategories(Data)}
+                                : rendreCategories(Data)}
                         </div>
                     </>
                 ) : (
