@@ -54,7 +54,12 @@ export default function AddNewProductForm() {
     useEffect(() => {
         const category = fixedInputs.category;
         if (category._id !== '-1') {
-            const { productVariantsSchema } = category;
+            let productVariantsSchema = [...category.productVariantsSchema].map(
+                productVariant => {
+                    return { ...productVariant, value: '' };
+                }
+            );
+
             let model = {
                 _id: crypto.randomUUID(),
                 categoryFiels: productVariantsSchema,
@@ -66,6 +71,7 @@ export default function AddNewProductForm() {
                     finalPrice: 0,
                 },
             };
+            console.log(model);
             setModels([model]);
         } else {
             setModels([

@@ -1,38 +1,72 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import SelectInput from '../SelectInput/SelectInput';
 import ColorInput from '../ColorInput/ColorInput';
 import CategoryInputs from '../CategoryInputs/CategoryInputs';
 import DetialInput from '../DetialInput/DetialInput';
+import { IoIosClose } from 'react-icons/io';
+import { ProductContext } from '@/contexts/ProductProvider';
 
 export default function NewProductModel({ _id, categoryFiels, indexModel }) {
-    console.log(categoryFiels);
+    const { models, setModels } = useContext(ProductContext);
+
     return (
         <div className="p-3 border border-gray-200 rounded-xl pt-6 relative">
             <span className="bg-blue-200 text-sm p-2 rounded-sm absolute top-[-1.5rem] left-3">
                 Model {indexModel + 1}{' '}
             </span>
+            {models.length > 1 && (
+                <span
+                    className="bg-red-200 flex justify-center items-center text-red-600 w-8 h-8 rounded-full absolute top-[-1rem] right-3"
+                    onClick={() =>
+                        setModels(prv => prv.filter(model => model._id !== _id))
+                    }
+                >
+                    <IoIosClose className="cursor-pointer text-[2rem] hover:text-red-500" />
+                </span>
+            )}
+
             {!!categoryFiels.length && (
                 <div className="bg-gray-100 rounded-sm p-2 mb-2">
-                    <span className="text-sm block mb-5">
+                    <span className="text-sm block">
                         <sup className="text-red-500">*</sup>Category Fields:
                     </span>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-5">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-5">
                         {categoryFiels.map(field => {
                             if (!!field.variantOptions.length) {
-                                return <SelectInput key={field._id} {...field}/>;
+                                return (
+                                    <SelectInput
+                                        key={field._id}
+                                        {...field}
+                                        modelId={_id}
+                                    />
+                                );
+                            } else if (
+                                field.variantName.toLowerCase() === 'color'
+                            ) {
+                                return (
+                                    <ColorInput
+                                        key={field._id}
+                                        {...field}
+                                        modelId={_id}
+                                    />
+                                );
+                            } else {
+                                return (
+                                    <CategoryInputs
+                                        key={field._id}
+                                        {...field}
+                                        modelId={_id}
+                                    />
+                                );
                             }
-                            
                         })}
-                        <ColorInput />
-                        <CategoryInputs />
-                        <CategoryInputs />
                     </div>
                 </div>
             )}
 
             <div className="bg-gray-100 rounded-sm p-2 mb-2">
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center">
                     <span className="text-sm block">Detial Fields:</span>
                     <button
                         type="button"
@@ -42,7 +76,7 @@ export default function NewProductModel({ _id, categoryFiels, indexModel }) {
                     </button>
                 </div>
 
-                <div className="mb-5">
+                <div className="mt-3">
                     <DetialInput />
                 </div>
             </div>
