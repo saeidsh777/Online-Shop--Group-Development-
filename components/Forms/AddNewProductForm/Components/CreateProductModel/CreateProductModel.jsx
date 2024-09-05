@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import NewProductModel from '../NewProductModel/NewProductModel';
 import { LuPlus } from 'react-icons/lu';
 import { ProductContext } from '@/contexts/ProductProvider';
+import toast from 'react-hot-toast';
 
 export default function CreateProductModel() {
     const { models, setModels } = useContext(ProductContext);
@@ -10,12 +11,13 @@ export default function CreateProductModel() {
             <button
                 type="button"
                 className="bg-gray-100 p-2 text-sm rounded-md flex items-center mb-10 hover:bg-gray-300 hover:shadow"
-                onClick={() =>
+                onClick={() => {
                     setModels(prv => [
                         ...prv,
                         { ...prv[0], _id: crypto.randomUUID() },
-                    ])
-                }
+                    ]);
+                    toast.success('New Model Added');
+                }}
             >
                 <LuPlus /> Create New Model
             </button>
