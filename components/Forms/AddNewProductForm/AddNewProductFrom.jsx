@@ -77,7 +77,7 @@ export default function AddNewProductForm() {
             setModels([
                 {
                     _id: crypto.randomUUID(),
-                    categoryFiels: [],
+                    categoryFields: [],
                     detialFields: [],
                     fixedFields: {
                         price: '',
