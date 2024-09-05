@@ -13,6 +13,19 @@ export const getAllCategories = async () => {
     }
 };
 
+export const getSingleCategory = async id => {
+    try {
+        const response = await fetch(API_BASE_URL + '/categories/' + id, {
+            cache: 'no-store',
+        });
+        const result = await response.json();
+
+        return { result, response };
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
+};
+
 export const addCategory = async (Data, token) => {
     try {
         const response = await fetch(API_BASE_URL + '/categories/create', {
