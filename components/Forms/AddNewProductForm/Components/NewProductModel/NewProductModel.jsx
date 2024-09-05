@@ -195,6 +195,23 @@ export default function NewProductModel({
         }
     };
 
+    const onChangeCount = e => {
+        if (justNumberRegex.test(+e.target.value)) {
+            setModels(prv =>
+                prv.map(model => {
+                    if (model._id !== _id) return model;
+                    return {
+                        ...model,
+                        fixedFields: {
+                            ...model.fixedFields,
+                            count: e.target.value,
+                        },
+                    };
+                })
+            );
+        }
+    };
+
     return (
         <div className="p-3 border border-gray-200 rounded-xl pt-6 relative mb-5 flex flex-col justify-between">
             <span className="bg-blue-200 text-sm p-2 rounded-sm absolute top-[-1.5rem] left-3">
@@ -328,20 +345,38 @@ export default function NewProductModel({
                 </div>
 
                 <div className="bg-gray-100 rounded-sm p-2 mb-2">
-                    <div className="mb-3">
-                        <label className="text-sm" htmlFor="price">
-                            Price
-                        </label>
-                        <div className="mt-2 relative Input_Label_Dollar">
-                            <input
-                                id="price"
-                                inputMode="numeric"
-                                type="text"
-                                placeholder="0 $"
-                                className="General_Input_1"
-                                value={fixedFields.price}
-                                onChange={onChangePrice}
-                            />
+                    <div className="flex flex-col md:flex-row gap-2">
+                        <div className="mb-3 w-full">
+                            <label className="text-sm" htmlFor="price">
+                                Price
+                            </label>
+                            <div className="mt-2 relative Input_Label_Dollar">
+                                <input
+                                    id="price"
+                                    inputMode="numeric"
+                                    type="text"
+                                    placeholder="0 $"
+                                    className="General_Input_1"
+                                    value={fixedFields.price}
+                                    onChange={onChangePrice}
+                                />
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label className="text-sm" htmlFor="Count">
+                                Count
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="Count"
+                                    inputMode="numeric"
+                                    type="text"
+                                    placeholder="Count"
+                                    className="General_Input_1"
+                                    value={fixedFields.count}
+                                    onChange={onChangeCount}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="flex flex-col md:flex-row gap-2">
@@ -386,7 +421,7 @@ export default function NewProductModel({
                     </div>
                 </div>
             </div>
-            <div className='bg-green-100 p-2 rounded-md'>
+            <div className="bg-green-100 p-2 rounded-md">
                 <div className="mt-3">
                     <small className="flex items-center text-sm text-gray-400">
                         Total Price:

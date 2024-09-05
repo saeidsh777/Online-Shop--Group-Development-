@@ -57,18 +57,30 @@ export default function ProductProvider({ children }) {
     };
 
     const formDataGenarator = () => {
+        let newModels = [...models].map(model => {
+            return {
+                ...model,
+                fixedFields: {
+                    discount: Number(model.fixedFields.discount),
+                    price: Number(model.fixedFields.price),
+                    count: Number(model.fixedFields.count),
+                },
+            };
+        });
+
+        console.log(newModels);
+
         const formData = new FormData();
-        formData.append('title', inputs.name);
-        formData.append('description', inputs.description);
-        formData.append('price', +inputs.price);
-        formData.append('category', inputs.category);
-        inputs.discount && formData.append('discount', +inputs.discount);
+        formData.append('title', fixedInputs.name);
+        formData.append('description', fixedInputs.description);
+        formData.append('category', fixedInputs.category._id);
         if (images.length > 0) {
-            console.log(images);
             for (let i = 0; i < images.length; i++) {
                 formData.append(`images`, images[i]);
             }
         }
+
+        formData.append('productModels', JSON.stringify(newModels));
         return formData;
     };
 
