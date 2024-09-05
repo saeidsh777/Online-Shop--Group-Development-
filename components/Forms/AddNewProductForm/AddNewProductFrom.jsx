@@ -71,7 +71,6 @@ export default function AddNewProductForm() {
                     finalPrice: 0,
                 },
             };
-            console.log(model);
             setModels([model]);
         } else {
             setModels([
@@ -89,31 +88,6 @@ export default function AddNewProductForm() {
             ]);
         }
     }, [fixedInputs.category]);
-
-    // Product discount calculation
-    // const discountHandler = value => {
-    //     // For numeric discountType
-    //     if (inputs.discountType === 'Numerical') {
-    //         if (inputs.price - +value >= 0) {
-    //             onChange({ finalPrice: +inputs.price - +value });
-    //         } else {
-    //             onChange({ finalPrice: +inputs.price - +inputs.price });
-    //         }
-    //     }
-
-    //     // For numeric Percentage
-    //     if (inputs.discountType === 'Percentage') {
-    //         if (value >= 100) {
-    //             onChange({ finalPrice: 0 });
-    //         } else if (value <= 0) {
-    //             onChange({ finalPrice: +inputs.price });
-    //         } else {
-    //             onChange({
-    //                 finalPrice: +inputs.price - (+inputs.price * +value) / 100,
-    //             });
-    //         }
-    //     }
-    // };
 
     // const submitHandler = async e => {
     //     e.preventDefault();
@@ -298,125 +272,7 @@ export default function AddNewProductForm() {
                             Next
                         </DashboardBTN>
                     </div>
-                    {/* <div className="mb-3">
-                    <label className="text-sm" htmlFor="price">
-                        Price
-                    </label>
-                    <div className="mt-2 relative Input_Label_Dollar">
-                        <input
-                            id="price"
-                            inputMode="numeric"
-                            type="text"
-                            placeholder="0 $"
-                            className="General_Input_1"
-                            value={inputs.price}
-                            onChange={e => {
-                                if (justNumberRegex.test(+e.target.value)) {
-                                    onChange({
-                                        price: e.target.value,
-                                        discount: '',
-                                        finalPrice: +e.target.value,
-                                    });
-                                    if (e.target.value.length == 0) {
-                                        onChange({
-                                            price: e.target.value,
-                                            discount: '',
-                                            finalPrice: 0,
-                                        });
-                                    }
-                                }
-                            }}
-                        />
-                    </div>
-                </div> */}
-                    {/* <div className="flex flex-col md:flex-row gap-2">
-                    <div className="mb-3 w-full md:w-[30%]">
-                        <label className="text-sm" htmlFor="discountType">
-                            Discount Type
-                        </label>
-                        <div className="mt-2">
-                            <select
-                                id="discountType"
-                                className="General_Input_1 h-[36px]"
-                                value={inputs?.discountType}
-                                onChange={e => {
-                                    onChange({
-                                        discountType: e.target.value,
-                                        discount: '',
-                                        finalPrice: +inputs.price,
-                                    });
-                                }}
-                            >
-                                <option value="-1">Select type</option>
-                                <option value="Numerical">$</option>
-                                <option value="Percentage">%</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="mb-3 w-full">
-                        <label className="text-sm" htmlFor="discount">
-                            Discount
-                        </label>
-                        <div className="mt-2">
-                            <input
-                                id="discount"
-                                inputMode="numeric"
-                                type="text"
-                                placeholder="..."
-                                className="General_Input_1"
-                                value={inputs?.discount}
-                                onChange={e => {
-                                    if (justNumberRegex.test(+e.target.value)) {
-                                        onChange({ discount: e.target.value });
-                                        discountHandler(+e.target.value);
-                                        if (e.target.value.length == 0) {
-                                            onChange({
-                                                discount: '',
-                                                finalPrice: +inputs.price,
-                                            });
-                                        }
-                                    }
-                                }}
-                            />
-                        </div>
-                    </div>
-                </div> */}
 
-                    {/* <div className="mt-3">
-                    <small className="flex items-center text-sm text-gray-400">
-                        Total Price:
-                        <span className="ms-4">
-                            {inputs.price ? inputs.price.toLocaleString() : 0} $
-                        </span>
-                    </small>
-                </div> */}
-                    {/* <div>
-                    <small className="flex items-center text-sm text-gray-400">
-                        Discount Price:
-                        <span className="ms-4 text-red-300">
-                            {inputs.discount
-                                ? +inputs.discount < +inputs.price
-                                    ? inputs.discountType === 'Percentage'
-                                        ? '-' +
-                                          (+inputs.price * +inputs.discount) /
-                                              100
-                                        : '-' +
-                                          +inputs.discount.toLocaleString()
-                                    : '-' + +inputs.price
-                                : 0}
-                            {' $'}
-                        </span>
-                    </small>
-                </div> */}
-
-                    {/* <div className="mt-3">
-                    <small>
-                        Final Price:
-                        <span className="ms-2 bg-gray-100 px-2 py-1 rounded-lg">
-                            {inputs.finalPrice.toLocaleString()} $
-                        </span>
-                    </small>
-                </div> */}
                 </form>
             </DashboardBox>
         </>
