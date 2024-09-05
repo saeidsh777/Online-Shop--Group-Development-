@@ -15,7 +15,9 @@ export const getAllCategories = async () => {
 
 export const getSingleCategory = async id => {
     try {
-        const response = await fetch(API_BASE_URL + '/categories/' + id);
+        const response = await fetch(API_BASE_URL + '/categories/' + id, {
+            cache: 'no-store',
+        });
         const result = await response.json();
 
         return { result, response };
