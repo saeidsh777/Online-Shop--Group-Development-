@@ -4,9 +4,11 @@ import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
 import useEditCategory from '@/hooks/useEditCategory';
 
-const EditCategoryForm = ({ category }) => {
-    const { FieldButton, FieldsBox, Refs, formAction } =
-        useEditCategory(category);
+const EditCategoryForm = ({ category, GoBackOnSuccess }) => {
+    const { FieldButton, FieldsBox, Refs, formAction } = useEditCategory(
+        category,
+        GoBackOnSuccess
+    );
     return (
         <form
             onSubmit={formAction}
