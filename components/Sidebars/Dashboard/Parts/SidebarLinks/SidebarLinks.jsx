@@ -1,4 +1,3 @@
-import { BsBox } from 'react-icons/bs';
 import { MdOutlineAddBox, MdOutlineCategory } from 'react-icons/md';
 import { TbCategoryPlus, TbGraph, TbListDetails } from 'react-icons/tb';
 import SidebarLink from './Components/SidebarLink';
@@ -16,9 +15,6 @@ const SidebarLinks = () => {
                 </SidebarLink>
                 <SidebarLink href={'/products'} text={'Product list'}>
                     <TbListDetails />
-                </SidebarLink>
-                <SidebarLink href={'/products/12'} text={'Product page'}>
-                    <BsBox />
                 </SidebarLink>
             </SidebarLinkSection>
             <SidebarLinkSection title={'category'}>
