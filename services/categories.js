@@ -16,12 +16,9 @@ export const getAllCategories = async () => {
 export const getSingleCategory = async id => {
     try {
         const response = await fetch(API_BASE_URL + '/categories/' + id);
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        }
+        const result = await response.json();
 
-        return 'Error';
+        return { result, response };
     } catch (e) {
         return e instanceof Error ? e.message : 'Error';
     }
