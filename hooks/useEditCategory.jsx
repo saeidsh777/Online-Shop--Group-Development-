@@ -9,7 +9,7 @@ import useResponse from './useResponse';
 import Revalidate from './useRevalidate';
 import useToken from './useToken';
 
-const useEditCategory = defaultValue => {
+const useEditCategory = (defaultValue, GoBackOnSuccess) => {
     const inputRef = useRef(null);
     const buttonRef = useRef(null);
     const Router = useRouter();
@@ -52,9 +52,14 @@ const useEditCategory = defaultValue => {
         };
 
         const onSuccess = () => {
-            Revalidate('/dashboard/categories/' + defaultValue._id);
             Revalidate('/dashboard/categories/');
-            Router.push('/dashboard/categories/');
+            Revalidate('/dashboard/categories/' + defaultValue._id);
+
+            if (GoBackOnSuccess) {
+                Router.back();
+            } else {
+                Router.push('/dashboard/categories/');
+            }
         };
 
         const title = inputRef.current.value;
