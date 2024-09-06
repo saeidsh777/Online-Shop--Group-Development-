@@ -39,3 +39,18 @@ export const getUserByPhoneNumber = async phoneNumber => {
         return err;
     }
 };
+
+export const getUserInfo = async token => {
+    try {
+        const res = await fetch(`${API_BASE_URL}/users/me/`, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+        });
+        const result = await res.json();
+
+        return { res, result };
+    } catch (err) {
+        return err instanceof Error ? err.message : 'Error';
+    }
+};
