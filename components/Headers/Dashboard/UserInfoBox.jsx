@@ -64,13 +64,13 @@ const UserInfoBox = () => {
                 </div>
             )}
 
-            <div className="cursor-pointer bg-dashboard-bg rounded p-2.5  hover:bg-[#dbe0e5] transition-colors">
-                {/* replace it with avatar image */}
+            {/* replace it with avatar image */}
+            {/* <div className="cursor-pointer bg-dashboard-bg rounded p-2.5  hover:bg-[#dbe0e5] transition-colors">
                 <div
                     className="rounded-full aspect-square w-5 425:w-6 sm:w-7 md:w-8 lg:w-9 1152:w-10 border border-dashboard-text cursor-pointer hover:bg-dashboard-sidebar-textActive
     "
                 ></div>
-            </div>
+            </div> */}
         </div>
     );
 };
