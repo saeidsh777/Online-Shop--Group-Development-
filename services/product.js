@@ -53,7 +53,6 @@ export const getAllProducts = async () => {
         const res = await fetch(`${API_BASE_URL}/products`);
         const result = await res.json();
 
-        console.log('helllo-------------------------------------------');
         return { res, result };
     } catch (e) {
         return 'error';
