@@ -1,5 +1,11 @@
+import { AiOutlineContainer } from 'react-icons/ai';
 import { MdOutlineAddBox, MdOutlineCategory } from 'react-icons/md';
-import { TbCategoryPlus, TbGraph, TbListDetails } from 'react-icons/tb';
+import {
+    TbCategoryPlus,
+    TbGraph,
+    TbListDetails,
+    TbMailPlus,
+} from 'react-icons/tb';
 import SidebarLink from './Components/SidebarLink';
 import SidebarLinkSection from './Components/SidebarLinkSection';
 
@@ -23,6 +29,14 @@ const SidebarLinks = () => {
                 </SidebarLink>
                 <SidebarLink href={'/categories'} text={'Category list'}>
                     <MdOutlineCategory />
+                </SidebarLink>
+            </SidebarLinkSection>
+            <SidebarLinkSection title={'ticket'}>
+                <SidebarLink href={'/add-new-ticket'} text={'Add ticket'}>
+                    <TbMailPlus />
+                </SidebarLink>
+                <SidebarLink href={'/tickets'} text={'Ticket list'}>
+                    <AiOutlineContainer />
                 </SidebarLink>
             </SidebarLinkSection>
         </div>
