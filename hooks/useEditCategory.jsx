@@ -54,6 +54,7 @@ const useEditCategory = (defaultValue, GoBackOnSuccess) => {
         const onSuccess = () => {
             Revalidate('/dashboard/categories/');
             Revalidate('/dashboard/categories/' + defaultValue._id);
+            Router.refresh();
 
             if (GoBackOnSuccess) {
                 Router.back();
