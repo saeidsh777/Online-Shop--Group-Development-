@@ -4,9 +4,8 @@ import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
 import { getAllCategories } from '@/services/categories';
 import { addNewProduct } from '@/services/product';
-import { justNumberRegex } from '@/utils/regex';
 import toast from 'react-hot-toast';
-import { AiOutlineDelete } from 'react-icons/ai';
+import { AiFillProduct } from 'react-icons/ai';
 import { ProductContext } from '@/contexts/ProductProvider';
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import Step from '@/components/Forms/AddNewProductForm/Components/Step/Step';
@@ -43,6 +42,7 @@ export default function AddNewProductForm() {
                 detialFields: [],
                 fixedFields: {
                     price: '',
+                    count: "",
                     discountType: '-1',
                     discount: '',
                     finalPrice: 0,
@@ -66,6 +66,7 @@ export default function AddNewProductForm() {
                 detialFields: [],
                 fixedFields: {
                     price: '',
+                    count: "",
                     discountType: '-1',
                     discount: '',
                     finalPrice: 0,
@@ -76,10 +77,11 @@ export default function AddNewProductForm() {
             setModels([
                 {
                     _id: crypto.randomUUID(),
-                    categoryFiels: [],
+                    categoryFields: [],
                     detialFields: [],
                     fixedFields: {
                         price: '',
+                        count: "",
                         discountType: '-1',
                         discount: '',
                         finalPrice: 0,
@@ -89,60 +91,16 @@ export default function AddNewProductForm() {
         }
     }, [fixedInputs.category]);
 
-    // const submitHandler = async e => {
-    //     e.preventDefault();
+    const submitHandler = async e => {
+        e.preventDefault();
+        console.log(formDataGenarator());
+    };
 
-    //     if (init.type === 'new') {
-    //         const { res, result, err } = await addNewProduct(formDataGenarator);
-    //         if (res.status === 201) {
-    //             onChange({
-    //                 name: '',
-    //                 category: '',
-    //                 price: '',
-    //                 discountType: '-1',
-    //                 description: '',
-    //                 discount: '',
-    //                 finalPrice: 0,
-    //             });
-    //             setImages([]);
-    //             setProductImages({
-    //                 image0: defaultImage,
-    //                 image1: defaultImage,
-    //                 image2: defaultImage,
-    //                 image3: defaultImage,
-    //             });
-    //             filesInput.current = '';
-    //             productImagesElm.current = [];
-    //             toast.success('Created New Product');
-    //         } else if (res.status === 500) {
-    //             toast.error(err.message + '!');
-    //         } else {
-    //             toast.error(result.message + '!');
-    //         }
-    //     } else if (init.type === 'edit') {
-    //         const { res, result, err } = await editProduct(
-    //             formDataGenarator,
-    //             init.productId
-    //         );
-    //         if (res.status === 201) {
-    //             setEditMode(false);
-    //             toast.success('Edit Product Successfully');
-    //         } else if (res.status === 500) {
-    //             toast.error(err.message + '!');
-    //         } else {
-    //             toast.error(result.message + '!');
-    //         }
-    //     }
-    // };
     return (
         <>
             <Step />
             <DashboardBox>
-                <form
-                    // className=" grid grid-cols-1 lg:grid-cols-2 gap-3"
-                    name="add-new-product"
-                    // onSubmit={submitHandler}
-                >
+                <form name="add-new-product" onSubmit={submitHandler}>
                     {step === 1 && (
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-5">
                             <div className="p-4 border border-gray-200 rounded-xl">
@@ -254,6 +212,25 @@ export default function AddNewProductForm() {
 
                     {step === 2 && <CreateProductModel />}
 
+                    {step === 3 && (
+                        <div className="p-3 border border-gray-200 rounded-xl mb-5 animation-bg-processing overflow-hidden">
+                            <div className="flex justify-center items-center">
+                                <div className="flex flex-col items-center relative">
+                                    <AiFillProduct className="text-[8rem] text-white animate-pulse" />
+                                    <div className="flex flex-col items-center gap-2">
+                                        <p className="font-bold text-white">
+                                            Product Information Completed
+                                            Successfuly{' '}
+                                        </p>
+                                        <div className="text-2xl text-white w-10 h-10 flex justify-center items-center bg-blue-300 rounded-full animation-appear-from-down">
+                                            ✓
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="flex items-center gap-2">
                         <DashboardBTN
                             type="button"
@@ -263,16 +240,21 @@ export default function AddNewProductForm() {
                         >
                             Back
                         </DashboardBTN>
-                        <DashboardBTN
-                            type="button"
-                            disabled={step >= 3 ? true : false}
-                            className="disabled:bg-gray-400"
-                            onClick={() => setStep(prv => prv + 1)}
-                        >
-                            Next
-                        </DashboardBTN>
-                    </div>
+                        {step <= 2 && (
+                            <DashboardBTN
+                                type="button"
+                                disabled={step >= 3 ? true : false}
+                                className="disabled:bg-gray-400"
+                                onClick={() => setStep(prv => prv + 1)}
+                            >
+                                Next
+                            </DashboardBTN>
+                        )}
 
+                        {step === 3 && (
+                            <DashboardBTN type="submit">Save</DashboardBTN>
+                        )}
+                    </div>
                 </form>
             </DashboardBox>
         </>
