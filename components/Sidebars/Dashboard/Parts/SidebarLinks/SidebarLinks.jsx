@@ -5,7 +5,7 @@ import SidebarLinkSection from './Components/SidebarLinkSection';
 
 const SidebarLinks = () => {
     return (
-        <div className="mt-1 flex flex-col gap-2.5 overflow-y-auto 1152:overflow-x-hidden px-4 Dashboard_Sidebar-SidebarLinks">
+        <div className="my-1 flex flex-col gap-2.5 overflow-y-auto 1152:overflow-x-hidden px-4 Dashboard_Sidebar-SidebarLinks">
             <SidebarLink href={'/'} text={'Overview'}>
                 <TbGraph />
             </SidebarLink>
