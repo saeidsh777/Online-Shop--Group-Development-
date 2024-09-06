@@ -41,7 +41,7 @@ const InterceptorModalWrapper = ({ children }) => {
                     </div>
                     <hr />
                 </div>
-                <div>{children}</div>
+                <div className="max-h-[350px] overflow-y-auto">{children}</div>
             </DashboardBox>
         </div>
     );
