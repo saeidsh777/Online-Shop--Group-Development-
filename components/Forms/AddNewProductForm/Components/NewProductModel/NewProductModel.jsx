@@ -10,7 +10,7 @@ import { justNumberRegex } from '@/utils/regex';
 
 export default function NewProductModel({
     _id,
-    categoryFiels,
+    categoryFields,
     indexModel,
     detialFields,
     fixedFields,
@@ -232,7 +232,7 @@ export default function NewProductModel({
                     </span>
                 )}
 
-                {!!categoryFiels.length && (
+                {!!categoryFields.length && (
                     <div className="bg-gray-100 rounded-sm p-2 mb-2">
                         <span className="text-sm block">
                             <sup className="text-red-500">*</sup>Category
@@ -240,7 +240,7 @@ export default function NewProductModel({
                         </span>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-5">
-                            {categoryFiels.map(field => {
+                            {categoryFields.map(field => {
                                 if (!!field.variantOptions.length) {
                                     return (
                                         <SelectInput

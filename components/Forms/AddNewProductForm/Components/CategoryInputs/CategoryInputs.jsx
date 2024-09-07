@@ -12,7 +12,7 @@ export default function CategoryInputs({ variantName, _id, value, modelId }) {
 
                 return {
                     ...model,
-                    categoryFiels: model.categoryFiels.map(field => {
+                    categoryFields: model.categoryFields.map(field => {
                         if (field._id !== _id) return field;
 
                         return {
