@@ -12,15 +12,20 @@ import Step from '@/components/Forms/AddNewProductForm/Components/Step/Step';
 import Link from 'next/link';
 import ProductImages from './Components/ProductImages/ProductImages';
 import CreateProductModel from './Components/CreateProductModel/CreateProductModel';
+import DetaildField from './Components/DetaildField/DetaildField';
+import { API_BASE_URL } from '@/utils/constants';
+import { Numans } from 'next/font/google';
 
 export default function AddNewProductForm() {
     const {
         fixedInputs,
+        setFixedInputs,
         onChangeFixedInputs,
         categories,
         setCategories,
         step,
         setStep,
+        models,
         setModels,
         onChangeCategory,
         formDataGenarator,
@@ -38,11 +43,11 @@ export default function AddNewProductForm() {
         setModels([
             {
                 id: crypto.randomUUID(),
-                categoryFiels: [],
+                categoryFields: [],
                 detialFields: [],
                 fixedFields: {
                     price: '',
-                    count: "",
+                    count: '',
                     discountType: '-1',
                     discount: '',
                     finalPrice: 0,
@@ -62,11 +67,11 @@ export default function AddNewProductForm() {
 
             let model = {
                 _id: crypto.randomUUID(),
-                categoryFiels: productVariantsSchema,
+                categoryFields: productVariantsSchema,
                 detialFields: [],
                 fixedFields: {
                     price: '',
-                    count: "",
+                    count: '',
                     discountType: '-1',
                     discount: '',
                     finalPrice: 0,
@@ -81,7 +86,7 @@ export default function AddNewProductForm() {
                     detialFields: [],
                     fixedFields: {
                         price: '',
-                        count: "",
+                        count: '',
                         discountType: '-1',
                         discount: '',
                         finalPrice: 0,
@@ -93,7 +98,20 @@ export default function AddNewProductForm() {
 
     const submitHandler = async e => {
         e.preventDefault();
-        console.log(formDataGenarator());
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_BASE_URL}/products/create-new-product`, {
+            method: 'POST',
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+            body: formDataGenarator(),
+        });
+        const result = await res.json();
+        console.log(res);
+        console.log(result);
+
+
+        toast.success('Product created successfully');
     };
 
     return (
@@ -180,7 +198,7 @@ export default function AddNewProductForm() {
                                     </ul>
                                 </div>
 
-                                <div className="mb-3">
+                                <div className="mb-5">
                                     <label
                                         className="text-sm"
                                         htmlFor="description"
@@ -202,6 +220,82 @@ export default function AddNewProductForm() {
                                             className="General_Input_1"
                                         ></textarea>
                                     </div>
+                                </div>
+
+                                <div className="mb-2">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm block">
+                                            Detial Fields:
+                                        </span>
+                                        {!!fixedInputs.detailFields.length && (
+                                            <button
+                                                type="button"
+                                                className="bg-gray-200 text-gray-500 px-2 py-1 text-sm rounded-sm hover:shadow"
+                                                onClick={() => {
+                                                    let detialField = {
+                                                        _id: crypto.randomUUID(),
+                                                        name: '',
+                                                        value: '',
+                                                        description: '',
+                                                    };
+                                                    setFixedInputs(prv => {
+                                                        return {
+                                                            ...prv,
+                                                            detailFields: [
+                                                                ...prv.detailFields,
+                                                                detialField,
+                                                            ],
+                                                        };
+                                                    });
+                                                    toast.success(
+                                                        'New Field Added'
+                                                    );
+                                                }}
+                                            >
+                                                Add Field
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {!!fixedInputs.detailFields.length ? (
+                                        fixedInputs.detailFields.map(field => (
+                                            <div
+                                                className="mt-3"
+                                                key={field._id}
+                                            >
+                                                <DetaildField {...field} />
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="flex justify-center items-center my-2">
+                                            <button
+                                                type="button"
+                                                className="bg-gray-200 w-full text-gray-500 py-2 text-sm rounded-sm hover:shadow"
+                                                onClick={() => {
+                                                    let detialField = {
+                                                        _id: crypto.randomUUID(),
+                                                        name: '',
+                                                        value: '',
+                                                        description: '',
+                                                    };
+                                                    setFixedInputs(prv => {
+                                                        return {
+                                                            ...prv,
+                                                            detailFields: [
+                                                                ...prv.detailFields,
+                                                                detialField,
+                                                            ],
+                                                        };
+                                                    });
+                                                    toast.success(
+                                                        'New Field Added'
+                                                    );
+                                                }}
+                                            >
+                                                Add Field
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="p-4 border border-gray-200 rounded-xl">

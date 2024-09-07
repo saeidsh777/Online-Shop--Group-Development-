@@ -9,6 +9,7 @@ export default function ProductProvider({ children }) {
         name: '',
         category: { _id: '-1' },
         description: '',
+        detailFields: [],
     });
 
     const [categories, setCategories] = useState([]);
@@ -56,36 +57,35 @@ export default function ProductProvider({ children }) {
               });
     };
 
+    // let newModels = [...models].map(model => {
+    //     return {
+    //         ...model,
+    //         fixedFields: {
+    //             discount: Number(model.fixedFields.discount),
+    //             price: Number(model.fixedFields.price),
+    //             count: Number(model.fixedFields.count),
+    //         },
+    //     };
+    // });
     const formDataGenarator = () => {
-        let newModels = [...models].map(model => {
-            return {
-                ...model,
-                fixedFields: {
-                    discount: Number(model.fixedFields.discount),
-                    price: Number(model.fixedFields.price),
-                    count: Number(model.fixedFields.count),
-                },
-            };
-        });
-
-        console.log(newModels);
-
+        console.log(fixedInputs);
         const formData = new FormData();
         formData.append('title', fixedInputs.name);
         formData.append('description', fixedInputs.description);
         formData.append('category', fixedInputs.category._id);
+        // formData.append('details', JSON.stringify(fixedInputs.detailFields));
         if (images.length > 0) {
             for (let i = 0; i < images.length; i++) {
                 formData.append(`images`, images[i]);
             }
         }
 
-        formData.append('productModels', JSON.stringify(newModels));
         return formData;
     };
 
     const contextValues = {
         fixedInputs,
+        setFixedInputs,
         onChangeFixedInputs,
         categories,
         setCategories,
