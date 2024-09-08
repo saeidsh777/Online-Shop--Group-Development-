@@ -14,7 +14,6 @@ const AddNewTicketForm = ({ formAction }) => {
                 const token = data.get('token');
                 if (!message) {
                     toast.error('you cant create a ticket without a message');
-                    Router.push('/dashboard');
                     return;
                 }
 
@@ -22,7 +21,7 @@ const AddNewTicketForm = ({ formAction }) => {
 
                 if (response?.ok) {
                     toast.success('Ticket successfuly created.');
-                    Router.push('/dashboard');
+                    Router.push('/dashboard/my-tickets');
                     return;
                 } else {
                     toast.error(response);
