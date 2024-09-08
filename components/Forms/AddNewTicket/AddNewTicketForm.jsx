@@ -30,7 +30,7 @@ const AddNewTicketForm = ({ formAction }) => {
                 }
             }}
         >
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 md:gap-2 lg:gap-3">
                 <textarea
                     className="block w-full px-3 py-2 rounded-lg border-0 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-300 outline-none lg:px-4"
                     name="message"
