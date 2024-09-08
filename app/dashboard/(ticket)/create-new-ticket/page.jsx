@@ -22,7 +22,7 @@ const AddNewTicket = () => {
 
     return (
         <div>
-            <SectionTitel title={'Add New Ticket'} />
+            <SectionTitel title={'Create New Ticket'} />
             <DashboardBox>
                 <AddNewTicketForm formAction={formAction} />
             </DashboardBox>

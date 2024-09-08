@@ -32,7 +32,7 @@ const SidebarLinks = () => {
                 </SidebarLink>
             </SidebarLinkSection>
             <SidebarLinkSection title={'ticket'}>
-                <SidebarLink href={'/add-new-ticket'} text={'Add ticket'}>
+                <SidebarLink href={'/create-new-ticket'} text={'Create ticket'}>
                     <TbMailPlus />
                 </SidebarLink>
                 <SidebarLink href={'/tickets'} text={'Ticket list'}>
