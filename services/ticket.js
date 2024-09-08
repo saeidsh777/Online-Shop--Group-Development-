@@ -32,3 +32,18 @@ export const getMyTickets = async token => {
         return e instanceof Error ? e.message : 'Error';
     }
 };
+
+export const getTicket = async (id, token) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/tickets/${id}`, {
+            method: 'GET',
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response;
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
+};
