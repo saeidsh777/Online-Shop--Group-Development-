@@ -10,7 +10,7 @@ const AddNewTicket = () => {
         const response = await addTicket(Tmessage, token);
 
         if (response.ok) {
-            return true;
+            return { ok: true };
         }
 
         if (typeof response === 'string') return response;

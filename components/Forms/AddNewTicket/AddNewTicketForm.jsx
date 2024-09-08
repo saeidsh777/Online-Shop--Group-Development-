@@ -20,13 +20,12 @@ const AddNewTicketForm = ({ formAction }) => {
 
                 const response = await formAction({ message, token });
 
-                if (response) {
+                if (response?.ok) {
                     toast.success('Ticket successfuly created.');
                     Router.push('/dashboard');
                     return;
                 } else {
                     toast.error(response);
-                    Router.push('/dashboard');
                     return;
                 }
             }}
