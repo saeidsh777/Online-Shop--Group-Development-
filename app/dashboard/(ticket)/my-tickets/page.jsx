@@ -1,7 +1,12 @@
+'use client';
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import SectionTitel from '@/components/Titels/SectionTitel/SectionTitel';
+import useResponse from '@/hooks/useResponse';
+import GetToken from '@/hooks/useToken';
+import { getMyTickets } from '@/services/ticket';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { AiOutlineContainer } from 'react-icons/ai';
 import { BiEnvelopeOpen } from 'react-icons/bi';
 import { GoDiscussionClosed } from 'react-icons/go';
@@ -41,19 +46,62 @@ const TicketBox = ({ text, ticketID, active }) => {
 };
 
 const UserTicketsPage = () => {
+    const [Tickets, setTickets] = useState({
+        all: 0,
+        active: 0,
+        close: 0,
+        tickets: [],
+    });
+    const responseHandler = useResponse();
+
+    useEffect(() => {
+        const Token = GetToken();
+        const ticketsFormater = tickets => {
+            const all = tickets.length;
+            let close = 0;
+            let active = 0;
+            tickets.forEach(({ isActive }) => {
+                if (isActive) {
+                    ++active;
+                } else {
+                    ++close;
+                }
+            });
+
+            setTickets({
+                active,
+                all,
+                close,
+                tickets,
+            });
+        };
+        const getTickets = async Token => {
+            const response = await getMyTickets(Token);
+            const result = await response.json();
+            if (response.ok) {
+                ticketsFormater(result);
+            } else {
+                responseHandler(response);
+            }
+        };
+        if (Token) {
+            getTickets(Token);
+        }
+    }, [setTickets, responseHandler]);
+
     return (
         <div>
             <SectionTitel title={'My Ticket List'} />
 
             <div className="grid grid-rows-4 gap-2 425:grid-cols-2 md:grid-cols-3 425:grid-rows-2 mb-6">
                 <DetailBox Icon={AiOutlineContainer} Title="All">
-                    <p className="text-center font-medium">1</p>
+                    <p className="text-center font-medium">{Tickets.all}</p>
                 </DetailBox>
                 <DetailBox Icon={BiEnvelopeOpen} Title="Active">
-                    <p className="text-center font-medium">1</p>
+                    <p className="text-center font-medium">{Tickets.active}</p>
                 </DetailBox>
                 <DetailBox Icon={GoDiscussionClosed} Title="Closed">
-                    <p className="text-center font-medium">1</p>
+                    <p className="text-center font-medium">{Tickets.close}</p>
                 </DetailBox>
                 <DetailBox Icon={TbMailPlus} Title="Create">
                     <Link href="/dashboard/create-new-ticket" className="w-fit">
@@ -69,7 +117,14 @@ const UserTicketsPage = () => {
                     Tickets
                 </p>
                 <div className="flex flex-col gap-2">
-                    <TicketBox text={'hello'} ticketID={2} active={true} />
+                    {Tickets.tickets.map(ticket => (
+                        <TicketBox
+                            key={ticket._id}
+                            text={ticket.messages[0].message}
+                            ticketID={ticket._id}
+                            active={ticket.isActive}
+                        />
+                    ))}
                 </div>
             </DashboardBox>
         </div>
