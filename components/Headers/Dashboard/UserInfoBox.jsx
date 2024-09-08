@@ -21,7 +21,11 @@ const UserInfoBox = () => {
     const getDataHandler = useCallback(() => {
         setLoading(true);
         const Token = GetToken();
-        if (!Token) return setLoading(false);
+        if (!Token) {
+            setLoading(false);
+            setBurh(true);
+            return;
+        }
 
         const User = async token => {
             const user = await getUserInfo(token);
