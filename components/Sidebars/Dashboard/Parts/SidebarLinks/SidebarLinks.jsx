@@ -1,4 +1,5 @@
 import { AiOutlineContainer } from 'react-icons/ai';
+import { BsEnvelopePaper } from 'react-icons/bs';
 import { MdOutlineAddBox, MdOutlineCategory } from 'react-icons/md';
 import {
     TbCategoryPlus,
@@ -34,6 +35,9 @@ const SidebarLinks = () => {
             <SidebarLinkSection title={'ticket'}>
                 <SidebarLink href={'/create-new-ticket'} text={'Create ticket'}>
                     <TbMailPlus />
+                </SidebarLink>
+                <SidebarLink href={'/my-tickets'} text={'My tickets'}>
+                    <BsEnvelopePaper />
                 </SidebarLink>
                 <SidebarLink href={'/tickets'} text={'Ticket list'}>
                     <AiOutlineContainer />
