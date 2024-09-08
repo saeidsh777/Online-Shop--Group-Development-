@@ -80,8 +80,8 @@ const UserTicketsPage = () => {
         };
         const getTickets = async Token => {
             const response = await getMyTickets(Token);
-            const result = await response.json();
-            if (response.ok) {
+            if (response?.ok) {
+                const result = await response.json();
                 ticketsFormater(result);
             } else {
                 responseHandler(response);
