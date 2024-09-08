@@ -31,9 +31,12 @@ const DetailBox = ({ Icon, Title, children }) => {
 const TicketBox = ({ text, ticketID, active }) => {
     return (
         <div className="md:p-3 lg:p-3.5 rounded-lg hover:bg-dashboard-sidebar-hover flex items-center">
-            <div className="flex items-center justify-between p-2 flex-1 border-r-2 border-dashed border-r-dashboard-title/50 mr-2">
-                <Link href={'/dashboard/my-tickets/' + ticketID}>
-                    <p className="line-clamp-1 cursor-pointer">{text}</p>
+            <div className="flex items-center justify-between p-2 flex-1 border-r-2 border-dashed border-r-dashboard-title/50 mr-2 gap-4">
+                <Link
+                    className="flex-1 line-clamp-1"
+                    href={'/dashboard/my-tickets/' + ticketID}
+                >
+                    {text}
                 </Link>
                 <Link href={'/dashboard/my-tickets/' + ticketID}>
                     <DashboardBTN>View</DashboardBTN>
