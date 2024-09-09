@@ -28,22 +28,46 @@ const DetailBox = ({ Icon, Title, children }) => {
     );
 };
 
-const TicketBox = ({ text, ticketID, active }) => {
+export const TicketBox = ({
+    text,
+    ticketID,
+    active,
+    usedFor = 'USER_TICKETS',
+}) => {
     return (
         <div className="md:p-3 lg:p-3.5 rounded-lg hover:bg-dashboard-sidebar-hover flex items-center">
-            <div className="flex items-center justify-between p-2 flex-1 border-r-2 border-dashed border-r-dashboard-title/50 mr-2 gap-4">
+            <div
+                className={`flex items-center justify-between p-2 flex-1  border-r-dashboard-title/50 ${
+                    usedFor === 'USER_TICKETS'
+                        ? 'border-r-2 border-dashed mr-2 gap-4'
+                        : ''
+                }`}
+            >
                 <Link
                     className="flex-1 line-clamp-1"
-                    href={'/dashboard/my-tickets/' + ticketID}
+                    href={
+                        (usedFor === 'USER_TICKETS'
+                            ? '/dashboard/my-tickets/'
+                            : '/dashboard/tickets/') + ticketID
+                    }
                 >
                     {text}
                 </Link>
-                <Link href={'/dashboard/my-tickets/' + ticketID}>
-                    <DashboardBTN>View</DashboardBTN>
+                <Link
+                    href={
+                        (usedFor === 'USER_TICKETS'
+                            ? '/dashboard/my-tickets/'
+                            : '/dashboard/tickets/') + ticketID
+                    }
+                >
+                    <DashboardBTN>
+                        {usedFor === 'USER_TICKETS' ? 'View' : 'Reply'}
+                    </DashboardBTN>
                 </Link>
             </div>
-
-            <p>{active ? 'Active' : 'Closed'}</p>
+            {usedFor === 'USER_TICKETS' ? (
+                <p>{active ? 'Active' : 'Closed'}</p>
+            ) : null}
         </div>
     );
 };
