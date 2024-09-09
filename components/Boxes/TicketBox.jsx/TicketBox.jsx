@@ -69,7 +69,7 @@ const TicketBox = ({ ticketID }) => {
                 console.log(new Date(result.createdAt).toDateString());
                 setState(result);
             } else {
-                responseHandler(response);
+                await responseHandler(response);
             }
         };
         if (Token) {

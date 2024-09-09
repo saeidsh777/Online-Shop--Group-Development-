@@ -84,7 +84,7 @@ const UserTicketsPage = () => {
                 const result = await response.json();
                 ticketsFormater(result);
             } else {
-                responseHandler(response);
+                await responseHandler(response);
             }
         };
         if (Token) {
