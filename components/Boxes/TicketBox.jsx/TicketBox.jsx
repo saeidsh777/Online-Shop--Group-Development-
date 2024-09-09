@@ -104,8 +104,8 @@ const TicketBox = ({ ticketID }) => {
             <form className="w-full flex items-center gap-2">
                 <DashboardInput
                     className="p-2 sm:px-3 md:py-2.5"
-                    placeholder="Search..."
-                    name="search"
+                    placeholder="message..."
+                    name="message"
                 />
                 <DashboardBTN
                     type="submit"
