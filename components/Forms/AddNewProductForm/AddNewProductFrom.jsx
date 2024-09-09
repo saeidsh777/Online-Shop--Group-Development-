@@ -1,9 +1,7 @@
 'use client';
 import { useContext, useEffect } from 'react';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
-import SubmitBtn from '@/components/Buttons/SubmitBtn/SubmitBtn';
 import { getAllCategories } from '@/services/categories';
-import { addNewProduct } from '@/services/product';
 import toast from 'react-hot-toast';
 import { AiFillProduct } from 'react-icons/ai';
 import { ProductContext } from '@/contexts/ProductProvider';
@@ -13,8 +11,7 @@ import Link from 'next/link';
 import ProductImages from './Components/ProductImages/ProductImages';
 import CreateProductModel from './Components/CreateProductModel/CreateProductModel';
 import DetaildField from './Components/DetaildField/DetaildField';
-import { API_BASE_URL } from '@/utils/constants';
-import { Numans } from 'next/font/google';
+import { addNewProduct, addNewProductModel } from '@/services/product';
 
 export default function AddNewProductForm() {
     const {
@@ -27,8 +24,12 @@ export default function AddNewProductForm() {
         setStep,
         models,
         setModels,
+        ready,
         onChangeCategory,
         formDataGenarator,
+        completed,
+        reset,
+        setCompleted,
     } = useContext(ProductContext);
 
     useEffect(() => {
@@ -52,6 +53,10 @@ export default function AddNewProductForm() {
                     discount: '',
                     finalPrice: 0,
                 },
+                isValidModelFields: {
+                    categoryFields: false,
+                    fixedFields: false,
+                },
             },
         ]);
     }, []);
@@ -61,7 +66,17 @@ export default function AddNewProductForm() {
         if (category._id !== '-1') {
             let productVariantsSchema = [...category.productVariantsSchema].map(
                 productVariant => {
-                    return { ...productVariant, value: '' };
+                    return {
+                        ...productVariant,
+                        value:
+                            productVariant.variantName.toLowerCase() === 'color'
+                                ? '#000000'
+                                : '',
+                        isValid:
+                            productVariant.variantName.toLowerCase() === 'color'
+                                ? true
+                                : false,
+                    };
                 }
             );
 
@@ -75,6 +90,10 @@ export default function AddNewProductForm() {
                     discountType: '-1',
                     discount: '',
                     finalPrice: 0,
+                },
+                isValidModelFields: {
+                    categoryFields: false,
+                    fixedFields: false,
                 },
             };
             setModels([model]);
@@ -91,6 +110,10 @@ export default function AddNewProductForm() {
                         discount: '',
                         finalPrice: 0,
                     },
+                    isValidModelFields: {
+                        categoryFields: false,
+                        fixedFields: false,
+                    },
                 },
             ]);
         }
@@ -98,20 +121,70 @@ export default function AddNewProductForm() {
 
     const submitHandler = async e => {
         e.preventDefault();
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${API_BASE_URL}/products/create-new-product`, {
-            method: 'POST',
-            headers: {
-                authorization: `Bearer ${token}`,
-            },
-            body: formDataGenarator(),
-        });
-        const result = await res.json();
-        console.log(res);
-        console.log(result);
+        const { res, result, err } = await addNewProduct(formDataGenarator);
+        if (res.status === 201) {
+            let formatDataModel = {
+                productModels: [],
+                product: result._id,
+                category: fixedInputs.category._id,
+            };
 
+            models.map(async model => {
+                const AdditionalFields = {};
+                !!model.categoryFields.length &&
+                    model.categoryFields.map(field => {
+                        AdditionalFields[field.variantName] = field.value;
+                    });
+                !!model.detialFields.length &&
+                    model.detialFields.map(field => {
+                        AdditionalFields[field.name] = field.value;
+                    });
+                let productModel = {
+                    price: Number(model.fixedFields.price),
+                    count: Number(model.fixedFields.count),
+                    discount:
+                        model.fixedFields.discountType === 'Percentage'
+                            ? (Number(model.fixedFields.price) *
+                                  Number(model.fixedFields.discount)) /
+                              100
+                            : Number(model.fixedFields.discount),
+                    additionalFields: AdditionalFields,
+                };
 
-        toast.success('Product created successfully');
+                formatDataModel.productModels.push(productModel);
+            });
+
+            const {
+                res: resModel,
+                result: resultModel,
+                err: errModel,
+            } = await addNewProductModel(formatDataModel);
+
+            if (resModel.status === 201) {
+                setCompleted(true);
+                toast.success('Product created successfully');
+            }
+
+            if (resModel.status === 400) {
+                toast.error(resultModel.message);
+            }
+            if (resModel.status === 403) {
+                toast.error(resultModel.message);
+            }
+            if (resModel.status === 500) {
+                toast.error(resultModel.message);
+            }
+        }
+
+        if (res.status === 400) {
+            toast.error(result.message);
+        }
+        if (res.status === 403) {
+            toast.error(result.message);
+        }
+        if (res.status === 500) {
+            toast.error(result.message);
+        }
     };
 
     return (
@@ -124,14 +197,18 @@ export default function AddNewProductForm() {
                             <div className="p-4 border border-gray-200 rounded-xl">
                                 <div className="mb-3">
                                     <label className="text-sm" htmlFor="name">
-                                        Product Name
+                                        Product Name{' '}
+                                        <span className="text-red-400">*</span>
                                     </label>
                                     <div className="mt-2">
                                         <input
                                             id="name"
                                             type="text"
                                             placeholder="Enter product name"
-                                            className="General_Input_1"
+                                            className={`General_Input_1 ${
+                                                fixedInputs.name.length < 3 &&
+                                                'ring-red-400 focus-visible:ring-red-400'
+                                            }`}
                                             value={fixedInputs?.name}
                                             onChange={e =>
                                                 onChangeFixedInputs({
@@ -147,12 +224,17 @@ export default function AddNewProductForm() {
                                         className="text-sm"
                                         htmlFor="category"
                                     >
-                                        Category
+                                        Category{' '}
+                                        <span className="text-red-400">*</span>
                                     </label>
                                     <div className="mt-2">
                                         <select
                                             id="category"
-                                            className="General_Input_1 h-[36px]"
+                                            className={`General_Input_1 h-[36px] ${
+                                                fixedInputs.category._id ===
+                                                    '-1' &&
+                                                'ring-red-400 focus-visible:ring-red-400'
+                                            }`}
                                             value={fixedInputs.category._id}
                                             onChange={e => onChangeCategory(e)}
                                         >
@@ -217,7 +299,10 @@ export default function AddNewProductForm() {
                                                 })
                                             }
                                             placeholder="Enter product description ..."
-                                            className="General_Input_1"
+                                            className={`General_Input_1 ${
+                                                !fixedInputs.description &&
+                                                'ring-red-400 focus-visible:ring-red-400'
+                                            }`}
                                         ></textarea>
                                     </div>
                                 </div>
@@ -307,46 +392,81 @@ export default function AddNewProductForm() {
                     {step === 2 && <CreateProductModel />}
 
                     {step === 3 && (
-                        <div className="p-3 border border-gray-200 rounded-xl mb-5 animation-bg-processing overflow-hidden">
-                            <div className="flex justify-center items-center">
+                        <div className="p-3 border border-gray-200 rounded-xl mb-5 animation-bg-processing overflow-hidden h-[15rem]">
+                            <div className="flex justify-center items-center h-full">
                                 <div className="flex flex-col items-center relative">
-                                    <AiFillProduct className="text-[8rem] text-white animate-pulse" />
-                                    <div className="flex flex-col items-center gap-2">
-                                        <p className="font-bold text-white">
-                                            Product Information Completed
-                                            Successfuly{' '}
-                                        </p>
-                                        <div className="text-2xl text-white w-10 h-10 flex justify-center items-center bg-blue-300 rounded-full animation-appear-from-down">
+                                    {completed ? (
+                                        <div className="text-[4rem] text-white w-20 h-20 flex justify-center items-center bg-blue-300 rounded-full animation-appear-from-up mb-5">
                                             ✓
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <AiFillProduct className="text-[8rem] text-white animate-pulse" />
+                                    )}
+                                    <p className="font-bold text-white">
+                                        {completed
+                                            ? 'Completed'
+                                            : 'Product Information Completed Successfuly'}
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     )}
 
                     <div className="flex items-center gap-2">
-                        <DashboardBTN
-                            type="button"
-                            disabled={step <= 1 ? true : false}
-                            className="disabled:bg-gray-400"
-                            onClick={() => setStep(prv => prv - 1)}
-                        >
-                            Back
-                        </DashboardBTN>
-                        {step <= 2 && (
+                        {completed ? (
                             <DashboardBTN
                                 type="button"
-                                disabled={step >= 3 ? true : false}
                                 className="disabled:bg-gray-400"
-                                onClick={() => setStep(prv => prv + 1)}
+                                onClick={() => {
+                                    reset();
+                                }}
                             >
-                                Next
+                                Create New Product
                             </DashboardBTN>
-                        )}
+                        ) : (
+                            <>
+                                <DashboardBTN
+                                    type="button"
+                                    disabled={step <= 1 ? true : false}
+                                    className="disabled:bg-gray-400"
+                                    onClick={() => setStep(prv => prv - 1)}
+                                >
+                                    Back
+                                </DashboardBTN>
+                                {step === 1 && (
+                                    <DashboardBTN
+                                        type="button"
+                                        disabled={
+                                            step > 2 ||
+                                            fixedInputs.name.length < 3 ||
+                                            fixedInputs.category._id === '-1' ||
+                                            fixedInputs.description.length === 0
+                                                ? true
+                                                : false
+                                        }
+                                        className="disabled:bg-gray-400"
+                                        onClick={() => setStep(prv => prv + 1)}
+                                    >
+                                        Next
+                                    </DashboardBTN>
+                                )}
+                                {step === 2 && (
+                                    <DashboardBTN
+                                        type="button"
+                                        disabled={ready ? false : true}
+                                        className="disabled:bg-gray-400"
+                                        onClick={() => setStep(prv => prv + 1)}
+                                    >
+                                        Next
+                                    </DashboardBTN>
+                                )}
 
-                        {step === 3 && (
-                            <DashboardBTN type="submit">Save</DashboardBTN>
+                                {step === 3 && (
+                                    <DashboardBTN type="submit">
+                                        Save
+                                    </DashboardBTN>
+                                )}
+                            </>
                         )}
                     </div>
                 </form>

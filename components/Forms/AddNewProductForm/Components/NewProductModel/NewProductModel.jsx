@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import SelectInput from '../SelectInput/SelectInput';
 import ColorInput from '../ColorInput/ColorInput';
 import CategoryInputs from '../CategoryInputs/CategoryInputs';
@@ -17,6 +17,80 @@ export default function NewProductModel({
 }) {
     const { models, setModels } = useContext(ProductContext);
 
+    useEffect(() => {
+        let isValidFields = true;
+        categoryFields.forEach(field => {
+            isValidFields = isValidFields && field.isValid;
+        });
+        if (isValidFields) {
+            setModels(prv =>
+                prv.map(model => {
+                    if (model._id !== _id) return model;
+
+                    return {
+                        ...model,
+                        isValidModelFields: {
+                            ...model.isValidModelFields,
+                            categoryFields: true,
+                        },
+                    };
+                })
+            );
+        } else {
+            setModels(prv =>
+                prv.map(model => {
+                    if (model._id !== _id) return model;
+
+                    return {
+                        ...model,
+                        isValidModelFields: {
+                            ...model.isValidModelFields,
+                            categoryFields: false,
+                        },
+                    };
+                })
+            );
+        }
+    }, [categoryFields]);
+
+    useEffect(() => {
+        let isValidFields = false;
+        if (fixedFields.price && fixedFields.count) {
+            isValidFields = true;
+        } else {
+            isValidFields = false;
+        }
+        if (isValidFields) {
+            setModels(prv =>
+                prv.map(model => {
+                    if (model._id !== _id) return model;
+
+                    return {
+                        ...model,
+                        isValidModelFields: {
+                            ...model.isValidModelFields,
+                            fixedFields: true,
+                        },
+                    };
+                })
+            );
+        } else {
+            setModels(prv =>
+                prv.map(model => {
+                    if (model._id !== _id) return model;
+
+                    return {
+                        ...model,
+                        isValidModelFields: {
+                            ...model.isValidModelFields,
+                            fixedFields: false,
+                        },
+                    };
+                })
+            );
+        }
+    }, [fixedFields]);
+
     // Product discount calculation
     const discountHandler = (from, value) => {
         if (from === 'price') {
@@ -31,14 +105,12 @@ export default function NewProductModel({
 
             // For numeric Percentage
             if (fixedFields.discountType === 'Percentage') {
-                if (value >= 100) {
+                if (fixedFields.discount >= 100) {
                     return 0;
-                } else if (value <= 0) {
-                    return +fixedFields.price;
+                } else if (fixedFields.discount <= 0) {
+                    return +value;
                 } else {
-                    return (
-                        +fixedFields.price - (+fixedFields.price * +value) / 100
-                    );
+                    return +value - (+fixedFields.discount * +value) / 100;
                 }
             }
             if (fixedFields.discountType === '-1') {
@@ -345,8 +417,8 @@ export default function NewProductModel({
                 </div>
 
                 <div className="bg-gray-100 rounded-sm p-2 mb-2">
-                    <div className="flex flex-col md:flex-row gap-2">
-                        <div className="mb-3 w-full">
+                    <div className="flex flex-col md:flex-row gap-2 flex-wrap">
+                        <div className="mb-3 flex-1">
                             <label className="text-sm" htmlFor="price">
                                 Price
                             </label>
@@ -356,13 +428,16 @@ export default function NewProductModel({
                                     inputMode="numeric"
                                     type="text"
                                     placeholder="0 $"
-                                    className="General_Input_1"
+                                    className={`General_Input_1 ${
+                                        !fixedFields.price &&
+                                        'ring-red-400 focus-visible:ring-red-400'
+                                    }`}
                                     value={fixedFields.price}
                                     onChange={onChangePrice}
                                 />
                             </div>
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-3 flex-1">
                             <label className="text-sm" htmlFor="Count">
                                 Count
                             </label>
@@ -372,15 +447,16 @@ export default function NewProductModel({
                                     inputMode="numeric"
                                     type="text"
                                     placeholder="Count"
-                                    className="General_Input_1"
+                                    className={`General_Input_1 ${
+                                        !fixedFields.count &&
+                                        'ring-red-400 focus-visible:ring-red-400'
+                                    }`}
                                     value={fixedFields.count}
                                     onChange={onChangeCount}
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div className="flex flex-col md:flex-row gap-2">
-                        <div className="mb-3 w-full md:w-[30%]">
+                        <div className="mb-3 flex-1">
                             <label className="text-sm" htmlFor="discountType">
                                 Discount Type
                             </label>
@@ -397,7 +473,7 @@ export default function NewProductModel({
                                 </select>
                             </div>
                         </div>
-                        <div className="mb-3 w-full">
+                        <div className="mb-3 flex-1">
                             <label className="text-sm" htmlFor="discount">
                                 Discount
                             </label>
@@ -419,6 +495,7 @@ export default function NewProductModel({
                             </div>
                         </div>
                     </div>
+                    <div className="flex flex-col md:flex-row gap-2"></div>
                 </div>
             </div>
             <div className="bg-green-100 p-2 rounded-md">
@@ -438,20 +515,18 @@ export default function NewProductModel({
                         Discount Price:
                         <span className="ms-4 text-red-300">
                             {fixedFields.discount
-                                ? +fixedFields.discount < +fixedFields.price
-                                    ? fixedFields.discountType === 'Percentage'
-                                        ? '-' +
-                                          (
-                                              (+fixedFields.price *
-                                                  +fixedFields.discount) /
-                                              100
+                                ? fixedFields.discountType === 'Numerical'
+                                    ? Number(fixedFields.discount) <
+                                      Number(fixedFields.price)
+                                        ? Number(fixedFields.discount)
+                                        : Number(
+                                              fixedFields.price
                                           ).toLocaleString()
-                                        : '-' +
-                                          Number(
-                                              fixedFields.discount
-                                          ).toLocaleString()
-                                    : '-' +
-                                      Number(fixedFields.price).toLocaleString()
+                                    : fixedFields.discountType ===
+                                          'Percentage' &&
+                                      (Number(fixedFields.discount) *
+                                          Number(fixedFields.price)) /
+                                          100
                                 : 0}
                             {' $'}
                         </span>

@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import defaultImage from '../public/images/default-image-product.svg';
 
 export const ProductContext = createContext();
@@ -10,13 +10,18 @@ export default function ProductProvider({ children }) {
         category: { _id: '-1' },
         description: '',
         detailFields: [],
+        isValid: false,
     });
 
     const [categories, setCategories] = useState([]);
 
     const [step, setStep] = useState(1);
 
+    const [completed, setCompleted] = useState(false);
+
     const [models, setModels] = useState([]);
+
+    const [ready, setReady] = useState(false);
 
     const [productImages, setProductImages] = useState({
         image0: defaultImage,
@@ -35,6 +40,39 @@ export default function ProductProvider({ children }) {
             };
         });
     };
+
+    const reset = () => {
+        setFixedInputs({
+            name: '',
+            category: { _id: '-1' },
+            description: '',
+            detailFields: [],
+            isValid: false,
+        });
+        setCategories([]);
+        setStep(1);
+        setCompleted(false);
+        setModels([]);
+        setReady(false);
+        setProductImages({
+            image0: defaultImage,
+            image1: defaultImage,
+            image2: defaultImage,
+            image3: defaultImage,
+        });
+        setImages([]);
+    };
+
+    useEffect(() => {
+        let isValid = true;
+        models.forEach(model => {
+            isValid =
+                isValid &&
+                model.isValidModelFields.categoryFields &&
+                model.isValidModelFields.fixedFields;
+        });
+        isValid ? setReady(true) : setReady(false);
+    }, [models]);
 
     const onChangeCategory = e => {
         const newCategory = categories.find(item => item.id === e.target.value);
@@ -57,23 +95,17 @@ export default function ProductProvider({ children }) {
               });
     };
 
-    // let newModels = [...models].map(model => {
-    //     return {
-    //         ...model,
-    //         fixedFields: {
-    //             discount: Number(model.fixedFields.discount),
-    //             price: Number(model.fixedFields.price),
-    //             count: Number(model.fixedFields.count),
-    //         },
-    //     };
-    // });
     const formDataGenarator = () => {
-        console.log(fixedInputs);
         const formData = new FormData();
         formData.append('title', fixedInputs.name);
         formData.append('description', fixedInputs.description);
         formData.append('category', fixedInputs.category._id);
-        // formData.append('details', JSON.stringify(fixedInputs.detailFields));
+        formData.append('fields', JSON.stringify());
+        // if (fixedInputs.detailFields.length > 0) {
+        //     for (let i = 0; i < fixedInputs.detailFields.length; i++) {
+        //         formData.append(`details`, fixedInputs.detailFields[i]);
+        //     }
+        // }
         if (images.length > 0) {
             for (let i = 0; i < images.length; i++) {
                 formData.append(`images`, images[i]);
@@ -97,6 +129,10 @@ export default function ProductProvider({ children }) {
         setStep,
         models,
         setModels,
+        completed,
+        setCompleted,
+        ready,
+        reset,
         onChangeCategory,
         formDataGenarator,
     };
