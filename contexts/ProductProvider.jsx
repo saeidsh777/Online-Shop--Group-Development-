@@ -100,17 +100,22 @@ export default function ProductProvider({ children }) {
         formData.append('title', fixedInputs.name);
         formData.append('description', fixedInputs.description);
         formData.append('category', fixedInputs.category._id);
-        formData.append('fields', JSON.stringify());
-        // if (fixedInputs.detailFields.length > 0) {
-        //     for (let i = 0; i < fixedInputs.detailFields.length; i++) {
-        //         formData.append(`details`, fixedInputs.detailFields[i]);
-        //     }
-        // }
+        if (fixedInputs.detailFields.length > 0) {
+            fixedInputs.detailFields.forEach((item, index) => {
+                formData.append(`details[${index}][name]`, item.name);
+                formData.append(`details[${index}][value]`, item.value);
+                formData.append(
+                    `details[${index}][description]`,
+                    item.description
+                );
+            });
+        }
         if (images.length > 0) {
             for (let i = 0; i < images.length; i++) {
                 formData.append(`images`, images[i]);
             }
         }
+        console.log(formData);
 
         return formData;
     };

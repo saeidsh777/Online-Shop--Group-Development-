@@ -163,26 +163,10 @@ export default function AddNewProductForm() {
             if (resModel.status === 201) {
                 setCompleted(true);
                 toast.success('Product created successfully');
-            }
-
-            if (resModel.status === 400) {
+            } else {
                 toast.error(resultModel.message);
             }
-            if (resModel.status === 403) {
-                toast.error(resultModel.message);
-            }
-            if (resModel.status === 500) {
-                toast.error(resultModel.message);
-            }
-        }
-
-        if (res.status === 400) {
-            toast.error(result.message);
-        }
-        if (res.status === 403) {
-            toast.error(result.message);
-        }
-        if (res.status === 500) {
+        } else {
             toast.error(result.message);
         }
     };
@@ -192,9 +176,11 @@ export default function AddNewProductForm() {
             <Step />
             <DashboardBox>
                 <form name="add-new-product" onSubmit={submitHandler}>
+                    {/* Step 1 - START */}
                     {step === 1 && (
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-5">
                             <div className="p-4 border border-gray-200 rounded-xl">
+                                {/* Product Name */}
                                 <div className="mb-3">
                                     <label className="text-sm" htmlFor="name">
                                         Product Name{' '}
@@ -219,6 +205,7 @@ export default function AddNewProductForm() {
                                     </div>
                                 </div>
 
+                                {/* Category */}
                                 <div className="mb-3">
                                     <label
                                         className="text-sm"
@@ -253,6 +240,7 @@ export default function AddNewProductForm() {
                                     </div>
                                 </div>
 
+                                {/* Note */}
                                 <div className="mb-5 bg-gray-50 p-2 rounded-md">
                                     <p className="font-bold text-sm">
                                         <span className="text-red-500">*</span>{' '}
@@ -280,6 +268,7 @@ export default function AddNewProductForm() {
                                     </ul>
                                 </div>
 
+                                {/* Product Description */}
                                 <div className="mb-5">
                                     <label
                                         className="text-sm"
@@ -307,6 +296,7 @@ export default function AddNewProductForm() {
                                     </div>
                                 </div>
 
+                                {/* Detial Fields */}
                                 <div className="mb-2">
                                     <div className="flex justify-between items-center">
                                         <span className="text-sm block">
@@ -388,9 +378,13 @@ export default function AddNewProductForm() {
                             </div>
                         </div>
                     )}
+                    {/* Step 1 - END */}
 
+                    {/* Step 2 - START */}
                     {step === 2 && <CreateProductModel />}
+                    {/* Step 2 - END */}
 
+                    {/* Step 3 - START */}
                     {step === 3 && (
                         <div className="p-3 border border-gray-200 rounded-xl mb-5 animation-bg-processing overflow-hidden h-[15rem]">
                             <div className="flex justify-center items-center h-full">
@@ -411,6 +405,7 @@ export default function AddNewProductForm() {
                             </div>
                         </div>
                     )}
+                    {/* Step 1 - END */}
 
                     <div className="flex items-center gap-2">
                         {completed ? (
