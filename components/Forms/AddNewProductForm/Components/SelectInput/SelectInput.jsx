@@ -6,6 +6,7 @@ export default function SelectInput({
     variantOptions,
     _id,
     value,
+    isValid,
     modelId,
 }) {
     const { setModels } = useContext(ProductContext);
@@ -25,6 +26,7 @@ export default function SelectInput({
                         return {
                             ...field,
                             value: e.target.value,
+                            isValid: e.target.value === "-1" ? false : true,
                         };
                     }),
                 };
@@ -42,7 +44,7 @@ export default function SelectInput({
                     id={variantName + newId}
                     value={value}
                     onChange={onChange}
-                    className="General_Input_1"
+                    className={`General_Input_1 ${!isValid && "ring-red-400" }`}
                 >
                     <option value="-1">Select Size</option>
                     {variantOptions.map(option => (

@@ -1,22 +1,22 @@
-.animation-appear-from-down {
-    animation: appear-from-down 1s ease-in-out 1s forwards;
-    transform: translateY(5rem);
-    -webkit-transform: translateY(5rem);
-    -moz-transform: translateY(5rem);
-    -ms-transform: translateY(5rem);
-    -o-transform: translateY(5rem);
+.animation-appear-from-up {
+    animation: appear-from-up 1s ease-in-out forwards;
+    transform: translateY(-3rem);
+    -webkit-transform: translateY(-3rem);
+    -moz-transform: translateY(-3rem);
+    -ms-transform: translateY(-3rem);
+    -o-transform: translateY(-3rem);
     opacity: 0;
-    -webkit-animation: appear-from-down 1s ease-in-out 0.2s forwards;
+    -webkit-animation: appear-from-up 1s ease-in-out forwards;
 }
-@keyframes appear-from-down {
+@keyframes appear-from-up {
     0% {
-        transform: translateY(5rem);
-        -webkit-transform: translateY(5rem);
-        -moz-transform: translateY(5rem);
-        -ms-transform: translateY(5rem);
-        -o-transform: translateY(5rem);
+        transform: translateY(-3rem);
+        -webkit-transform: translateY(-3rem);
+        -moz-transform: translateY(-3rem);
+        -ms-transform: translateY(-3rem);
+        -o-transform: translateY(-3rem);
         opacity: 0;
-    }
+}
     100% {
         transform: translateY(0);
         -webkit-transform: translateY(0);
