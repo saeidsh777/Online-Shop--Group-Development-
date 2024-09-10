@@ -1,4 +1,5 @@
 import { toastOptions } from '@/configs/toastOptions';
+import AuthProvider from '@/contexts/AuthProvider';
 import { Inter, Roboto } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
@@ -26,7 +27,7 @@ export default function RootLayout({ children }) {
                 }
                 suppressHydrationWarning={true}
             >
-                {children}
+                <AuthProvider>{children}</AuthProvider>
                 <Toaster toastOptions={toastOptions} />
             </body>
         </html>
