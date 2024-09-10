@@ -6,39 +6,85 @@ import { login } from '@/services/auth';
 import { useCallback, useContext } from 'react';
 import toast from 'react-hot-toast';
 
+const Credntials = {
+    ADMIN: {
+        phoneNumber: '09123456789',
+        password: 'admin1234',
+    },
+    USER: {
+        phoneNumber: '09987654321',
+        password: 'user1234',
+    },
+};
+
 const UserInfoBox = () => {
     const { User, Handlers } = useContext(AuthContext);
 
-    const LoginWithAdminCredntials = useCallback(async () => {
-        const adminAuthInfo = {
-            phoneNumber: '09123456789',
-            password: 'admin1234',
-        };
-        const { res, result, err } = await login(adminAuthInfo);
+    const LoginWithCredntials = useCallback(
+        async AuthInfo => {
+            const { res, result, err } = await login(AuthInfo);
 
-        if (res.status === 200) {
-            toast.success(result.message);
-            Handlers.LoginHandler(result.token);
-        } else if (res.status === 500) {
-            toast.error(err + '!');
-        } else {
-            toast.error(result.message + '!');
-        }
-    }, [Handlers]);
+            if (res.status === 200) {
+                toast.success(result.message);
+                Handlers.LoginHandler(result.token);
+            } else if (res.status === 500) {
+                toast.error(err + '!');
+            } else {
+                toast.error(result.message + '!');
+            }
+        },
+        [Handlers]
+    );
 
     return (
         <div className="flex items-center gap-2">
             {User.isLoggedIn ? (
-                <div className="flex flex-col">
-                    <span className="text-dashboard-title capitalize font-medium">
-                        {User.details.phoneNumber}
-                    </span>
-                    <span>{User.details.role}</span>
-                </div>
+                <>
+                    <div className="flex flex-col">
+                        <span className="text-dashboard-title capitalize font-medium">
+                            {User.details.phoneNumber}
+                        </span>
+                        <span>{User.details.role}</span>
+                    </div>
+                    {User.details.role === 'admin' ? (
+                        <DashboardBTN
+                            onClick={LoginWithCredntials.bind(
+                                null,
+                                Credntials.USER
+                            )}
+                        >
+                            Login as USER
+                        </DashboardBTN>
+                    ) : (
+                        <DashboardBTN
+                            onClick={LoginWithCredntials.bind(
+                                null,
+                                Credntials.ADMIN
+                            )}
+                        >
+                            Login as ADMIN
+                        </DashboardBTN>
+                    )}
+                </>
             ) : (
-                <DashboardBTN onClick={LoginWithAdminCredntials}>
-                    Login
-                </DashboardBTN>
+                <>
+                    <DashboardBTN
+                        onClick={LoginWithCredntials.bind(
+                            null,
+                            Credntials.ADMIN
+                        )}
+                    >
+                        Login as ADMIN
+                    </DashboardBTN>
+                    <DashboardBTN
+                        onClick={LoginWithCredntials.bind(
+                            null,
+                            Credntials.USER
+                        )}
+                    >
+                        Login as USER
+                    </DashboardBTN>
+                </>
             )}
 
             {/* replace it with avatar image */}
