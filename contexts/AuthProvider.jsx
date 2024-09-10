@@ -9,7 +9,9 @@ import {
     useState,
 } from 'react';
 
-const InitialLocalToken = localStorage.getItem('token');
+const InitialLocalToken =
+    typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
 const InitialValue = {
     isLoggedIn: false,
     token: InitialLocalToken,
