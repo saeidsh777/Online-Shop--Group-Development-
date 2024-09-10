@@ -39,14 +39,35 @@ const UserInfoBox = () => {
     return (
         <div className="flex items-center gap-2">
             {User.isLoggedIn ? (
-                <div className="flex flex-col">
-                    <span className="text-dashboard-title capitalize font-medium">
-                        {User.details.phoneNumber}
-                    </span>
-                    <span>{User.details.role}</span>
-                </div>
+                <>
+                    <div className="flex flex-col">
+                        <span className="text-dashboard-title capitalize font-medium">
+                            {User.details.phoneNumber}
+                        </span>
+                        <span>{User.details.role}</span>
+                    </div>
+                    {User.details.role === 'admin' ? (
+                        <DashboardBTN
+                            onClick={LoginWithCredntials.bind(
+                                null,
+                                Credntials.USER
+                            )}
+                        >
+                            Login as USER
+                        </DashboardBTN>
+                    ) : (
+                        <DashboardBTN
+                            onClick={LoginWithCredntials.bind(
+                                null,
+                                Credntials.ADMIN
+                            )}
+                        >
+                            Login as ADMIN
+                        </DashboardBTN>
+                    )}
+                </>
             ) : (
-                <div className="flex items-center gap-2">
+                <>
                     <DashboardBTN
                         onClick={LoginWithCredntials.bind(
                             null,
@@ -63,7 +84,7 @@ const UserInfoBox = () => {
                     >
                         Login as USER
                     </DashboardBTN>
-                </div>
+                </>
             )}
 
             {/* replace it with avatar image */}
