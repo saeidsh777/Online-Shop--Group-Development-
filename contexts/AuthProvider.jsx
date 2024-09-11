@@ -79,10 +79,16 @@ const AuthProvider = ({ children }) => {
         [Logout]
     );
 
+    // validate InitialLocalToken on first component mount if existed
+    // (the token that previously stored in localsotrage)
     useEffect(() => {
         InitialLocalToken ? TokenChecker(InitialLocalToken) : Logout();
     }, [Logout, TokenChecker]);
 
+    // auto revalidate token for every 15min
+    // (the token that has been stored in User state at the top)
+    // OR
+    // remove revalidation on component unMount and only if (!User.token)
     useEffect(() => {
         const _10min = 600_000;
         if (!User.token && reValidateTokenInterval.current) {
