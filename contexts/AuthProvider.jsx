@@ -6,6 +6,7 @@ import {
     useCallback,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 
@@ -32,14 +33,26 @@ export const AuthContext = createContext({
 
 const AuthProvider = ({ children }) => {
     const [User, setUser] = useState(InitialValue);
+    const reValidateTokenInterval = useRef(null);
+
+    const ClearReValidator = useCallback(() => {
+        if (!reValidateTokenInterval.current) return;
+
+        clearInterval(reValidateTokenInterval.current);
+        reValidateTokenInterval.current = null;
+    }, []);
 
     const Logout = useCallback(() => {
         localStorage.setItem('token', '');
         setUser({ ...InitialValue, token: '' });
-    }, [setUser]);
+        ClearReValidator();
+    }, [setUser, ClearReValidator]);
 
     const TokenChecker = useCallback(
         async token => {
+            if (!token) return;
+            console.log('Runned');
+
             const response = await getUserInfo(token);
 
             if ('res' in response && response.res.status === 200) {
@@ -67,12 +80,23 @@ const AuthProvider = ({ children }) => {
     );
 
     useEffect(() => {
-        if (InitialLocalToken) {
-            TokenChecker(InitialLocalToken);
-            return;
+        InitialLocalToken ? TokenChecker(InitialLocalToken) : Logout();
+    }, [Logout, TokenChecker]);
+
+    useEffect(() => {
+        const _10min = 600_000;
+        if (!User.token && reValidateTokenInterval.current) {
+            ClearReValidator();
+        } else {
+            reValidateTokenInterval.current = setInterval(
+                TokenChecker,
+                _10min,
+                User.token
+            );
         }
-        Logout();
-    }, [TokenChecker, Logout]);
+
+        return ClearReValidator;
+    }, [TokenChecker, User.token, ClearReValidator]);
 
     const Handlers = useMemo(
         () => ({
