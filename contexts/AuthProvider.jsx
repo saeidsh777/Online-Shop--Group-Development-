@@ -85,7 +85,7 @@ const AuthProvider = ({ children }) => {
         InitialLocalToken ? TokenChecker(InitialLocalToken) : Logout();
     }, [Logout, TokenChecker]);
 
-    // auto revalidate token for every 15min
+    // auto revalidate token for every 10min
     // (the token that has been stored in User state at the top)
     // OR
     // remove revalidation on component unMount and only if (!User.token)
