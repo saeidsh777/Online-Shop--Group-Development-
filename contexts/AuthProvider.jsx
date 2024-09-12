@@ -51,7 +51,6 @@ const AuthProvider = ({ children }) => {
     const TokenChecker = useCallback(
         async token => {
             if (!token) return;
-            console.log('Runned');
 
             const response = await getUserInfo(token);
 
