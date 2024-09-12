@@ -15,7 +15,7 @@ const useAddCategory = () => {
 
     const AddCategory = async (Data, onSuccess, onError) => {
         const Token = useToken();
-        if (!Token) return;
+        if (!Token) return onError();
 
         const response = await postCategory(Data, Token);
 
