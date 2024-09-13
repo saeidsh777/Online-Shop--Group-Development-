@@ -1,10 +1,11 @@
 import { AiOutlineContainer } from 'react-icons/ai';
-import { BsEnvelopePaper } from 'react-icons/bs';
+import { BsBoxes, BsEnvelopePaper } from 'react-icons/bs';
 import { MdOutlineAddBox, MdOutlineCategory } from 'react-icons/md';
 import {
     TbCategoryPlus,
     TbGraph,
-    TbListDetails,
+    TbHexagonalPrismPlus,
+    TbHexagons,
     TbMailPlus,
 } from 'react-icons/tb';
 import SidebarLink from './Components/SidebarLink';
@@ -21,7 +22,7 @@ const SidebarLinks = () => {
                     <MdOutlineAddBox />
                 </SidebarLink>
                 <SidebarLink href={'/products'} text={'Product list'}>
-                    <TbListDetails />
+                    <BsBoxes />
                 </SidebarLink>
             </SidebarLinkSection>
             <SidebarLinkSection title={'category'}>
@@ -30,6 +31,14 @@ const SidebarLinks = () => {
                 </SidebarLink>
                 <SidebarLink href={'/categories'} text={'Category list'}>
                     <MdOutlineCategory />
+                </SidebarLink>
+            </SidebarLinkSection>
+            <SidebarLinkSection title={'brand'}>
+                <SidebarLink href={'/add-new-brand'} text={'Add brand'}>
+                    <TbHexagonalPrismPlus />
+                </SidebarLink>
+                <SidebarLink href={'/brands'} text={'Brand list'}>
+                    <TbHexagons />
                 </SidebarLink>
             </SidebarLinkSection>
             <SidebarLinkSection title={'ticket'}>
