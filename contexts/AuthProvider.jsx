@@ -10,12 +10,9 @@ import {
     useState,
 } from 'react';
 
-const InitialLocalToken =
-    typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-
 const InitialValue = {
     isLoggedIn: false,
-    token: InitialLocalToken,
+    token: '',
     details: {
         email: '',
         name: '',
@@ -33,6 +30,7 @@ export const AuthContext = createContext({
 
 const AuthProvider = ({ children }) => {
     const [User, setUser] = useState(InitialValue);
+    const [isChecked, setChecked] = useState(false);
     const reValidateTokenInterval = useRef(null);
 
     const ClearReValidator = useCallback(() => {
@@ -44,7 +42,7 @@ const AuthProvider = ({ children }) => {
 
     const Logout = useCallback(() => {
         localStorage.setItem('token', '');
-        setUser({ ...InitialValue, token: '' });
+        setUser(InitialValue);
         ClearReValidator();
     }, [setUser, ClearReValidator]);
 
@@ -81,8 +79,17 @@ const AuthProvider = ({ children }) => {
     // validate InitialLocalToken on first component mount if existed
     // (the token that previously stored in localsotrage)
     useEffect(() => {
-        InitialLocalToken ? TokenChecker(InitialLocalToken) : Logout();
-    }, [Logout, TokenChecker]);
+        const InitialLocalToken = localStorage.getItem('token');
+        if (InitialLocalToken) {
+            const checkInitialLocalToken = async () => {
+                await TokenChecker(InitialLocalToken);
+                setChecked(true);
+            };
+            checkInitialLocalToken();
+            return;
+        }
+        setChecked(true);
+    }, [TokenChecker]);
 
     // auto revalidate token for every 10min
     // (the token that has been stored in User state at the top)
@@ -112,6 +119,10 @@ const AuthProvider = ({ children }) => {
     );
 
     const value = { User, Handlers };
+
+    if (!isChecked) {
+        return <div className="text-center font-bold">LOADING...</div>;
+    }
 
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
