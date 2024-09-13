@@ -10,6 +10,7 @@ import Link from 'next/link';
 
 const page = async ({ searchParams }) => {
     const categories = await getAllCategories();
+    console.log("hi ikami")
 
     if (categories.err) return <RefreshPage />;
 
