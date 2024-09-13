@@ -2,22 +2,16 @@ import { API_BASE_URL, responseAndResult } from '@/utils/constants';
 
 
 export const getAllBrands = async () => {
-    console.log('Fetching brands...'); 
   
     try {
       const res = await fetch(`${API_BASE_URL}/brands/all`, {
         cache: 'no-store',
       });
   
-    //   console.log('Response received:', res); 
-  
       const result = await res.json();
-  
-    //   console.log('API Response:', result); 
   
       return { res, result };
     } catch (err) {
-      console.error('Error fetching brands:', err); 
       return { err, ...responseAndResult };
     }
   };
