@@ -2,7 +2,6 @@ import { API_BASE_URL, responseAndResult } from '@/utils/constants';
 
 
 export const getAllBrands = async () => {
-  
     try {
       const res = await fetch(`${API_BASE_URL}/brands/all`, {
         cache: 'no-store',
