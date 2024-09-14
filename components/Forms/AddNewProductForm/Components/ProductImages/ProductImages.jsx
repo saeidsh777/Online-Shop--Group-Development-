@@ -1,3 +1,4 @@
+'use client';
 import { ProductContext } from '@/contexts/ProductProvider';
 import Image from 'next/image';
 import React, { useContext, useEffect, useRef } from 'react';
@@ -5,9 +6,15 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import { FiUploadCloud } from 'react-icons/fi';
 import defaultImage from '../../../../../public/images/default-image-product.svg';
 
-export default function ProductImages() {
-    const { productImages, setProductImages, images, setImages } =
-        useContext(ProductContext);
+export default function ProductImages({
+    productImages,
+    setProductImages,
+    images,
+    setImages,
+    disabled,
+}) {
+    // const { productImages, setProductImages, images, setImages } =
+    //     useContext(ProductContext);
     const filesInput = useRef();
     const productImagesElm = useRef([]);
 
@@ -74,7 +81,7 @@ export default function ProductImages() {
                         alt="product image"
                         className={`object-cover rounded-lg ${
                             images[0] ? 'w-[100%] h-[100%]' : 'w-[80%] h-[70%]'
-                        }`}
+                        } ${disabled && 'opacity-50'}`}
                     />
                     {images[0] && (
                         <span
@@ -101,7 +108,7 @@ export default function ProductImages() {
                                 images[1]
                                     ? 'w-[100%] h-[100%]'
                                     : 'w-[90%] h-[90%]'
-                            }`}
+                            } ${disabled && 'opacity-50'}`}
                         />
                         {images[1] && (
                             <span
@@ -127,7 +134,7 @@ export default function ProductImages() {
                                 images[2]
                                     ? 'w-[100%] h-[100%]'
                                     : 'w-[90%] h-[90%]'
-                            }`}
+                            } ${disabled && 'opacity-50'}`}
                         />
                         {images[2] && (
                             <span
@@ -153,7 +160,7 @@ export default function ProductImages() {
                                 images[3]
                                     ? 'w-[100%] h-[100%]'
                                     : 'w-[90%] h-[90%]'
-                            }`}
+                            } ${disabled && 'opacity-50'}`}
                         />
                         {images[3] && (
                             <span
@@ -171,10 +178,12 @@ export default function ProductImages() {
                 <label
                     htmlFor="img"
                     className={`${
-                        images.length
+                        disabled
+                            ? 'bg-gray-300'
+                            : images.length
                             ? 'bg-gradient-to-r from-sky-50 to-indigo-100'
-                            : 'bg-inherit'
-                    } flex w-full py-2 justify-between overflow-hidden bg-gray-200 hover:bg-gray-50 cursor-pointer items-center border border-gray-200 rounded-md`}
+                            : 'bg-inherit hover:bg-gray-50'
+                    } flex w-full py-2 justify-between overflow-hidden cursor-pointer items-center border border-gray-200 rounded-md`}
                 >
                     <div className="w-full flex flex-col items-center justify-center">
                         <FiUploadCloud className="iconFontSize" />
@@ -188,6 +197,7 @@ export default function ProductImages() {
                         id="img"
                         type="file"
                         className="hidden"
+                        disabled={disabled}
                         multiple={true}
                         name="files"
                         ref={filesInput}

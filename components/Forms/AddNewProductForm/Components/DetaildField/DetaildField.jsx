@@ -1,10 +1,14 @@
-import { ProductContext } from '@/contexts/ProductProvider';
-import { useContext } from 'react';
+'use client';
 import { AiOutlineDelete } from 'react-icons/ai';
 
-export default function DetaildField({ name, value, description, _id }) {
-    const { setFixedInputs } = useContext(ProductContext);
-
+export default function DetaildField({
+    name,
+    value,
+    description,
+    _id,
+    setFixedInputs,
+    disabled,
+}) {
     const nameId = crypto.randomUUID();
     const valueId = crypto.randomUUID();
     const descriptionId = crypto.randomUUID();
@@ -76,6 +80,7 @@ export default function DetaildField({ name, value, description, _id }) {
                             id={nameId}
                             value={name}
                             onChange={onChangeName}
+                            disabled={disabled}
                             type="text"
                             className="General_Input_1"
                         />
@@ -88,6 +93,7 @@ export default function DetaildField({ name, value, description, _id }) {
                     <div className="flex items-center gap-1">
                         <input
                             id={valueId}
+                            disabled={disabled}
                             value={value}
                             onChange={onChangeValue}
                             type="text"
@@ -104,16 +110,24 @@ export default function DetaildField({ name, value, description, _id }) {
                     <div className="flex items-center gap-1">
                         <textarea
                             id={descriptionId}
+                            disabled={disabled}
                             value={description}
                             onChange={onChangeDescription}
                             rows={4}
                             type="text"
                             className="General_Input_1"
                         />
-                        <AiOutlineDelete
-                            className="cursor-pointer hover:text-red-500"
+                        <button
+                            disabled={disabled}
+                            className={` ${
+                                disabled
+                                    ? 'text-gray-400'
+                                    : 'cursor-pointer hover:text-red-500'
+                            }`}
                             onClick={() => deleteField(_id)}
-                        />
+                        >
+                            <AiOutlineDelete />
+                        </button>
                     </div>
                 </div>
             </div>

@@ -30,8 +30,6 @@ export default function LoginForm() {
             toast.success(result.message);
             localStorage.setItem('token', result.token);
             router.push('/');
-        } else if (res.status === 500) {
-            toast.error(err + '!');
         } else {
             toast.error(result.message + '!');
         }
