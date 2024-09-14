@@ -10,7 +10,7 @@ import Step from '@/components/Forms/AddNewProductForm/Components/Step/Step';
 import Link from 'next/link';
 import ProductImages from './Components/ProductImages/ProductImages';
 import CreateProductModel from './Components/CreateProductModel/CreateProductModel';
-import DetaildField from './Components/DetaildField/DetaildField';
+import DetailField from './Components/DetailField/DetailField';
 
 export default function AddNewProductForm() {
     const {
@@ -213,9 +213,12 @@ export default function AddNewProductForm() {
                                                 className="mt-3"
                                                 key={field._id}
                                             >
-                                                <DetaildField
+                                                <DetailField
                                                     {...field}
                                                     disabled={false}
+                                                    setFixedInputs={
+                                                        setFixedInputs
+                                                    }
                                                 />
                                             </div>
                                         ))

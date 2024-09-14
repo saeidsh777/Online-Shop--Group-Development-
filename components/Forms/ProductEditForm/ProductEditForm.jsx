@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react';
 import ProductImages from '../AddNewProductForm/Components/ProductImages/ProductImages';
 import defaultImage from '../../../public/images/default-image-product.svg';
-import DetaildField from '../AddNewProductForm/Components/DetaildField/DetaildField';
 import toast from 'react-hot-toast';
 import { editProduct } from '@/services/product';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
+import DetailField from '../AddNewProductForm/Components/DetailField/DetailField';
 
 export default function ProductEditForm({
     _id,
@@ -181,7 +181,7 @@ export default function ProductEditForm({
                         {!!fixedInputs.detailFields.length ? (
                             fixedInputs.detailFields.map(field => (
                                 <div className="mt-3" key={field._id}>
-                                    <DetaildField
+                                    <DetailField
                                         {...field}
                                         setFixedInputs={setFixedInputs}
                                         disabled={!editMode}
@@ -231,7 +231,15 @@ export default function ProductEditForm({
                             <DashboardBTN
                                 className="w-full bg-gray-400"
                                 type="button"
-                                onClick={() => setEditMode(false)}
+                                onClick={() => {
+                                    setFixedInputs(prv => {
+                                        return {
+                                            ...prv,
+                                            detailFields: productDetails,
+                                        };
+                                    });
+                                    setEditMode(false);
+                                }}
                             >
                                 Cancel
                             </DashboardBTN>

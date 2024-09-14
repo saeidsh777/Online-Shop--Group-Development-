@@ -1,7 +1,7 @@
 'use client';
 import { AiOutlineDelete } from 'react-icons/ai';
 
-export default function DetaildField({
+export default function DetailField({
     name,
     value,
     description,
