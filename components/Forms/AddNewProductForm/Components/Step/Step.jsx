@@ -1,3 +1,4 @@
+'use client';
 import { ProductContext } from '@/contexts/ProductProvider';
 import React, { useContext } from 'react';
 

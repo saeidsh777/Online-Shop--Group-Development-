@@ -1,8 +1,8 @@
 'use client';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
+import GetToken from '@/hooks/useToken';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import InputToken from './Components/InputToken';
 
 const AddNewTicketForm = ({ formAction }) => {
     const Router = useRouter();
@@ -11,7 +11,9 @@ const AddNewTicketForm = ({ formAction }) => {
             className="flex flex-col items-start gap-2.5 md:gap-3 1152:gap-4"
             action={async data => {
                 const message = data.get('message');
-                const token = data.get('token');
+                const token = GetToken();
+                if (!token) return;
+
                 if (!message) {
                     toast.error('you cant create a ticket without a message');
                     return;
@@ -36,7 +38,6 @@ const AddNewTicketForm = ({ formAction }) => {
                     rows="10"
                     maxLength={750}
                 ></textarea>
-                <InputToken />
                 <DashboardBTN type="submit">Create</DashboardBTN>
             </div>
         </form>

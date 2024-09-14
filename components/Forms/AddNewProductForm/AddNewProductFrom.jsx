@@ -10,11 +10,11 @@ import Step from '@/components/Forms/AddNewProductForm/Components/Step/Step';
 import Link from 'next/link';
 import ProductImages from './Components/ProductImages/ProductImages';
 import CreateProductModel from './Components/CreateProductModel/CreateProductModel';
-import DetaildField from './Components/DetaildField/DetaildField';
-import { addNewProduct, addNewProductModel } from '@/services/product';
+import DetailField from './Components/DetailField/DetailField';
 
 export default function AddNewProductForm() {
     const {
+        setModelsForCategory,
         fixedInputs,
         setFixedInputs,
         onChangeFixedInputs,
@@ -22,14 +22,15 @@ export default function AddNewProductForm() {
         setCategories,
         step,
         setStep,
-        models,
-        setModels,
         ready,
         onChangeCategory,
-        formDataGenarator,
         completed,
         reset,
-        setCompleted,
+        submitHandler,
+        productImages,
+        setProductImages,
+        images,
+        setImages,
     } = useContext(ProductContext);
 
     useEffect(() => {
@@ -41,160 +42,19 @@ export default function AddNewProductForm() {
         };
         categoriesRequestHandler();
 
-        setModels([
-            {
-                id: crypto.randomUUID(),
-                categoryFields: [],
-                detialFields: [],
-                fixedFields: {
-                    price: '',
-                    count: '',
-                    discountType: '-1',
-                    discount: '',
-                    finalPrice: 0,
-                },
-                isValidModelFields: {
-                    categoryFields: false,
-                    fixedFields: false,
-                },
-            },
-        ]);
+        setModelsForCategory([]);
     }, []);
-
-    useEffect(() => {
-        const category = fixedInputs.category;
-        if (category._id !== '-1') {
-            let productVariantsSchema = [...category.productVariantsSchema].map(
-                productVariant => {
-                    return {
-                        ...productVariant,
-                        value:
-                            productVariant.variantName.toLowerCase() === 'color'
-                                ? '#000000'
-                                : '',
-                        isValid:
-                            productVariant.variantName.toLowerCase() === 'color'
-                                ? true
-                                : false,
-                    };
-                }
-            );
-
-            let model = {
-                _id: crypto.randomUUID(),
-                categoryFields: productVariantsSchema,
-                detialFields: [],
-                fixedFields: {
-                    price: '',
-                    count: '',
-                    discountType: '-1',
-                    discount: '',
-                    finalPrice: 0,
-                },
-                isValidModelFields: {
-                    categoryFields: false,
-                    fixedFields: false,
-                },
-            };
-            setModels([model]);
-        } else {
-            setModels([
-                {
-                    _id: crypto.randomUUID(),
-                    categoryFields: [],
-                    detialFields: [],
-                    fixedFields: {
-                        price: '',
-                        count: '',
-                        discountType: '-1',
-                        discount: '',
-                        finalPrice: 0,
-                    },
-                    isValidModelFields: {
-                        categoryFields: false,
-                        fixedFields: false,
-                    },
-                },
-            ]);
-        }
-    }, [fixedInputs.category]);
-
-    const submitHandler = async e => {
-        e.preventDefault();
-        const { res, result, err } = await addNewProduct(formDataGenarator);
-        if (res.status === 201) {
-            let formatDataModel = {
-                productModels: [],
-                product: result._id,
-                category: fixedInputs.category._id,
-            };
-
-            models.map(async model => {
-                const AdditionalFields = {};
-                !!model.categoryFields.length &&
-                    model.categoryFields.map(field => {
-                        AdditionalFields[field.variantName] = field.value;
-                    });
-                !!model.detialFields.length &&
-                    model.detialFields.map(field => {
-                        AdditionalFields[field.name] = field.value;
-                    });
-                let productModel = {
-                    price: Number(model.fixedFields.price),
-                    count: Number(model.fixedFields.count),
-                    discount:
-                        model.fixedFields.discountType === 'Percentage'
-                            ? (Number(model.fixedFields.price) *
-                                  Number(model.fixedFields.discount)) /
-                              100
-                            : Number(model.fixedFields.discount),
-                    additionalFields: AdditionalFields,
-                };
-
-                formatDataModel.productModels.push(productModel);
-            });
-
-            const {
-                res: resModel,
-                result: resultModel,
-                err: errModel,
-            } = await addNewProductModel(formatDataModel);
-
-            if (resModel.status === 201) {
-                setCompleted(true);
-                toast.success('Product created successfully');
-            }
-
-            if (resModel.status === 400) {
-                toast.error(resultModel.message);
-            }
-            if (resModel.status === 403) {
-                toast.error(resultModel.message);
-            }
-            if (resModel.status === 500) {
-                toast.error(resultModel.message);
-            }
-        }
-
-        if (res.status === 400) {
-            toast.error(result.message);
-        }
-        if (res.status === 403) {
-            toast.error(result.message);
-        }
-        if (res.status === 500) {
-            toast.error(result.message);
-        }
-    };
 
     return (
         <>
             <Step />
             <DashboardBox>
                 <form name="add-new-product" onSubmit={submitHandler}>
+                    {/* Step 1 - START */}
                     {step === 1 && (
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-5">
                             <div className="p-4 border border-gray-200 rounded-xl">
+                                {/* Product Name */}
                                 <div className="mb-3">
                                     <label className="text-sm" htmlFor="name">
                                         Product Name{' '}
@@ -219,6 +79,7 @@ export default function AddNewProductForm() {
                                     </div>
                                 </div>
 
+                                {/* Category */}
                                 <div className="mb-3">
                                     <label
                                         className="text-sm"
@@ -253,6 +114,7 @@ export default function AddNewProductForm() {
                                     </div>
                                 </div>
 
+                                {/* Note */}
                                 <div className="mb-5 bg-gray-50 p-2 rounded-md">
                                     <p className="font-bold text-sm">
                                         <span className="text-red-500">*</span>{' '}
@@ -280,12 +142,14 @@ export default function AddNewProductForm() {
                                     </ul>
                                 </div>
 
+                                {/* Product Description */}
                                 <div className="mb-5">
                                     <label
                                         className="text-sm"
                                         htmlFor="description"
                                     >
-                                        Product Description
+                                        Product Description{' '}
+                                        <span className="text-red-400">*</span>
                                     </label>
                                     <div className="mt-2">
                                         <textarea
@@ -307,6 +171,7 @@ export default function AddNewProductForm() {
                                     </div>
                                 </div>
 
+                                {/* Detial Fields */}
                                 <div className="mb-2">
                                     <div className="flex justify-between items-center">
                                         <span className="text-sm block">
@@ -348,7 +213,13 @@ export default function AddNewProductForm() {
                                                 className="mt-3"
                                                 key={field._id}
                                             >
-                                                <DetaildField {...field} />
+                                                <DetailField
+                                                    {...field}
+                                                    disabled={false}
+                                                    setFixedInputs={
+                                                        setFixedInputs
+                                                    }
+                                                />
                                             </div>
                                         ))
                                     ) : (
@@ -383,14 +254,26 @@ export default function AddNewProductForm() {
                                     )}
                                 </div>
                             </div>
+
+                            {/* Images */}
                             <div className="p-4 border border-gray-200 rounded-xl">
-                                <ProductImages />
+                                <ProductImages
+                                    productImages={productImages}
+                                    setProductImages={setProductImages}
+                                    images={images}
+                                    setImages={setImages}
+                                    disabled={false}
+                                />
                             </div>
                         </div>
                     )}
+                    {/* Step 1 - END */}
 
+                    {/* Step 2 - START */}
                     {step === 2 && <CreateProductModel />}
+                    {/* Step 2 - END */}
 
+                    {/* Step 3 - START */}
                     {step === 3 && (
                         <div className="p-3 border border-gray-200 rounded-xl mb-5 animation-bg-processing overflow-hidden h-[15rem]">
                             <div className="flex justify-center items-center h-full">
@@ -411,6 +294,7 @@ export default function AddNewProductForm() {
                             </div>
                         </div>
                     )}
+                    {/* Step 1 - END */}
 
                     <div className="flex items-center gap-2">
                         {completed ? (
