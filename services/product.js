@@ -15,6 +15,7 @@ export const addNewProduct = async formDataGenarator => {
 
         return { res, result };
     } catch (err) {
+        console.log(err);
         return { err, ...responseAndResult };
     }
 };
@@ -35,6 +36,7 @@ export const addNewProductModel = async formatDataModel => {
 
         return { res, result };
     } catch (err) {
+        console.log(err);
         return { err, ...responseAndResult };
     }
 };
@@ -57,7 +59,7 @@ export const editProduct = async (formDataGenarator, productId) => {
 
         return { res, result };
     } catch (err) {
-        return err;
+        return { err, ...responseAndResult };
     }
 };
 
