@@ -22,7 +22,11 @@ const AddNewBrandForm = () => {
         const category = categories.find(cat => cat._id === categoryId);
         if (category) {
             addCategory(category);
-            setSearchTerm(''); 
+            setSearchTerm('');
+            // close tab after click
+            if (dropdownRef.current) {
+                dropdownRef.current.style.display = 'none';
+            }
         }
     };
 
@@ -33,7 +37,7 @@ const AddNewBrandForm = () => {
         }
     };
 
-    // fucos when we have click on inputs
+    // focus when we have click on inputs
     const handleFocus = () => {
         dropdownRef.current.style.display = 'block';
     };
@@ -81,7 +85,7 @@ const AddNewBrandForm = () => {
                         filteredCategories.map((category) => (
                             <div
                                 key={category._id}
-                                className=" px-3 py-2 cursor-pointer  hover:bg-blue-100"
+                                className=" px-3 py-2 cursor-pointer hover:bg-blue-100"
                                 onClick={() => handleCategorySelect(category._id)}
                             >
                                 {category.title}
@@ -99,9 +103,9 @@ const AddNewBrandForm = () => {
                     {selectedCategories.map((cat) => (
                         <span
                             key={cat._id}
-                            className="  bg-blue-100 text-blue-700 px-3 py-1 rounded-full flex items-center justify-center space-x-2 "
+                            className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full flex items-center justify-center space-x-2"
                         >
-                            <span >{cat.title}</span>
+                            <span>{cat.title}</span>
                             <button
                                 type="button"
                                 onClick={() => removeCategory(cat._id)}

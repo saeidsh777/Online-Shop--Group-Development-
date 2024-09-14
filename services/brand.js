@@ -2,7 +2,7 @@ import { API_BASE_URL, responseAndResult } from '@/utils/constants';
 
 
 export const getAllBrands = async () => {
-    console.log('Fetching brands...'); 
+    // console.log('Fetching brands...'); 
   
     try {
       const res = await fetch(`${API_BASE_URL}/brands/all`, {
