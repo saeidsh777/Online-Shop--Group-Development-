@@ -12,7 +12,7 @@ export default async function ProductModelEditPage({ params }) {
     const model = result.productModels[0].productModels.find(
         item => item._id === modelId
     );
-    // console.log(result);
+    console.log(result);
     console.log(model);
 
     return (
