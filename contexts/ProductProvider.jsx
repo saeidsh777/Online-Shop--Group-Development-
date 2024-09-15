@@ -84,7 +84,6 @@ export default function ProductProvider({ children }) {
             {
                 _id: crypto.randomUUID(),
                 categoryFields: productVariantsSchema,
-                detialFields: [],
                 fixedFields: {
                     price: '',
                     count: '',
@@ -182,10 +181,6 @@ export default function ProductProvider({ children }) {
                 !!model.categoryFields.length &&
                     model.categoryFields.map(field => {
                         AdditionalFields[field.variantName] = field.value;
-                    });
-                !!model.detialFields.length &&
-                    model.detialFields.map(field => {
-                        AdditionalFields[field.name] = field.value;
                     });
                 let productModel = {
                     price: Number(model.fixedFields.price),
