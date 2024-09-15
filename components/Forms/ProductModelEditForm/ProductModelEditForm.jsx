@@ -1,15 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import DetialInput from '../AddNewProductForm/Components/DetialInput/DetialInput';
-import CategoryInputs from '../AddNewProductForm/Components/CategoryInputs/CategoryInputs';
-import ColorInput from '../AddNewProductForm/Components/ColorInput/ColorInput';
-import SelectInput from '../AddNewProductForm/Components/SelectInput/SelectInput';
+import SelectInput from './Components/SelectInput/SelectInput';
+import ColorInput from './Components/ColorInput/ColorInput';
+import CategoryInputs from './Components/CategoryInputs/CategoryInputs';
 
 export default function ProductModelEditForm({
     price,
     count,
     discount,
     additionalFields,
+    categoryFields,
 }) {
     const [data, setData] = useState({
         price,
@@ -20,12 +20,18 @@ export default function ProductModelEditForm({
 
     useEffect(() => {
         let newFieldsArray = [];
-        for (let item in additionalFields) {
-            let newFields = {};
-            newFields.name = item;
-            newFields.value = additionalFields[item];
-            newFieldsArray.push(newFields);
-        }
+        categoryFields.forEach(field => {
+            for (let item in additionalFields) {
+                if (field.variantName === item) {
+                    let newFields = {};
+                    newFields._id = field._id;
+                    newFields.name = field.variantName;
+                    newFields.value = additionalFields[item];
+                    newFields.variantOptions = field.variantOptions;
+                    newFieldsArray.push(newFields);
+                }
+            }
+        });
         setData(prv => {
             return {
                 ...prv,
@@ -46,34 +52,31 @@ export default function ProductModelEditForm({
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-5">
                             {data.fields.map(field => {
-                                if (!!field.name.toLowerCase() === 'size') {
+                                if (field.variantOptions.length) {
                                     return (
-                                        // <SelectInput
-                                        //     key={field._id}
-                                        //     {...field}
-                                        //     modelId={_id}
-                                        // />
-                                        <>dd</>
+                                        <SelectInput
+                                            key={field._id}
+                                            {...field}
+                                            setData={setData}
+                                        />
                                     );
                                 } else if (
                                     field.name.toLowerCase() === 'color'
                                 ) {
                                     return (
-                                        // <ColorInput
-                                        //     key={field._id}
-                                        //     {...field}
-                                        //     modelId={_id}
-                                        // />
-                                        <>dd</>
+                                        <ColorInput
+                                            key={field._id}
+                                            {...field}
+                                            setData={setData}
+                                        />
                                     );
                                 } else {
                                     return (
-                                        // <CategoryInputs
-                                        //     key={field._id}
-                                        //     {...field}
-                                        //     modelId={_id}
-                                        // />
-                                        <>dd</>
+                                        <CategoryInputs
+                                            key={field._id}
+                                            {...field}
+                                            setData={setData}
+                                        />
                                     );
                                 }
                             })}
