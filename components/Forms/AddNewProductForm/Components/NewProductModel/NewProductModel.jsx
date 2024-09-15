@@ -12,7 +12,6 @@ export default function NewProductModel({
     _id,
     categoryFields,
     indexModel,
-    detialFields,
     fixedFields,
 }) {
     const { models, setModels } = useContext(ProductContext);
@@ -344,77 +343,6 @@ export default function NewProductModel({
                         </div>
                     </div>
                 )}
-
-                <div className="bg-gray-100 rounded-sm p-2 mb-2">
-                    <div className="flex justify-between items-center">
-                        <span className="text-sm block">Detial Fields:</span>
-                        {!!detialFields.length && (
-                            <button
-                                type="button"
-                                className="bg-gray-300 text-gray-500 px-2 py-1 text-sm rounded-sm hover:shadow"
-                                onClick={() => {
-                                    setModels(prv =>
-                                        prv.map(model => {
-                                            if (model._id !== _id) return model;
-                                            let detialField = {
-                                                _id: crypto.randomUUID(),
-                                                name: '',
-                                                value: '',
-                                            };
-                                            return {
-                                                ...model,
-                                                detialFields: [
-                                                    ...model.detialFields,
-                                                    detialField,
-                                                ],
-                                            };
-                                        })
-                                    );
-                                    toast.success('New Field Added');
-                                }}
-                            >
-                                Add Field
-                            </button>
-                        )}
-                    </div>
-
-                    {!!detialFields.length ? (
-                        detialFields.map(field => (
-                            <div className="mt-3" key={field._id}>
-                                <DetialInput {...field} modelId={_id} />
-                            </div>
-                        ))
-                    ) : (
-                        <div className="flex justify-center items-center my-2">
-                            <button
-                                type="button"
-                                className="bg-gray-200 w-full text-gray-500 py-2 text-sm rounded-sm hover:shadow"
-                                onClick={() => {
-                                    setModels(prv =>
-                                        prv.map(model => {
-                                            if (model._id !== _id) return model;
-                                            let detialField = {
-                                                _id: crypto.randomUUID(),
-                                                name: '',
-                                                value: '',
-                                            };
-                                            return {
-                                                ...model,
-                                                detialFields: [
-                                                    ...model.detialFields,
-                                                    detialField,
-                                                ],
-                                            };
-                                        })
-                                    );
-                                    toast.success('New Field Added');
-                                }}
-                            >
-                                Add Field
-                            </button>
-                        </div>
-                    )}
-                </div>
 
                 <div className="bg-gray-100 rounded-sm p-2 mb-2">
                     <div className="flex flex-col md:flex-row gap-2 flex-wrap">
