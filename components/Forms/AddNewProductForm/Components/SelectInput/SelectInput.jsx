@@ -36,7 +36,7 @@ export default function SelectInput({
     return (
         <div className="flex items-center gap-2 mb-2">
             <label htmlFor={variantName + newId} className="text-sm">
-                Size:
+                {variantName}:
             </label>
             <div>
                 <select
@@ -44,7 +44,7 @@ export default function SelectInput({
                     id={variantName + newId}
                     value={value}
                     onChange={onChange}
-                    className={`General_Input_1 ${!isValid && "ring-red-400" }`}
+                    className={`General_Input_1 ${!isValid && 'ring-red-400'}`}
                 >
                     <option value="-1">Select Size</option>
                     {variantOptions.map(option => (
