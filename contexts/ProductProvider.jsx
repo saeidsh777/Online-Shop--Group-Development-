@@ -173,7 +173,7 @@ export default function ProductProvider({ children }) {
         if (res.status === 201) {
             let formatDataModel = {
                 productModels: [],
-                product: result._id,
+                product: result.data._id,
                 category: fixedInputs.category._id,
             };
 
