@@ -64,10 +64,16 @@ export const editProduct = async (formDataGenarator, productId) => {
 };
 
 export const getOneProduct = async productId => {
-    const res = await fetch(`${API_BASE_URL}/products/${productId}`);
-    const result = await res.json();
+    try {
+        const res = await fetch(`${API_BASE_URL}/products/${productId}`, {
+            cache: 'no-store',
+        });
+        const result = await res.json();
 
-    return { res, result };
+        return { res, result };
+    } catch (err) {
+        return { err, ...responseAndResult };
+    }
 };
 
 export const getAllProducts = async () => {
