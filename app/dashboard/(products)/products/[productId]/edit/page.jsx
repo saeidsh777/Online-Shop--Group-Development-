@@ -6,7 +6,9 @@ import React from 'react';
 
 export default async function ProductEditPage({ params }) {
     const { productId } = params;
-    const res = await fetch(`${API_BASE_URL}/products/${productId}`,{cache:"no-store"});
+    const res = await fetch(`${API_BASE_URL}/products/${productId}`, {
+        cache: 'no-store',
+    });
     const result = await res.json();
     const { _id, title, description, images, details } = result;
     const productData = {

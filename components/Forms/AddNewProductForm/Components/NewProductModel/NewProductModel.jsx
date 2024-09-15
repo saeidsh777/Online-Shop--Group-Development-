@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import SelectInput from '../SelectInput/SelectInput';
 import ColorInput from '../ColorInput/ColorInput';
 import CategoryInputs from '../CategoryInputs/CategoryInputs';
-import DetialInput from '../DetialInput/DetialInput';
 import { IoIosClose } from 'react-icons/io';
 import { ProductContext } from '@/contexts/ProductProvider';
 import toast from 'react-hot-toast';
