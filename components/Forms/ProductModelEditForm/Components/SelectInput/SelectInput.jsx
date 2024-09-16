@@ -5,6 +5,7 @@ export default function SelectInput({
     value,
     _id,
     setData,
+    editMode,
 }) {
     const onChange = e => {
         setData(prv => {
@@ -31,6 +32,7 @@ export default function SelectInput({
                     id={name + _id}
                     value={value}
                     onChange={onChange}
+                    disabled={editMode}
                     className={`General_Input_1`}
                 >
                     <option value="-1">select {name}</option>

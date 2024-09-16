@@ -62,6 +62,28 @@ export const editProduct = async (formDataGenarator, productId) => {
         return { err, ...responseAndResult };
     }
 };
+export const editProductModel = async (data, productModelId) => {
+    try {
+        const token = localStorage.getItem('token');
+
+        const res = await fetch(
+            `${API_BASE_URL}/product-models/update/${productModelId}`,
+            {
+                method: 'PUT',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }
+        );
+        const result = await res.json();
+
+        return { res, result };
+    } catch (err) {
+        return { err, ...responseAndResult };
+    }
+};
 
 export const getOneProduct = async productId => {
     try {

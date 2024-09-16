@@ -1,7 +1,6 @@
 'use client';
-import { ProductContext } from '@/contexts/ProductProvider';
 import Image from 'next/image';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FiUploadCloud } from 'react-icons/fi';
 import defaultImage from '../../../../../public/images/default-image-product.svg';
@@ -13,8 +12,6 @@ export default function ProductImages({
     setImages,
     disabled,
 }) {
-    // const { productImages, setProductImages, images, setImages } =
-    //     useContext(ProductContext);
     const filesInput = useRef();
     const productImagesElm = useRef([]);
 
@@ -179,13 +176,17 @@ export default function ProductImages({
                     htmlFor="img"
                     className={`${
                         disabled
-                            ? 'bg-gray-300'
+                            ? 'bg-gray-100'
                             : images.length
                             ? 'bg-gradient-to-r from-sky-50 to-indigo-100'
                             : 'bg-inherit hover:bg-gray-50'
                     } flex w-full py-2 justify-between overflow-hidden cursor-pointer items-center border border-gray-200 rounded-md`}
                 >
-                    <div className="w-full flex flex-col items-center justify-center">
+                    <div
+                        className={`w-full flex flex-col items-center justify-center ${
+                            disabled && 'text-gray-300'
+                        }`}
+                    >
                         <FiUploadCloud className="iconFontSize" />
                         <p className="text-xs">
                             {images.length

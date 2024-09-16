@@ -193,6 +193,7 @@ export default function ProductEditForm({
                                 <button
                                     type="button"
                                     className="bg-gray-200 w-full text-gray-500 py-2 text-sm rounded-sm hover:shadow disabled:bg-gray-100 disabled:text-gray-300"
+                                    disabled={editMode ? false : true}
                                     onClick={() => {
                                         let detialField = {
                                             _id: crypto.randomUUID(),

@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import SelectInput from './Components/SelectInput/SelectInput';
 import ColorInput from './Components/ColorInput/ColorInput';
 import CategoryInputs from './Components/CategoryInputs/CategoryInputs';
+import { justNumberRegex } from '@/utils/regex';
+import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
+import { editProductModel } from '@/services/product';
+import toast from 'react-hot-toast';
 
 export default function ProductModelEditForm({
     price,
@@ -10,15 +14,21 @@ export default function ProductModelEditForm({
     discount,
     additionalFields,
     categoryFields,
+    productModelId,
+    productId,
+    categoryId,
 }) {
     const [data, setData] = useState({
         price,
         count,
-        discount,
+        discount: discount === 0 ? '' : discount,
+        discountType: discount === 0 ? '-1' : 'Numerical',
+        finalPrice: price - discount,
         fields: [],
     });
+    const [editMode, setEditMode] = useState(false);
 
-    useEffect(() => {
+    const categoryGenerator = () => {
         let newFieldsArray = [];
         categoryFields.forEach(field => {
             for (let item in additionalFields) {
@@ -32,19 +42,217 @@ export default function ProductModelEditForm({
                 }
             }
         });
+        return newFieldsArray;
+    };
+
+    useEffect(() => {
         setData(prv => {
             return {
                 ...prv,
-                fields: newFieldsArray,
+                fields: categoryGenerator(),
             };
         });
     }, []);
 
+    const discountHandler = (from, value) => {
+        if (from === 'price') {
+            // For numeric discountType
+            if (data.discountType === 'Numerical') {
+                if (+value - +data.discount <= 0) {
+                    return 0;
+                } else {
+                    return +value - +data.discount;
+                }
+            }
+
+            // For numeric Percentage
+            if (data.discountType === 'Percentage') {
+                if (data.discount >= 100) {
+                    return 0;
+                } else if (data.discount <= 0) {
+                    return +value;
+                } else {
+                    return +value - (+data.discount * +value) / 100;
+                }
+            }
+            if (data.discountType === '-1') {
+                return +value;
+            }
+        }
+
+        if (from === 'discount') {
+            // For numeric discountType
+            if (data.discountType === 'Numerical') {
+                if (+data.price - +value <= 0) {
+                    return 0;
+                } else {
+                    return +data.price - +value;
+                }
+            }
+
+            // For numeric Percentage
+            if (data.discountType === 'Percentage') {
+                if (value >= 100) {
+                    return 0;
+                } else if (value <= 0) {
+                    return +data.price;
+                } else {
+                    return +data.price - (+data.price * +value) / 100;
+                }
+            }
+
+            if (data.discountType === '-1') {
+                return data.price;
+            }
+        }
+
+        if (from === 'discountType') {
+            if (value === '-1') {
+                return +data.price;
+            }
+
+            // For numeric discountType
+            if (value === 'Numerical') {
+                if (+data.price - +data.discount <= 0) {
+                    return 0;
+                } else {
+                    return +data.price - +data.discount;
+                }
+            }
+
+            // For numeric Percentage
+            if (value === 'Percentage') {
+                if (+data.discount >= 100) {
+                    return 0;
+                } else if (+data.discount <= 0) {
+                    return +data.price;
+                } else {
+                    return +data.price - (+data.price * +data.discount) / 100;
+                }
+            }
+        }
+    };
+
+    const onChangePrice = e => {
+        if (justNumberRegex.test(+e.target.value)) {
+            setData(prv => {
+                return {
+                    ...prv,
+                    price: e.target.value.length == 0 ? '' : e.target.value,
+                    finalPrice:
+                        e.target.value.length == 0
+                            ? 0
+                            : discountHandler('price', e.target.value),
+                };
+            });
+        }
+    };
+
+    const onChangeCount = e => {
+        if (justNumberRegex.test(+e.target.value)) {
+            setData(prv => {
+                return {
+                    ...prv,
+                    count: e.target.value,
+                };
+            });
+        }
+    };
+
+    const onChangeDiscountType = e => {
+        setData(prv => {
+            return {
+                ...prv,
+                discountType: e.target.value,
+                discount:
+                    e.target.value === '-1'
+                        ? ''
+                        : e.target.value === 'Numerical'
+                        ? +data.discount > +data.price
+                            ? data.price
+                            : data.discount
+                        : e.target.value === 'Percentage'
+                        ? +data.discount > 100
+                            ? 100
+                            : data.discount
+                        : e.target.value === '-1' && '',
+                finalPrice: discountHandler('discountType', e.target.value),
+            };
+        });
+    };
+
+    const onChangeDiscount = e => {
+        if (justNumberRegex.test(+e.target.value)) {
+            setData(prv => {
+                return {
+                    ...prv,
+                    discount:
+                        e.target.value.length == 0
+                            ? ''
+                            : data.discountType === 'Numerical'
+                            ? +e.target.value > +data.price
+                                ? data.price
+                                : e.target.value
+                            : data.discountType === 'Percentage' &&
+                              +e.target.value > 100
+                            ? 100
+                            : +e.target.value < 0
+                            ? 0
+                            : e.target.value,
+                    finalPrice:
+                        e.target.value.length == 0
+                            ? data.price
+                            : discountHandler('discount', e.target.value),
+                };
+            });
+        }
+    };
+
+    const onSubmit = async e => {
+        e.preventDefault();
+        let formatDataModel = {
+            productModels: [],
+            product: productId,
+            category: categoryId,
+        };
+
+        const AdditionalFields = {};
+        !!data.fields.length &&
+            data.fields.map(field => {
+                AdditionalFields[field.name] = field.value;
+            });
+        let productModel = {
+            price: Number(data.price),
+            count: Number(data.count),
+            discount:
+                data.discountType === 'Percentage'
+                    ? (Number(data.price) * Number(data.discount)) / 100
+                    : Number(data.discount),
+            additionalFields: AdditionalFields,
+        };
+
+        formatDataModel.productModels.push(productModel);
+
+        const { res, result, err } = await editProductModel(
+            formatDataModel,
+            productModelId
+        );
+        console.log(formatDataModel);
+        console.log(result);
+
+        if (res.status === 201) {
+            setCompleted(true);
+            toast.success('Product Model Update Successfully');
+        } else {
+            toast.error(result.message);
+        }
+    };
+
     return (
-        <div className="p-3 border border-gray-200 rounded-xl pt-6 relative mb-5 flex flex-col justify-between">
-            <div>
+        <div className="p-3 border border-gray-200 rounded-xl pt-6 mb-5 flex flex-col justify-between md:col-span-2">
+            <form onSubmit={onSubmit}>
                 {!!data.fields.length && (
-                    <div className="bg-gray-100 rounded-sm p-2 mb-2">
+                    <div className="bg-gray-100 rounded-md p-2 mb-2">
                         <span className="text-sm block">
                             <sup className="text-red-500">*</sup>Category
                             Fields:
@@ -58,6 +266,7 @@ export default function ProductModelEditForm({
                                             key={field._id}
                                             {...field}
                                             setData={setData}
+                                            editMode={!editMode}
                                         />
                                     );
                                 } else if (
@@ -68,6 +277,7 @@ export default function ProductModelEditForm({
                                             key={field._id}
                                             {...field}
                                             setData={setData}
+                                            editMode={!editMode}
                                         />
                                     );
                                 } else {
@@ -76,6 +286,7 @@ export default function ProductModelEditForm({
                                             key={field._id}
                                             {...field}
                                             setData={setData}
+                                            editMode={!editMode}
                                         />
                                     );
                                 }
@@ -84,78 +295,7 @@ export default function ProductModelEditForm({
                     </div>
                 )}
 
-                {/* <div className="bg-gray-100 rounded-sm p-2 mb-2">
-                    <div className="flex justify-between items-center">
-                        <span className="text-sm block">Detial Fields:</span>
-                        {!!detialFields.length && (
-                            <button
-                                type="button"
-                                className="bg-gray-300 text-gray-500 px-2 py-1 text-sm rounded-sm hover:shadow"
-                                onClick={() => {
-                                    setModels(prv =>
-                                        prv.map(model => {
-                                            if (model._id !== _id) return model;
-                                            let detialField = {
-                                                _id: crypto.randomUUID(),
-                                                name: '',
-                                                value: '',
-                                            };
-                                            return {
-                                                ...model,
-                                                detialFields: [
-                                                    ...model.detialFields,
-                                                    detialField,
-                                                ],
-                                            };
-                                        })
-                                    );
-                                    toast.success('New Field Added');
-                                }}
-                            >
-                                Add Field
-                            </button>
-                        )}
-                    </div>
-
-                    {!!detialFields.length ? (
-                        detialFields.map(field => (
-                            <div className="mt-3" key={field._id}>
-                                <DetialInput {...field} modelId={_id} />
-                            </div>
-                        ))
-                    ) : (
-                        <div className="flex justify-center items-center my-2">
-                            <button
-                                type="button"
-                                className="bg-gray-200 w-full text-gray-500 py-2 text-sm rounded-sm hover:shadow"
-                                onClick={() => {
-                                    setModels(prv =>
-                                        prv.map(model => {
-                                            if (model._id !== _id) return model;
-                                            let detialField = {
-                                                _id: crypto.randomUUID(),
-                                                name: '',
-                                                value: '',
-                                            };
-                                            return {
-                                                ...model,
-                                                detialFields: [
-                                                    ...model.detialFields,
-                                                    detialField,
-                                                ],
-                                            };
-                                        })
-                                    );
-                                    toast.success('New Field Added');
-                                }}
-                            >
-                                Add Field
-                            </button>
-                        </div>
-                    )}
-                </div> */}
-
-                {/* <div className="bg-gray-100 rounded-sm p-2 mb-2">
+                <div className="bg-gray-100 rounded-md p-2 mb-2">
                     <div className="flex flex-col md:flex-row gap-2 flex-wrap">
                         <div className="mb-3 flex-1">
                             <label className="text-sm" htmlFor="price">
@@ -167,11 +307,12 @@ export default function ProductModelEditForm({
                                     inputMode="numeric"
                                     type="text"
                                     placeholder="0 $"
+                                    disabled={!editMode}
                                     className={`General_Input_1 ${
-                                        !fixedFields.price &&
+                                        !data.price &&
                                         'ring-red-400 focus-visible:ring-red-400'
                                     }`}
-                                    value={fixedFields.price}
+                                    value={data.price}
                                     onChange={onChangePrice}
                                 />
                             </div>
@@ -186,11 +327,12 @@ export default function ProductModelEditForm({
                                     inputMode="numeric"
                                     type="text"
                                     placeholder="Count"
+                                    disabled={!editMode}
                                     className={`General_Input_1 ${
-                                        !fixedFields.count &&
+                                        !data.count &&
                                         'ring-red-400 focus-visible:ring-red-400'
                                     }`}
-                                    value={fixedFields.count}
+                                    value={data.count}
                                     onChange={onChangeCount}
                                 />
                             </div>
@@ -203,7 +345,8 @@ export default function ProductModelEditForm({
                                 <select
                                     id="discountType"
                                     className="General_Input_1 h-[36px]"
-                                    value={fixedFields.discountType}
+                                    disabled={!editMode}
+                                    value={data.discountType}
                                     onChange={onChangeDiscountType}
                                 >
                                     <option value="-1">Select type</option>
@@ -224,62 +367,98 @@ export default function ProductModelEditForm({
                                     placeholder="..."
                                     className="General_Input_1"
                                     disabled={
-                                        fixedFields.discountType === '-1'
+                                        data.discountType === '-1'
                                             ? true
                                             : false
                                     }
-                                    value={fixedFields.discount}
+                                    value={data.discount}
                                     onChange={onChangeDiscount}
                                 />
                             </div>
                         </div>
                     </div>
                     <div className="flex flex-col md:flex-row gap-2"></div>
-                </div> */}
-            </div>
-            {/* <div className="bg-green-100 p-2 rounded-md">
-              <div className="mt-3">
-                  <small className="flex items-center text-sm text-gray-400">
-                      Total Price:
-                      <span className="ms-4">
-                          {fixedFields.price
-                              ? Number(fixedFields.price).toLocaleString()
-                              : 0}{' '}
-                          $
-                      </span>
-                  </small>
-              </div>
-              <div>
-                  <small className="flex items-center text-sm text-gray-400">
-                      Discount Price:
-                      <span className="ms-4 text-red-300">
-                          {fixedFields.discount
-                              ? fixedFields.discountType === 'Numerical'
-                                  ? Number(fixedFields.discount) <
-                                    Number(fixedFields.price)
-                                      ? Number(fixedFields.discount)
-                                      : Number(
-                                            fixedFields.price
-                                        ).toLocaleString()
-                                  : fixedFields.discountType === 'Percentage' &&
-                                    (Number(fixedFields.discount) *
-                                        Number(fixedFields.price)) /
-                                        100
-                              : 0}
-                          {' $'}
-                      </span>
-                  </small>
-              </div>
+                </div>
+                <div className="bg-green-100 p-2 rounded-md mb-2">
+                    {/* Total Price */}
+                    <div className="mt-3">
+                        <small className="flex items-center text-sm text-gray-400">
+                            Total Price:
+                            <span className="ms-4">
+                                {data.price
+                                    ? Number(data.price).toLocaleString()
+                                    : 0}{' '}
+                                $
+                            </span>
+                        </small>
+                    </div>
+                    {/* Discount Price */}
+                    <div>
+                        <small className="flex items-center text-sm text-gray-400">
+                            Discount Price:
+                            <span className="ms-4 text-red-300">
+                                {data.discount
+                                    ? data.discountType === 'Numerical'
+                                        ? Number(data.discount) <
+                                          Number(data.price)
+                                            ? Number(data.discount)
+                                            : Number(
+                                                  data.price
+                                              ).toLocaleString()
+                                        : data.discountType === 'Percentage' &&
+                                          (Number(data.discount) *
+                                              Number(data.price)) /
+                                              100
+                                    : 0}
+                                {' $'}
+                            </span>
+                        </small>
+                    </div>
 
-              <div className="mt-3">
-                  <small>
-                      Final Price:
-                      <span className="ms-2 bg-white px-2 py-1 rounded-lg">
-                          {Number(fixedFields.finalPrice).toLocaleString()} $
-                      </span>
-                  </small>
-              </div>
-          </div> */}
+                    <div className="mt-3">
+                        <small>
+                            Final Price:
+                            <span className="ms-2 bg-white px-2 py-1 rounded-lg">
+                                {Number(data.finalPrice).toLocaleString()} $
+                            </span>
+                        </small>
+                    </div>
+                </div>
+                <div className="mb-2">
+                    {editMode ? (
+                        <div className="flex gap-2">
+                            <DashboardBTN
+                                className="bg-gray-400"
+                                onClick={() => {
+                                    setData({
+                                        price,
+                                        count,
+                                        discount:
+                                            discount === 0 ? '' : discount,
+                                        discountType:
+                                            discount === 0 ? '-1' : 'Numerical',
+                                        finalPrice: price - discount,
+                                        fields: categoryGenerator(),
+                                    });
+                                    setEditMode(false);
+                                }}
+                            >
+                                Cancel
+                            </DashboardBTN>
+                            <DashboardBTN
+                                type="submit"
+                                onClick={() => setEditMode(true)}
+                            >
+                                Save
+                            </DashboardBTN>
+                        </div>
+                    ) : (
+                        <DashboardBTN onClick={() => setEditMode(true)}>
+                            Edit
+                        </DashboardBTN>
+                    )}
+                </div>
+            </form>
         </div>
     );
 }

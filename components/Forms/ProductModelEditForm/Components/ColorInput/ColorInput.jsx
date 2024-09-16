@@ -1,4 +1,4 @@
-export default function ColorInput({ name, value, setData, _id }) {
+export default function ColorInput({ name, value, setData, _id, editMode }) {
     const newId = crypto.randomUUID();
 
     const onChange = e => {
@@ -28,6 +28,7 @@ export default function ColorInput({ name, value, setData, _id }) {
                     type="color"
                     value={value}
                     onChange={onChange}
+                    disabled={editMode}
                     className="General_Input_1 w-20"
                 />
             </div>

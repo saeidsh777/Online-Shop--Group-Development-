@@ -1,4 +1,4 @@
-export default function CategoryInputs({ name, _id, value, setData, isValid }) {
+export default function CategoryInputs({ name, _id, value, setData, editMode }) {
     const onChange = e => {
         setData(prv => {
             return {
@@ -24,6 +24,7 @@ export default function CategoryInputs({ name, _id, value, setData, isValid }) {
                 <input
                     id={name + _id}
                     type="text"
+                    disabled={editMode}
                     value={value}
                     onChange={onChange}
                     className="General_Input_1"
