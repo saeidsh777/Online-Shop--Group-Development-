@@ -241,7 +241,7 @@ export default function ProductModelEditForm({
         console.log(result);
 
         if (res.status === 201) {
-            setCompleted(true);
+            setEditMode(false);
             toast.success('Product Model Update Successfully');
         } else {
             toast.error(result.message);
@@ -379,7 +379,7 @@ export default function ProductModelEditForm({
                     </div>
                     <div className="flex flex-col md:flex-row gap-2"></div>
                 </div>
-                <div className="bg-green-100 p-2 rounded-md mb-2">
+                <div className={`${editMode ? "bg-green-100": "bg-gray-200"} p-2 rounded-md mb-2`}>
                     {/* Total Price */}
                     <div className="mt-3">
                         <small className="flex items-center text-sm text-gray-400">
