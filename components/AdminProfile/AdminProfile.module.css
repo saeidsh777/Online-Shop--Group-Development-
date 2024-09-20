@@ -1,0 +1,5 @@
+@media screen and (min-width: 1152px) {
+    .clip_path {
+        clip-path: polygon(0 0, 100% 0%, calc(100% - 3rem) 100%, 0% 100%);
+    }
+}
