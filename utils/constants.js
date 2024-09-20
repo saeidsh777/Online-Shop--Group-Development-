@@ -35,6 +35,14 @@ export const optionsHookForm = {
             message: 'Enter more than 8 characters',
         },
     },
+    
+    prvPassword: {
+        required: 'Enter more than 8 characters',
+        minLength: {
+            value: 8,
+            message: 'Enter more than 8 characters',
+        },
+    },
 };
 
 export const responseAndResult = {
