@@ -1,6 +1,6 @@
 import RegisterForm from '@/components/Forms/RegisterForm/RegisterForm';
 
-export default function registerPage() {
+export default function registerPage({ searchParams: { from } }) {
     return (
         <main>
             <div className="flex flex-col justify-center items-center min-h-dvh relative">
@@ -10,7 +10,7 @@ export default function registerPage() {
                     <div className="w-[10rem] h-[10rem] bg-red-c-100 z-0 absolute left-[0rem] bottom-[2rem]"></div>
                 </div>
 
-                <RegisterForm />
+                <RegisterForm from={from} />
             </div>
         </main>
     );

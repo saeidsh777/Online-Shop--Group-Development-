@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -13,10 +13,9 @@ import { useContext } from 'react';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
 
-export default function LoginForm() {
+export default function LoginForm({ from }) {
     const { Handlers } = useContext(AuthContext);
     const router = useRouter();
-    const params = useSearchParams();
 
     const {
         register,
@@ -34,7 +33,7 @@ export default function LoginForm() {
             resetField('phoneNumber');
             resetField('password');
 
-            router.push(params.get('from') ?? '/');
+            router.push(from ?? '/');
         } else {
             toast.error(result.message + '!');
         }
@@ -60,9 +59,7 @@ export default function LoginForm() {
                         <Link
                             className="text-sm  text-blue-500 hover:text-blue-600"
                             href={`/auth/register${
-                                params.get('from')
-                                    ? '?from=' + params.get('from')
-                                    : ''
+                                from ? '?from=' + from : ''
                             }`}
                         >
                             Don&apos;t have an account?
