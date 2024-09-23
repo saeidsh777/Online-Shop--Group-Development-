@@ -3,15 +3,18 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { AuthContext } from '@/contexts/AuthProvider';
+import { registerAuth } from '@/services/auth';
 import { optionsHookForm } from '@/utils/constants';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import { registerAuth } from '@/services/auth';
 
 export default function RegisterForm() {
     const router = useRouter();
+    const { Handlers } = useContext(AuthContext);
 
     const {
         register,
@@ -24,12 +27,14 @@ export default function RegisterForm() {
         const { res, result, err } = await registerAuth(data);
 
         if (res.status === 201) {
+            await Handlers.LoginHandler(result.token);
+
+            toast.success(result.message);
             resetField('name');
             resetField('email');
             resetField('phoneNumber');
             resetField('password');
-            toast.success(result.message);
-            localStorage.setItem('token', result.token);
+
             router.push('/');
         } else if (res.status === 500) {
             toast.error(err + '!');
