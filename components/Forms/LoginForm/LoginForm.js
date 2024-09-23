@@ -6,12 +6,15 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { AuthContext } from '@/contexts/AuthProvider';
+import { login } from '@/services/auth';
 import { optionsHookForm } from '@/utils/constants';
+import { useContext } from 'react';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import { login } from '@/services/auth';
 
 export default function LoginForm() {
+    const { Handlers } = useContext(AuthContext);
     const router = useRouter();
 
     const {
@@ -25,10 +28,10 @@ export default function LoginForm() {
         const { res, result, err } = await login(data);
 
         if (res.status === 200) {
+            await Handlers.LoginHandler(result.token);
+            toast.success(result.message);
             resetField('phoneNumber');
             resetField('password');
-            toast.success(result.message);
-            localStorage.setItem('token', result.token);
             router.push('/');
         } else {
             toast.error(result.message + '!');
