@@ -1,11 +1,12 @@
 'use client';
 
 import { AuthContext, userStatus } from '@/contexts/AuthProvider';
-import { redirect } from 'next/navigation';
-import { useContext } from 'react';
+import { redirect, usePathname } from 'next/navigation';
+import { Suspense, useContext } from 'react';
 
-const PrivateRoute = ({ children }) => {
+const PrivateRouteHandler = ({ children }) => {
     const { User } = useContext(AuthContext);
+    const pathName = usePathname();
 
     switch (User.isLoggedIn) {
         case userStatus['loading']: {
@@ -15,10 +16,19 @@ const PrivateRoute = ({ children }) => {
             return children;
         }
         case userStatus['loggedOUT']: {
-            redirect('/auth/login');
+            redirect('/auth/login?from=' + pathName);
         }
         default:
             throw new Error('User login status is unknown');
     }
 };
+
+const PrivateRoute = ({ children }) => {
+    return (
+        <Suspense fallback="loading...">
+            <PrivateRouteHandler>{children}</PrivateRouteHandler>
+        </Suspense>
+    );
+};
+
 export default PrivateRoute;

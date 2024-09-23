@@ -15,6 +15,7 @@ import AuthInput from '../../Inputs/AuthInput/AuthInput';
 export default function RegisterForm() {
     const router = useRouter();
     const { Handlers } = useContext(AuthContext);
+    const params = useSearchParams();
 
     const {
         register,
@@ -35,7 +36,7 @@ export default function RegisterForm() {
             resetField('phoneNumber');
             resetField('password');
 
-            router.push('/');
+            router.push(params.get('from') ?? '/');
         } else if (res.status === 500) {
             toast.error(err + '!');
         } else {

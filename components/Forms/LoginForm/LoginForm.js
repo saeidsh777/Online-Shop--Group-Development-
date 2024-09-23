@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -16,6 +16,7 @@ import AuthInput from '../../Inputs/AuthInput/AuthInput';
 export default function LoginForm() {
     const { Handlers } = useContext(AuthContext);
     const router = useRouter();
+    const params = useSearchParams();
 
     const {
         register,
@@ -32,7 +33,8 @@ export default function LoginForm() {
             toast.success(result.message);
             resetField('phoneNumber');
             resetField('password');
-            router.push('/');
+
+            router.push(params.get('from') ?? '/');
         } else {
             toast.error(result.message + '!');
         }
