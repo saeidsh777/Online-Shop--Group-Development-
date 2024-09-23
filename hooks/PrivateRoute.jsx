@@ -1,16 +1,24 @@
 'use client';
 
-import { AuthContext } from '@/contexts/AuthProvider';
+import { AuthContext, userStatus } from '@/contexts/AuthProvider';
 import { redirect } from 'next/navigation';
 import { useContext } from 'react';
 
 const PrivateRoute = ({ children }) => {
     const { User } = useContext(AuthContext);
 
-    if (!User.isLoggedIn) {
-        redirect('/auth/login');
+    switch (User.isLoggedIn) {
+        case userStatus['loading']: {
+            return '...loading';
+        }
+        case userStatus['loggedIN']: {
+            return children;
+        }
+        case userStatus['loggedOUT']: {
+            redirect('/auth/login');
+        }
+        default:
+            throw new Error('User login status is unknown');
     }
-
-    return children;
 };
 export default PrivateRoute;
