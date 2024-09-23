@@ -1,5 +1,6 @@
 'use client';
 
+import LogoutWrapper from '@/components/Wrappers/LogoutWrapper';
 import { SidebarContext } from '@/contexts/SidebarProvider';
 import { useContext } from 'react';
 import BgOverlay from './Parts/BgOverlay';
@@ -28,7 +29,9 @@ const Sidebar = () => {
             >
                 <Logo />
                 <SidebarLinks />
-                <LogoutButton />
+                <LogoutWrapper>
+                    <LogoutButton />
+                </LogoutWrapper>
             </div>
         </>
     );
