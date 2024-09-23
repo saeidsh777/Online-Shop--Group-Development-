@@ -31,7 +31,7 @@ const InitialValue = {
 export const AuthContext = createContext({
     User: InitialValue,
     Handlers: {
-        LoginHandler: () => {},
+        LoginHandler: async () => {},
         LogoutHandler: () => {},
     },
 });
