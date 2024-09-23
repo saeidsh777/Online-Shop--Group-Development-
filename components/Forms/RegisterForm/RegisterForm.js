@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { AuthContext } from '@/contexts/AuthProvider';
 import { registerAuth } from '@/services/auth';
@@ -63,7 +63,11 @@ export default function RegisterForm() {
                         </h2>
                         <Link
                             className="text-sm  text-blue-500 hover:text-blue-600"
-                            href="/auth/login"
+                            href={`/auth/login${
+                                params.get('from')
+                                    ? '?from=' + params.get('from')
+                                    : ''
+                            }`}
                         >
                             Already have an account?
                         </Link>

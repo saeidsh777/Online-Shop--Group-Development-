@@ -59,7 +59,11 @@ export default function LoginForm() {
                         </h2>
                         <Link
                             className="text-sm  text-blue-500 hover:text-blue-600"
-                            href="/auth/register"
+                            href={`/auth/register${
+                                params.get('from')
+                                    ? '?from=' + params.get('from')
+                                    : ''
+                            }`}
                         >
                             Don&apos;t have an account?
                         </Link>
