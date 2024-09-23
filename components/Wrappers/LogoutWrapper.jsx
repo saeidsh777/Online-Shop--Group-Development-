@@ -3,7 +3,7 @@
 import { AuthContext } from '@/contexts/AuthProvider';
 import { useContext } from 'react';
 
-const LogoutWrapper = ({ children }) => {
+const LogoutWrapper = ({ children, onClick, ...props }) => {
     const { Handlers } = useContext(AuthContext);
 
     return (
@@ -11,6 +11,7 @@ const LogoutWrapper = ({ children }) => {
             onClick={() => {
                 Handlers.LogoutHandler();
             }}
+            {...props}
         >
             {children}
         </div>
