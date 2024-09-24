@@ -3,6 +3,7 @@
 import { AuthContext, userStatus } from '@/contexts/AuthProvider';
 import { redirect, usePathname } from 'next/navigation';
 import { Suspense, useContext } from 'react';
+import Loading from '../Loading/Loading';
 
 const PrivateRouteHandler = ({ children }) => {
     const { User } = useContext(AuthContext);
@@ -10,7 +11,7 @@ const PrivateRouteHandler = ({ children }) => {
 
     switch (User.isLoggedIn) {
         case userStatus['loading']: {
-            return '...loading';
+            return <Loading />;
         }
         case userStatus['loggedIN']: {
             return children;
@@ -21,6 +22,7 @@ const PrivateRouteHandler = ({ children }) => {
         default:
             throw new Error('User login status is unknown');
     }
+    
 };
 
 const PrivateRoute = ({ children }) => {
