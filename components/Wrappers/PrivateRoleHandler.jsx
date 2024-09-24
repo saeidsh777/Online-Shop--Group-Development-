@@ -1,13 +1,8 @@
 'use client';
 
 import { AuthContext } from '@/contexts/AuthProvider';
+import { Roles } from '@/utils/Roles';
 import { useContext } from 'react';
-
-export const Roles = {
-    user: 0,
-    admin: 1,
-    owner: 2,
-};
 
 const PrivateRoleHandler = ({ children, minimum_Role = 0 }) => {
     const { User } = useContext(AuthContext);
