@@ -1,3 +1,4 @@
+import PrivateRoleHandler from '@/components/Wrappers/PrivateRoleHandler';
 import { Roles } from '@/utils/Roles';
 import { AiOutlineContainer } from 'react-icons/ai';
 import { BsBoxes, BsEnvelopePaper } from 'react-icons/bs';
@@ -11,7 +12,6 @@ import {
 } from 'react-icons/tb';
 import SidebarLink from './Components/SidebarLink';
 import SidebarLinkSection from './Components/SidebarLinkSection';
-import PrivateRoleHandler from '@/components/Wrappers/PrivateRoleHandler';
 
 const SidebarLinks = () => {
     return (
@@ -49,15 +49,22 @@ const SidebarLinks = () => {
                 </SidebarLinkSection>
             </PrivateRoleHandler>
             <SidebarLinkSection title={'ticket'}>
-                <SidebarLink href={'/create-new-ticket'} text={'Create ticket'}>
-                    <TbMailPlus />
-                </SidebarLink>
-                <SidebarLink href={'/my-tickets'} text={'My tickets'}>
-                    <BsEnvelopePaper />
-                </SidebarLink>
-                <SidebarLink href={'/tickets'} text={'Ticket list'}>
-                    <AiOutlineContainer />
-                </SidebarLink>
+                <PrivateRoleHandler onlyRole={Roles.user}>
+                    <SidebarLink
+                        href={'/create-new-ticket'}
+                        text={'Create ticket'}
+                    >
+                        <TbMailPlus />
+                    </SidebarLink>
+                    <SidebarLink href={'/my-tickets'} text={'My tickets'}>
+                        <BsEnvelopePaper />
+                    </SidebarLink>
+                </PrivateRoleHandler>
+                <PrivateRoleHandler minimum_Role={Roles.admin}>
+                    <SidebarLink href={'/tickets'} text={'Ticket list'}>
+                        <AiOutlineContainer />
+                    </SidebarLink>
+                </PrivateRoleHandler>
             </SidebarLinkSection>
         </div>
     );
