@@ -50,3 +50,13 @@
         width: 100%;
     }
 }
+
+.animation_delay_02{
+    animation-delay: .2s !important;
+}
+.animation_delay_03{
+    animation-delay: .3s !important;
+}
+.animation_delay_04{
+    animation-delay: .4s !important;
+}
