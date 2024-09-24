@@ -117,7 +117,7 @@ export default function ChangePassword() {
                         </DashboardBox>
                     ) : (
                         <div
-                            className={`w-[10rem] h-[10rem] rounded-full bg-yellow-100 border-8 border-yellow-500 flex flex-col justify-center items-center cursor-pointer shadow-lg ${styles.hover} ${styles.animation}`}
+                            className={`w-[10rem] h-[10rem] rounded-full bg-yellow-100 border-8 border-yellow-500 flex flex-col justify-center items-center cursor-pointer shadow-lg ${styles.animation} ${styles.hover} `}
                             onClick={() => setShowInputs(true)}
                         >
                             <p className="font-bold text-yellow-500">Change</p>
