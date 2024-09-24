@@ -1,6 +1,4 @@
-import PrivateRoleHandler, {
-    Roles,
-} from '@/components/Wrappers/PrivateRoleHandler';
+import { Roles } from '@/utils/Roles';
 import { AiOutlineContainer } from 'react-icons/ai';
 import { BsBoxes, BsEnvelopePaper } from 'react-icons/bs';
 import { MdOutlineAddBox, MdOutlineCategory } from 'react-icons/md';
@@ -13,6 +11,7 @@ import {
 } from 'react-icons/tb';
 import SidebarLink from './Components/SidebarLink';
 import SidebarLinkSection from './Components/SidebarLinkSection';
+import PrivateRoleHandler from '@/components/Wrappers/PrivateRoleHandler';
 
 const SidebarLinks = () => {
     return (

@@ -1,10 +1,27 @@
 'use client';
 
 import { AuthContext, userStatus } from '@/contexts/AuthProvider';
+import { RolesRouteAccess } from '@/utils/Roles';
 import { redirect, usePathname } from 'next/navigation';
 import { Suspense, useContext } from 'react';
 
-const PrivateRouteHandler = ({ children }) => {
+const PrivateRouteRoleChecker = ({ children, role, currentRoute }) => {
+    const HasAccess = [...RolesRouteAccess[role]].some(root => {
+        const routes = [
+            root.root,
+            ...root.children.map(route => root.root + route),
+        ];
+
+        return routes.some(route => route === currentRoute);
+    });
+
+    if (HasAccess) {
+        return children;
+    }
+    redirect('/'); // create a forbidden page
+};
+
+const PrivateRouteLoginChecker = ({ children }) => {
     const { User } = useContext(AuthContext);
     const pathName = usePathname();
 
@@ -13,7 +30,14 @@ const PrivateRouteHandler = ({ children }) => {
             return '...loading';
         }
         case userStatus['loggedIN']: {
-            return children;
+            return (
+                <PrivateRouteRoleChecker
+                    role={User.details.role}
+                    currentRoute={pathName}
+                >
+                    {children}
+                </PrivateRouteRoleChecker>
+            );
         }
         case userStatus['loggedOUT']: {
             redirect('/auth/login?from=' + pathName);
@@ -26,7 +50,7 @@ const PrivateRouteHandler = ({ children }) => {
 const PrivateRoute = ({ children }) => {
     return (
         <Suspense fallback="loading...">
-            <PrivateRouteHandler>{children}</PrivateRouteHandler>
+            <PrivateRouteLoginChecker>{children}</PrivateRouteLoginChecker>
         </Suspense>
     );
 };
