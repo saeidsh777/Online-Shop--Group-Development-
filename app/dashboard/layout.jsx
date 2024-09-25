@@ -1,6 +1,6 @@
 import BreadCrumb from '@/components/Breadcrumbs/DashboardBD';
-import ModalProvider from '@/contexts/ModalProvider';
 import PrivateRoute from '@/components/Wrappers/PrivateRoute';
+import ModalProvider from '@/contexts/ModalProvider';
 import Header from '../../components/Headers/Dashboard/Header';
 import Sidebar from '../../components/Sidebars/Dashboard/Sidebar';
 import SidebarProvider from '../../contexts/SidebarProvider';
