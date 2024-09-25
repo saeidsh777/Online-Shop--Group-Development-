@@ -1,6 +1,6 @@
 import LoginForm from '@/components/Forms/LoginForm/LoginForm';
 
-export default function loginPage() {
+export default function loginPage({ searchParams: { from } }) {
     return (
         <main>
             <div className="flex flex-col justify-center items-center min-h-dvh relative">
@@ -10,7 +10,7 @@ export default function loginPage() {
                     <div className="w-[10rem] h-[10rem] bg-red-c-100 z-0 absolute left-[0rem] bottom-[2rem]"></div>
                 </div>
 
-                <LoginForm />
+                <LoginForm from={from} />
             </div>
         </main>
     );

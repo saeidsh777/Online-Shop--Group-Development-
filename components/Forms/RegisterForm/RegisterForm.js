@@ -3,15 +3,18 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { AuthContext } from '@/contexts/AuthProvider';
+import { registerAuth } from '@/services/auth';
 import { optionsHookForm } from '@/utils/constants';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import SubmitBtn from '../../Buttons/SubmitBtn/SubmitBtn';
 import AuthInput from '../../Inputs/AuthInput/AuthInput';
-import { registerAuth } from '@/services/auth';
 
-export default function RegisterForm() {
+export default function RegisterForm({ from }) {
     const router = useRouter();
+    const { Handlers } = useContext(AuthContext);
 
     const {
         register,
@@ -24,13 +27,15 @@ export default function RegisterForm() {
         const { res, result, err } = await registerAuth(data);
 
         if (res.status === 201) {
+            await Handlers.LoginHandler(result.token);
+
+            toast.success(result.message);
             resetField('name');
             resetField('email');
             resetField('phoneNumber');
             resetField('password');
-            toast.success(result.message);
-            localStorage.setItem('token', result.token);
-            router.push('/');
+
+            router.push(from ?? '/');
         } else if (res.status === 500) {
             toast.error(err + '!');
         } else {
@@ -57,7 +62,7 @@ export default function RegisterForm() {
                         </h2>
                         <Link
                             className="text-sm  text-blue-500 hover:text-blue-600"
-                            href="/auth/login"
+                            href={`/auth/login${from ? '?from=' + from : ''}`}
                         >
                             Already have an account?
                         </Link>

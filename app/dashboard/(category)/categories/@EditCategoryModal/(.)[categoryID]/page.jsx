@@ -1,5 +1,5 @@
 import EditCategoryForm from '@/components/Forms/EditCategory/EditCategoryForm';
-import InterceptorModalWrapper from '@/components/ModalsWrapper/InterceptorModalWrapper';
+import InterceptorModalWrapper from '@/components/Wrappers/InterceptorModalWrapper';
 import ModalProvider from '@/contexts/ModalProvider';
 import RefreshPage from '@/hooks/RefreshPage';
 import { getSingleCategory } from '@/services/categories';

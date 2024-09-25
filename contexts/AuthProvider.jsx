@@ -9,9 +9,16 @@ import {
     useRef,
     useState,
 } from 'react';
+import toast from 'react-hot-toast';
+
+export const userStatus = {
+    loggedIN: 'loggedIN',
+    loggedOUT: 'loggedOUT',
+    loading: 'loading',
+};
 
 const InitialValue = {
-    isLoggedIn: false,
+    isLoggedIn: userStatus['loading'],
     token: '',
     details: {
         email: '',
@@ -20,17 +27,17 @@ const InitialValue = {
         role: '',
     },
 };
+
 export const AuthContext = createContext({
     User: InitialValue,
     Handlers: {
-        LoginHandler: () => {},
+        LoginHandler: async () => {},
         LogoutHandler: () => {},
     },
 });
 
 const AuthProvider = ({ children }) => {
     const [User, setUser] = useState(InitialValue);
-    const [isChecked, setChecked] = useState(false);
     const reValidateTokenInterval = useRef(null);
 
     const ClearReValidator = useCallback(() => {
@@ -42,7 +49,7 @@ const AuthProvider = ({ children }) => {
 
     const Logout = useCallback(() => {
         localStorage.setItem('token', '');
-        setUser(InitialValue);
+        setUser({ ...InitialValue, isLoggedIn: userStatus['loggedOUT'] });
         ClearReValidator();
     }, [setUser, ClearReValidator]);
 
@@ -50,9 +57,11 @@ const AuthProvider = ({ children }) => {
         async token => {
             if (!token) return;
 
+            setUser(prv => ({ ...prv, isLoggedIn: userStatus['loading'] }));
+
             const response = await getUserInfo(token);
 
-            if ('res' in response && response.res.status === 200) {
+            if (response?.res?.status === 200) {
                 const UserInfo = {};
                 Object.entries(response.result).forEach(([key, value]) => {
                     if (key in InitialValue.details) {
@@ -63,7 +72,7 @@ const AuthProvider = ({ children }) => {
                 setUser({
                     token,
                     details: UserInfo,
-                    isLoggedIn: true,
+                    isLoggedIn: userStatus['loggedIN'],
                 });
                 localStorage.setItem('token', token);
                 return;
@@ -80,16 +89,17 @@ const AuthProvider = ({ children }) => {
     // (the token that previously stored in localsotrage)
     useEffect(() => {
         const InitialLocalToken = localStorage.getItem('token');
+
         if (InitialLocalToken) {
             const checkInitialLocalToken = async () => {
                 await TokenChecker(InitialLocalToken);
-                setChecked(true);
             };
             checkInitialLocalToken();
             return;
         }
-        setChecked(true);
-    }, [TokenChecker]);
+
+        Logout();
+    }, [TokenChecker, Logout]);
 
     // auto revalidate token for every 10min
     // (the token that has been stored in User state at the top)
@@ -119,10 +129,6 @@ const AuthProvider = ({ children }) => {
     );
 
     const value = { User, Handlers };
-
-    if (!isChecked) {
-        return <div className="text-center font-bold">LOADING...</div>;
-    }
 
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
