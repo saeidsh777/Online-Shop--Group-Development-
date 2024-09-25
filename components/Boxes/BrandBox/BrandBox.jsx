@@ -7,6 +7,7 @@ import useToken from '@/hooks/useToken';
 import toast from 'react-hot-toast';
 
 const BrandBox = ({ id, title = '', categories = [] }) => {
+  
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
   const [currentTitle, setCurrentTitle] = useState(title);
