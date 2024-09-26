@@ -16,7 +16,7 @@ const MessageBox = props => {
 
     return (
         <div
-            className={`425:max-w-[65%] md:max-w-[50%] w-full grid grid-cols-[6px,1fr] ${
+            className={`425:max-w-[65%] md:max-w-[50%] w-full grid ${
                 from === 'USER'
                     ? 'grid-cols-[6px,1fr] mr-auto'
                     : 'grid-cols-[1fr,6px] ml-auto'
@@ -55,18 +55,16 @@ const MessageBox = props => {
     );
 };
 
-const TicketBox = ({ ticketID }) => {
+const TicketBox = ({ ticketID, isAdmin }) => {
     const [state, setState] = useState(null);
     const responseHandler = useResponse();
 
     useEffect(() => {
         const Token = getToken();
         const getData = async () => {
-            const response = await getTicket(ticketID, Token);
+            const response = await getTicket(ticketID, Token, isAdmin);
             if (response?.ok) {
                 const result = await response.json();
-                console.log(result);
-                console.log(new Date(result.createdAt).toDateString());
                 setState(result);
             } else {
                 await responseHandler(response);
@@ -75,7 +73,7 @@ const TicketBox = ({ ticketID }) => {
         if (Token) {
             getData();
         }
-    }, [ticketID, responseHandler]);
+    }, [ticketID, responseHandler, isAdmin]);
 
     const createDateFormater = useMemo(() => {
         if (!state?.createdAt) return '';
@@ -91,9 +89,16 @@ const TicketBox = ({ ticketID }) => {
                 <span className="font-medium">{createDateFormater}</span>
             </p>
             <DashboardBox className="border-dashed flex flex-col gap-1 max-h-80 overflow-y-auto !bg-dashboard-sidebar-hover">
-                {/* {state.messages.map(message => (
-                    <MessageBox key={message._id} {} message="heelo" from="USER" />
-                ))} */}
+                {state.messages.map(message => {
+                    // console.log(message);
+                    return null;
+                    <MessageBox
+                        key={message._id}
+                        {...message}
+                        message="heelo"
+                        from="USER"
+                    />;
+                })}
                 <MessageBox message="heelo" from="USER" />
                 <MessageBox message="heelo" from="ADMIN" />
                 <MessageBox message="heelo" from="USER" />
