@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import AuthInput from '@/components/Inputs/AuthInput/AuthInput';
@@ -13,12 +13,8 @@ import { FaXmark } from 'react-icons/fa6';
 
 import styles from './ChangePassword.module.css';
 
-
 export default function ChangePassword() {
     const { Handlers } = useContext(AuthContext);
-    
-      
-      
     const [showInputs, setShowInputs] = useState(false);
     const {
         register,
@@ -36,12 +32,6 @@ export default function ChangePassword() {
             toast.error(result.message);
         }
     };
-
-
-
-    // -------------------------------------------------------------------------------------------------------
-
-   
 
     return (
         <div className={styles.background_yellow_line}>
@@ -126,23 +116,15 @@ export default function ChangePassword() {
                             </form>
                         </DashboardBox>
                     ) : (
-                        <>
-                           
-                                <div
-                                    className={`w-[10rem] h-[10rem] rounded-full  bg-yellow-100 border-8 border-yellow-500 flex flex-col justify-center items-center cursor-pointer shadow-lg ${styles.hover} ${styles.animation}`}
-                                    onClick={() => setShowInputs(true)}
-                                >
-                                    <p className="font-bold text-yellow-500">
-                                        Change
-                                    </p>
-                                    <p className="font-bold text-yellow-500">
-                                        Password
-                                    </p>
-                                </div>
-                                
-                      
-                           
-                        </>
+                        <div
+                            className={`w-[10rem] h-[10rem] rounded-full bg-yellow-100 border-8 border-yellow-500 flex flex-col justify-center items-center cursor-pointer shadow-lg ${styles.animation} ${styles.hover} `}
+                            onClick={() => setShowInputs(true)}
+                        >
+                            <p className="font-bold text-yellow-500">Change</p>
+                            <p className="font-bold text-yellow-500">
+                                Password
+                            </p>
+                        </div>
                     )}
                 </div>
                 <div>
