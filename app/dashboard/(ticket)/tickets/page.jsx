@@ -18,7 +18,6 @@ const ListOfTickets = () => {
             const response = await getAllTickets(token);
             if (response?.ok) {
                 const result = await response.json();
-                console.log(result);
                 setTickets(result);
             } else {
                 await responseHandler(response);
