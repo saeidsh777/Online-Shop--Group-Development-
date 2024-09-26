@@ -66,3 +66,23 @@ export const getAllTickets = async token => {
         return e instanceof Error ? e.message : 'Error';
     }
 };
+
+export const sendTicketResponse = async (message, ticketID, token) => {
+    try {
+        const response = await fetch(
+            API_BASE_URL + '/tickets/response-ticket/' + ticketID,
+            {
+                method: 'POST',
+                body: JSON.stringify({ message }),
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
+                },
+            }
+        );
+
+        return response;
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
+};
