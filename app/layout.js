@@ -1,6 +1,6 @@
 import { toastOptions } from '@/configs/toastOptions';
 import AuthProvider from '@/contexts/AuthProvider';
-import { Inter, Roboto } from 'next/font/google';
+import { Inter, Kalam, Roboto } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
 
@@ -10,7 +10,13 @@ const roboto = Roboto({
     weight: ['500'],
     variable: '--roboto-font',
 });
-const fonts = inter.className + ' ' + roboto.variable;
+const kalam = Kalam({
+    subsets: ['latin'],
+    weight: '700',
+    variable: '--kalam-font',
+});
+
+const fonts = inter.className + ' ' + roboto.variable + ' ' + kalam.variable;
 
 export const metadata = {
     title: 'Create Next App',

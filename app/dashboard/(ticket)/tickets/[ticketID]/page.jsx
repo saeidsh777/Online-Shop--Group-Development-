@@ -7,7 +7,7 @@ const TicketRoom = ({ params: { ticketID } }) => {
         <div>
             <SectionTitel title="Ticket" />
             <DashboardBox>
-                <TicketBox ticketID={ticketID} />
+                <TicketBox ticketID={ticketID} isAdmin />
             </DashboardBox>
         </div>
     );

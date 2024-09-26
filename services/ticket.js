@@ -33,9 +33,13 @@ export const getMyTickets = async token => {
     }
 };
 
-export const getTicket = async (id, token) => {
+export const getTicket = async (id, token, isAdmin) => {
+    const URL = !!isAdmin
+        ? `${API_BASE_URL}/tickets/admin/${id}`
+        : `${API_BASE_URL}/tickets/${id}`;
+
     try {
-        const response = await fetch(`${API_BASE_URL}/tickets/${id}`, {
+        const response = await fetch(URL, {
             method: 'GET',
             headers: {
                 authorization: `Bearer ${token}`,
@@ -56,6 +60,26 @@ export const getAllTickets = async token => {
                 authorization: `Bearer ${token}`,
             },
         });
+
+        return response;
+    } catch (e) {
+        return e instanceof Error ? e.message : 'Error';
+    }
+};
+
+export const sendTicketResponse = async (message, ticketID, token) => {
+    try {
+        const response = await fetch(
+            API_BASE_URL + '/tickets/response-ticket/' + ticketID,
+            {
+                method: 'POST',
+                body: JSON.stringify({ message }),
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    'content-type': 'application/json',
+                },
+            }
+        );
 
         return response;
     } catch (e) {
