@@ -16,10 +16,11 @@ export const RolesRouteAccess = {
             root: '/dashboard',
             children: [
                 '/add-new-product',
-                '/products',
+                '/products/*',
                 '/add-new-category',
                 '/categories',
-                '/tickets',
+                '/tickets/*',
+                '/create-notification'
             ],
         },
     ],
