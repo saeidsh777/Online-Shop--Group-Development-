@@ -43,10 +43,9 @@ module.exports = {
             },
             fontFamily: {
                 roboto: 'var(--roboto-font)',
+                kalam: 'var(--kalam-font)',
             },
         },
     },
     plugins: [],
-    
 };
-
