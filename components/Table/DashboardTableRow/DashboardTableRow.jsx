@@ -1,19 +1,11 @@
-import { DeleteWrapper } from '@/hooks/useModal';
+import { API_BASE_URL } from '@/utils/constants';
 import Image from 'next/image';
 import Link from 'next/link';
-import ActionIcon from './ActionIcons';
+import ActionIcon from '../ActionIcons';
+import DeleteProduct from './DeleteProduct';
 
 const DashboardTableRow = props => {
-    const {
-        index,
-        name,
-        imgSrc,
-        category,
-        price,
-        discount,
-        id,
-        borderB = false,
-    } = props;
+    const { index, title, images, _id, borderB = false } = props;
 
     return (
         <tr
@@ -21,29 +13,22 @@ const DashboardTableRow = props => {
                 !borderB ? 'border-b' : ''
             }`}
         >
-            <td className="p-4">{index + 1}</td>
-            <td className="p-4">
-                <Link
-                    href={'/dashboard/products/' + id}
-                    className="flex items-center gap-4"
-                >
-                    <div className="aspect-square w-8 rounded-lg overflow-hidden">
-                        <Image
-                            src={imgSrc}
-                            alt={name + ' product image'}
-                            width={32}
-                            height={32}
-                        />
-                    </div>
-                    <p>{name}</p>
-                </Link>
+            <td className="p-3">{index + 1}</td>
+            <td className="p-3 flex items-center justify-center">
+                <Image
+                    src={API_BASE_URL + '/' + images[0]}
+                    alt={title + ' product image'}
+                    width={32}
+                    height={32}
+                    className="rounded-xl aspect-square w-10"
+                />
             </td>
-            <td className="p-4 capitalize">{category}</td>
-            <td className="p-4">{price}$</td>
-            <td className="p-4">{discount}%</td>
-            <td className="p-4">
+            <td className="px-8 py-3">
+                <p>{title}</p>
+            </td>
+            <td className="px-3 py-3">
                 <div className="flex justify-center items-center gap-1.5">
-                    <Link href={'/dashboard/products/' + id}>
+                    <Link href={'/dashboard/products/' + _id}>
                         <ActionIcon type={'view'}>
                             <path
                                 d="M15.58 12c0 1.98-1.6 3.58-3.58 3.58S8.42 13.98 8.42 12s1.6-3.58 3.58-3.58 3.58 1.6 3.58 3.58Z"
@@ -59,7 +44,7 @@ const DashboardTableRow = props => {
                             ></path>
                         </ActionIcon>
                     </Link>
-                    <Link href={`/dashboard/products/${id}/edit`}>
+                    <Link href={`/dashboard/products/${_id}/edit`}>
                         <ActionIcon type={'update'}>
                             <path
                                 d="M11 2H9C4 2 2 4 2 9v6c0 5 2 7 7 7h6c5 0 7-2 7-7v-2"
@@ -83,22 +68,7 @@ const DashboardTableRow = props => {
                             ></path>
                         </ActionIcon>
                     </Link>
-                    <DeleteWrapper
-                        text={`This action delete ${name} permanently! Are you sure?`}
-                        func={async () => {
-                            'use server';
-                            // add how to delete the product
-                        }}
-                    >
-                        <ActionIcon type={'delete'}>
-                            <path
-                                d="M21 5.98c-3.33-.33-6.68-.5-10.02-.5-1.98 0-3.96.1-5.94.3L3 5.98M8.5 4.97l.22-1.31C8.88 2.71 9 2 10.69 2h2.62c1.69 0 1.82.75 1.97 1.67l.22 1.3M18.85 9.14l-.65 10.07C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5h3.33M9.5 12.5h5"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            ></path>
-                        </ActionIcon>
-                    </DeleteWrapper>
+                    <DeleteProduct id={_id} title={title} />
                 </div>
             </td>
         </tr>
