@@ -108,7 +108,11 @@ export const getAllProducts = async () => {
         const result = await res.json();
         return { res, result };
     } catch (e) {
-        return 'error';
+        return e instanceof Error
+            ? e.message
+            : typeof e === 'string'
+            ? e
+            : 'Error';
     }
 };
 
