@@ -13,10 +13,18 @@ const PrivateRouteRoleChecker = ({ children, role, currentRoute }) => {
             ...root.children.map(route => root.root + route),
         ];
 
-        return routes.some(route => route === currentRoute);
+        return routes.some(route => {
+            if (route === currentRoute) {
+                return true;
+            }
+            if(route.includes("*")){
+                return true;
+            }
+        });
     });
 
-    if (true) { // there is some issue in development 
+    if (HasAccess) {
+        // there is some issue in development
         return children;
     }
     redirect('/'); // create a forbidden page
@@ -46,7 +54,6 @@ const PrivateRouteLoginChecker = ({ children }) => {
         default:
             throw new Error('User login status is unknown');
     }
-    
 };
 
 const PrivateRoute = ({ children }) => {
