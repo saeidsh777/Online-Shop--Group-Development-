@@ -2,13 +2,14 @@
 
 import { AuthContext } from '@/contexts/AuthProvider';
 import { DeleteWrapper } from '@/hooks/useModal';
+import Revalidate from '@/hooks/useRevalidate';
 import GetTOken from '@/hooks/useToken';
 import { deleteSingleProduct } from '@/services/product';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import toast from 'react-hot-toast';
 
-const DeleteProduct = ({ id, title, children }) => {
+const DeleteProduct = ({ id, title, children, ChangeTo = undefined }) => {
     const { Handlers } = useContext(AuthContext);
     const Router = useRouter();
 
@@ -27,6 +28,12 @@ const DeleteProduct = ({ id, title, children }) => {
                 if ('res' in result && result.res.ok) {
                     toast.success('Product Delete successfuly');
                     Router.refresh();
+                    if (ChangeTo !== undefined) {
+                        Router.push(ChangeTo);
+                        Revalidate(ChangeTo);
+                    } else {
+                        Router.refresh();
+                    }
                     return;
                 }
 
