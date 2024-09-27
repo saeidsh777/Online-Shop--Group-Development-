@@ -4,9 +4,10 @@ import DashboardInput from '@/components/Inputs/DashboardInput/DashboardInput';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
-const FilterList = () => {
+const FilterList = ({ pathname }) => {
     const Router = useRouter();
     const inputRef = useRef();
+
     return (
         <form
             onSubmit={e => {
@@ -15,7 +16,7 @@ const FilterList = () => {
                 const search = text ? '?search=' + text : '';
 
                 inputRef.current.value = '';
-                Router.push('/dashboard/categories' + search);
+                Router.push(pathname + search);
             }}
             className="w-full max-w-xs 896:max-w-md flex items-center gap-1"
         >

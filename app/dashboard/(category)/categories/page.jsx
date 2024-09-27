@@ -64,7 +64,7 @@ const page = async ({ searchParams }) => {
                 {Data.length ? (
                     <>
                         <div className="flex sm:items-center justify-between mb-6 flex-col gap-1.5 sm:flex-row">
-                            <FilterList />
+                            <FilterList pathname={'/dashboard/categories'} />
                             <Link
                                 href="/dashboard/add-new-category"
                                 className="w-fit"
