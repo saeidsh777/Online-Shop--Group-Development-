@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 const RefreshButton = () => {
     const Params = useSearchParams();
@@ -33,6 +33,15 @@ const RefreshButton = () => {
 };
 
 const RefreshPage = () => {
+    const [renderCount, setCount] = useState(1);
+    const Router = useRouter();
+
+    useEffect(() => {
+        if (renderCount !== 1) return;
+        setCount(prv => prv + 1);
+        Router.refresh();
+    }, [renderCount, Router]);
+
     return (
         <div>
             <h3 className="text-center font-medium text-[120%] mb-5">
