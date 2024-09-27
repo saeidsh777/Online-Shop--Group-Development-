@@ -62,6 +62,7 @@ export const editProduct = async (formDataGenarator, productId) => {
         return { err, ...responseAndResult };
     }
 };
+
 export const editProductModel = async (data, productModelId) => {
     try {
         const token = localStorage.getItem('token');
@@ -100,10 +101,31 @@ export const getOneProduct = async productId => {
 
 export const getAllProducts = async () => {
     try {
-        const res = await fetch(`${API_BASE_URL}/products`);
-        const result = await res.json();
-        console.log(result);
+        const res = await fetch(`${API_BASE_URL}/products`, {
+            cache: 'no-store',
+        });
 
+        const result = await res.json();
+        return { res, result };
+    } catch (e) {
+        return 'error';
+    }
+};
+
+export const deleteSingleProduct = async (id, token) => {
+    try {
+        const res = await fetch(
+            `${API_BASE_URL}/products/delete-product/${id}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+                cache: 'no-store',
+            }
+        );
+
+        const result = await res.json();
         return { res, result };
     } catch (e) {
         return 'error';
