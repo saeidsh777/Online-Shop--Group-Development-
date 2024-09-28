@@ -105,7 +105,7 @@ const ProductListPage = async ({ searchParams }) => {
         <div>
             <SectionTitel title={'List of products'} />
             <DashboardBox>
-                {response.ok ? (
+                {response?.ok ? (
                     data.length ? (
                         searchParams.search ? (
                             filterDataHandler(data, searchParams.search)
