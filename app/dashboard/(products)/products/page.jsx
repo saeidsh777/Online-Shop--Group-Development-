@@ -11,7 +11,7 @@ import Link from 'next/link';
 const ProductListPage = async ({ searchParams }) => {
     const result = await getAllProducts();
 
-    if (result === 'error') return <RefreshPage />;
+    if (typeof result === 'string' || !result) return <RefreshPage />;
 
     const { result: data, res: response } = result;
 
