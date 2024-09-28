@@ -125,7 +125,6 @@ export const deleteSingleProduct = async (id, token) => {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
-                cache: 'no-store',
             }
         );
 
@@ -133,5 +132,25 @@ export const deleteSingleProduct = async (id, token) => {
         return { res, result };
     } catch (e) {
         return 'error';
+    }
+};
+
+export const deleteSingleModel = async (id, token) => {
+    try {
+        const res = await fetch(`${API_BASE_URL}/product-models/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+        });
+
+        const result = await res.json();
+        return { res, result };
+    } catch (e) {
+        return e instanceof Error
+            ? e.message
+            : typeof e === 'string'
+            ? e
+            : 'Error';
     }
 };

@@ -1,6 +1,6 @@
 import DashboardBox from '@/components/Boxes/DashboardBox';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
-import DashboardModalsTableRow from '@/components/Table/DashboardModalsTableRow/DashboardModalsTableRow';
+import DashboardModalsTableRow from '@/components/Table/DashboardModelsTableRow/DashboardModelsTableRow';
 import DeleteProduct from '@/components/Table/DashboardProductsTableRow/DeleteProduct';
 import RefreshPage from '@/hooks/RefreshPage';
 import { getOneProduct } from '@/services/product';
