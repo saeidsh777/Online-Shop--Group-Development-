@@ -20,7 +20,8 @@ export const RolesRouteAccess = {
                 '/add-new-category',
                 '/categories',
                 '/tickets/*',
-                '/create-notification'
+                '/create-notification',
+                '/notification-list',
             ],
         },
     ],
