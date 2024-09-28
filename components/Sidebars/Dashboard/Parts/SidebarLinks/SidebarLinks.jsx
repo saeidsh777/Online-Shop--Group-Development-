@@ -2,7 +2,11 @@ import PrivateRoleHandler from '@/components/Wrappers/PrivateRoleHandler';
 import { Roles } from '@/utils/Roles';
 import { AiOutlineContainer } from 'react-icons/ai';
 import { BsBoxes, BsEnvelopePaper } from 'react-icons/bs';
-import { MdOutlineAddBox, MdOutlineCategory } from 'react-icons/md';
+import {
+    MdOutlineAddBox,
+    MdOutlineCategory,
+    MdOutlineNotificationAdd,
+} from 'react-icons/md';
 import {
     TbCategoryPlus,
     TbGraph,
@@ -10,6 +14,7 @@ import {
     TbHexagons,
     TbMailPlus,
 } from 'react-icons/tb';
+import { TfiLayoutListThumbAlt } from 'react-icons/tfi';
 import SidebarLink from './Components/SidebarLink';
 import SidebarLinkSection from './Components/SidebarLinkSection';
 
@@ -37,6 +42,20 @@ const SidebarLinks = () => {
                     </SidebarLink>
                     <SidebarLink href={'/categories'} text={'Category list'}>
                         <MdOutlineCategory />
+                    </SidebarLink>
+                </SidebarLinkSection>
+                <SidebarLinkSection title={'notifications'}>
+                    <SidebarLink
+                        href={'/create-notification'}
+                        text={'Create Notification'}
+                    >
+                        <MdOutlineNotificationAdd />
+                    </SidebarLink>
+                    <SidebarLink
+                        href={'/notification-list'}
+                        text={'Notification List'}
+                    >
+                        <TfiLayoutListThumbAlt />
                     </SidebarLink>
                 </SidebarLinkSection>
                 <SidebarLinkSection title={'brand'}>
