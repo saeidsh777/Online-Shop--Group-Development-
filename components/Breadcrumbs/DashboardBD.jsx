@@ -50,7 +50,7 @@ const DashboardBD = () => {
     );
 
     return (
-        <div className="flex items-center gap-0.5 mb-3 sm:mb-4 896:mb-5">
+        <div className="flex items-center gap-0.5 mb-3 sm:mb-4 896:mb-5 flex-wrap">
             {pathnames.map((path, index) => {
                 const istheLastOne = pathnames.length > index + 1;
                 const isHome = path === 'Dashboard';
