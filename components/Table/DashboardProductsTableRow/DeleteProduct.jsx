@@ -26,7 +26,7 @@ const DeleteProduct = ({ id, title, children, ChangeTo = undefined }) => {
 
                 const result = await deleteSingleProduct(id, token);
                 if ('res' in result && result.res.ok) {
-                    toast.success('Product Delete successfuly');
+                    toast.success('Product Deleted successfuly');
                     Router.refresh();
                     if (ChangeTo !== undefined) {
                         Router.push(ChangeTo);
