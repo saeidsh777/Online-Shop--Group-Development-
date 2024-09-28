@@ -17,8 +17,9 @@ const PrivateRouteRoleChecker = ({ children, role, currentRoute }) => {
             if (route === currentRoute) {
                 return true;
             }
-            if(route.includes("*")){
-                return true;
+            if (route.includes('*')) {
+                const newRoute = route.replace(/\/\*/g, '');
+                return currentRoute.includes(newRoute);
             }
         });
     });
