@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/utils/constants';
+import { API_BASE_URL, responseAndResult } from '@/utils/constants';
 
 export const getUserByEmail = async userEmail => {
     try {
@@ -52,5 +52,22 @@ export const getUserInfo = async token => {
         return { res, result };
     } catch (err) {
         return err instanceof Error ? err.message : 'Error';
+    }
+};
+
+export const getAllUsers = async () => {
+    try {
+        const token = localStorage.getItem('token');
+
+        const res = await fetch(`${API_BASE_URL}/users/all-users`, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+        });
+        const result = await res.json();
+
+        return { res, result };
+    } catch (err) {
+        return { err, ...responseAndResult };
     }
 };
