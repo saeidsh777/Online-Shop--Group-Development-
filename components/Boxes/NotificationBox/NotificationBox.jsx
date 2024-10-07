@@ -1,6 +1,6 @@
 'use client';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
-import { sendNotificationToAll } from '@/services/notification';
+import { sendNotification } from '@/services/notification';
 import { getAllUsers } from '@/services/user';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -49,7 +49,7 @@ export default function NotificationBox() {
             users: usersID,
         };
 
-        const { res, result } = await sendNotificationToAll(data);
+        const { res, result } = await sendNotification(data);
 
         if (res.status === 201) {
             setMessage('');
