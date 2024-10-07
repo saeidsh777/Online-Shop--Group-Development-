@@ -25,5 +25,20 @@ export const RolesRouteAccess = {
             ],
         },
     ],
-    owner: [''],
+    owner: [
+        {
+            root: '/dashboard',
+            children: [
+                '/add-new-product',
+                '/products/*',
+                '/add-new-category',
+                '/categories',
+                '/tickets/*',
+                '/create-notification',
+                '/notification-list',
+                '/add-new-brand',
+                '/brands',
+            ],
+        },
+    ],
 };
