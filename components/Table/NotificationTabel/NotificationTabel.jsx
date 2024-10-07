@@ -16,10 +16,9 @@ export default function NotificationTabel() {
     useEffect(() => {
         const getNotifications = async () => {
             const { res, result } = await getAllNotifications(token);
-            console.log(result);
 
             if (res.status === 200) {
-                setNotifications(result);
+                setNotifications(result.reverse());
             }
         };
         getNotifications();
