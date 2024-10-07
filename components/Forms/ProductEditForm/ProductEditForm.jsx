@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { editProduct } from '@/services/product';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DetailField from '../AddNewProductForm/Components/DetailField/DetailField';
+import { API_BASE_URL } from '@/utils/constants';
 
 export default function ProductEditForm({
     _id,
@@ -34,7 +35,7 @@ export default function ProductEditForm({
     useEffect(() => {
         let newUrlImages = {};
         productImagesDefault.forEach((urlImage, index) => {
-            newUrlImages['image' + index] = '/' + urlImage;
+            newUrlImages['image' + index] = API_BASE_URL + '/' + urlImage;
         });
         setProductImages(prv => {
             return {
