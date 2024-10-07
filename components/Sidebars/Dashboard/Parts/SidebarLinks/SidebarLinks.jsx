@@ -58,6 +58,8 @@ const SidebarLinks = () => {
                         <TfiLayoutListThumbAlt />
                     </SidebarLink>
                 </SidebarLinkSection>
+            </PrivateRoleHandler>
+            <PrivateRoleHandler onlyRole={Roles.owner}>
                 <SidebarLinkSection title={'brand'}>
                     <SidebarLink href={'/add-new-brand'} text={'Add brand'}>
                         <TbHexagonalPrismPlus />
