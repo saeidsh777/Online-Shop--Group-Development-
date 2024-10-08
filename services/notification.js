@@ -21,6 +21,28 @@ export const sendNotification = async data => {
     }
 };
 
+export const deleteNotification = async nofitId => {
+    try {
+        const token = localStorage.getItem('token');
+
+        const res = await fetch(
+            `${API_BASE_URL}/notifications/delete/${nofitId}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const result = await res.json();
+
+        return { res, result };
+    } catch (err) {
+        console.log(err);
+        return { err, ...responseAndResult };
+    }
+};
+
 export const getAllNotifications = async token => {
     try {
         const res = await fetch(`${API_BASE_URL}/notifications/notifications`, {
