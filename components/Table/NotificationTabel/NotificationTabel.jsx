@@ -5,8 +5,12 @@ import ActionIcon from '../ActionIcons';
 import { ModalContext } from '@/contexts/ModalProvider';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import DashboardBox from '@/components/Boxes/DashboardBox';
-import { getAllNotifications } from '@/services/notification';
+import {
+    deleteNotification,
+    getAllNotifications,
+} from '@/services/notification';
 import useToken from '@/hooks/useToken';
+import toast from 'react-hot-toast';
 
 export default function NotificationTabel() {
     const [notifications, setNotifications] = useState([]);
@@ -24,7 +28,7 @@ export default function NotificationTabel() {
         getNotifications();
     }, []);
 
-    const viewNotif = (message) => {
+    const viewNotif = message => {
         const Layout = (
             <div className="lg:max-w-[40rem]">
                 <DashboardBox>
@@ -41,6 +45,52 @@ export default function NotificationTabel() {
                     >
                         Close
                     </DashboardBTN>
+                </DashboardBox>
+            </div>
+        );
+        setModal(Layout);
+    };
+
+    const deleteNotif = id => {
+        const deleteNotifHandler = async () => {
+            const { res, result } = await deleteNotification(id);
+
+            if (res.status === 201) {
+                toast.success(result.message);
+                CloseModal();
+                const { res: resNotif, result: resultNotif } =
+                    await getAllNotifications(token);
+
+                if (resNotif.status === 200) {
+                    setNotifications(resultNotif.reverse());
+                }
+            } else {
+                toast.error(result.message);
+            }
+        };
+
+        const Layout = (
+            <div className="lg:max-w-[40rem]">
+                <DashboardBox>
+                    <p className="text-gray-500 text-center mb-5">
+                        Do you want to <strong>Remove</strong> the notification?
+                    </p>
+
+                    <div className="flex gap-4 items-center">
+                        <DashboardBTN
+                            paddingClasses="lg:px-4 lg:py-2"
+                            className="bg-gray-500"
+                            onClick={CloseModal}
+                        >
+                            Cancel
+                        </DashboardBTN>
+                        <DashboardBTN
+                            paddingClasses="lg:px-4 lg:py-2"
+                            onClick={() => deleteNotifHandler()}
+                        >
+                            Delete
+                        </DashboardBTN>
+                    </div>
                 </DashboardBox>
             </div>
         );
@@ -86,7 +136,7 @@ export default function NotificationTabel() {
                                     })}
                                 </td>
                                 <td className="p-3">
-                                    <p className="line-clamp-3">
+                                    <p className="line-clamp-1">
                                         {notif.message}
                                     </p>
                                 </td>
@@ -112,7 +162,11 @@ export default function NotificationTabel() {
                                                 ></path>
                                             </ActionIcon>
                                         </span>
-                                        <span>
+                                        <span
+                                            onClick={() =>
+                                                deleteNotif(notif._id)
+                                            }
+                                        >
                                             <ActionIcon type={'delete'}>
                                                 <path
                                                     d="M21 5.98c-3.33-.33-6.68-.5-10.02-.5-1.98 0-3.96.1-5.94.3L3 5.98M8.5 4.97l.22-1.31C8.88 2.71 9 2 10.69 2h2.62c1.69 0 1.82.75 1.97 1.67l.22 1.3M18.85 9.14l-.65 10.07C18.09 20.78 18 22 15.21 22H8.79C6 22 5.91 20.78 5.8 19.21L5.15 9.14M10.33 16.5h3.33M9.5 12.5h5"
