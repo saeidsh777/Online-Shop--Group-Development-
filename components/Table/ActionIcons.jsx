@@ -28,7 +28,7 @@ const ActionIcon = ({ type, children: SVGsPaths, tooltip = true }) => {
                 {SVGsPaths}
             </svg>
             {tooltip && (
-                <p className="absolute opacity-0 group-hover:opacity-100 z-10 capitalize bottom-[115%] left-1/2 -translate-x-1/2 bg-white shadow-xl p-1 rounded-lg after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-m-1 after:border-4 after:border-solid after:border-transparent after:border-t-white ">
+                <p className="absolute opacity-0 group-hover:opacity-100 z-10 capitalize bottom-[115%] left-1/2 -translate-x-1/2 bg-white shadow-xl p-1 rounded-lg after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-m-1 after:border-4 after:border-solid after:border-transparent after:border-t-white invisible group-hover:visible">
                     {type}
                 </p>
             )}
