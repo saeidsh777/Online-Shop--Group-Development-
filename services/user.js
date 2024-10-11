@@ -1,4 +1,4 @@
-import { API_BASE_URL, responseAndResult } from '@/utils/constants';
+import { API_BASE_URL } from '@/utils/constants';
 
 export const getUserByEmail = async userEmail => {
     try {
@@ -40,7 +40,8 @@ export const getUserByPhoneNumber = async phoneNumber => {
     }
 };
 
-export const getUserInfo = async token => {
+export const getUserInfo = async (token) => {
+    
     try {
         const res = await fetch(`${API_BASE_URL}/users/me/`, {
             headers: {
@@ -48,6 +49,7 @@ export const getUserInfo = async token => {
             },
         });
         const result = await res.json();
+       
 
         return { res, result };
     } catch (err) {
@@ -55,19 +57,96 @@ export const getUserInfo = async token => {
     }
 };
 
-export const getAllUsers = async () => {
-    try {
-        const token = localStorage.getItem('token');
 
-        const res = await fetch(`${API_BASE_URL}/users/all-users`, {
+
+export const getUserList = async (token) => {
+    
+    try {
+        const res = await fetch(`${API_BASE_URL}/users/all-users/`, {
             headers: {
                 authorization: `Bearer ${token}`,
             },
         });
         const result = await res.json();
+        
+       
 
+        return { res, result };
+    } catch (err) {
+        return err instanceof Error ? err.message : 'Error';
+    }
+};
+
+
+export const updateUserInfo = async (updatedUser ) => {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Token not found');
+
+        const res = await fetch(`${API_BASE_URL}/users/me`, {
+            method: 'PATCH',
+            headers: {
+                authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedUser),
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.message || 'Error updating user info');
+
+        return { res, result };
+    } catch (err) {
+        return err instanceof Error ? err.message : 'Error updating user info';
+    }
+};
+
+
+
+
+
+
+export const updatePassword = async ({ currentPassword, newPassword }) => {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error('Token not found');
+
+        const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+            method: 'PATCH',
+            headers: {
+                authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ currentPassword, newPassword }),
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.message || 'Error updating password');
+
+        return { res, result };
+    } catch (err) {
+        return err instanceof Error ? err.message : 'Error updating password';
+    }
+};
+
+
+
+export const changeUserRole = async (phoneNumber, newRole, token) => {
+    try {
+        const res = await fetch(`${API_BASE_URL}/users/role/${phoneNumber}`, {
+            method: 'PATCH',
+            headers: {
+                authorization: `Bearer ${token}`,
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({ role: newRole }),
+        });
+        const result = await res.json();
+            
         return { res, result };
     } catch (err) {
         return { err, ...responseAndResult };
     }
 };
+
+

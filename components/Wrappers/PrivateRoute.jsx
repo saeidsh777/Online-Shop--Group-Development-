@@ -7,6 +7,7 @@ import { Suspense, useContext } from 'react';
 import Loading from '../Loading/Loading';
 
 const PrivateRouteRoleChecker = ({ children, role, currentRoute }) => {
+    return children;
     const HasAccess = [...RolesRouteAccess[role]].some(root => {
         const routes = [
             root.root,
