@@ -1,7 +1,7 @@
 'use client';
 import DashboardBTN from '@/components/Buttons/Dashboard/DashboardBTN';
 import { sendNotification } from '@/services/notification';
-import { getAllUsers } from '@/services/user';
+import { getUserList } from '@/services/user';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -16,7 +16,9 @@ export default function NotificationBox() {
 
     useEffect(() => {
         const getUsers = async () => {
-            const { res, result } = await getAllUsers();
+            const token = localStorage.getItem('token');
+
+            const { res, result } = await getUserList(token);
 
             if (res.status === 200) {
                 const allUsers = result.map(user => ({
@@ -37,12 +39,11 @@ export default function NotificationBox() {
         setSearchUser(users);
     }, [users]);
 
-    
     const searchHandler = e => {
         setSearch(e.target.value);
         setSearchUser(users.filter(user => user.name.includes(e.target.value)));
     };
-    
+
     const sendNotifHandler = async () => {
         const data = {
             message,
