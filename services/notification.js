@@ -28,6 +28,7 @@ export const deleteNotification = async nofitId => {
         const res = await fetch(
             `${API_BASE_URL}/notifications/delete/${nofitId}`,
             {
+                cache:"no-store",
                 method: 'DELETE',
                 headers: {
                     authorization: `Bearer ${token}`,
@@ -46,7 +47,7 @@ export const deleteNotification = async nofitId => {
 export const getAllNotifications = async token => {
     try {
         const res = await fetch(`${API_BASE_URL}/notifications/notifications`, {
-            cache: 'no-store',
+            cache: "no-store",
             headers: {
                 authorization: `Bearer ${token}`,
             },
