@@ -12,9 +12,9 @@ export default async function ProductModelEditPage({ params }) {
     let model;
     let categoryFields;
     if (res.status === 200) {
-        result.models.forEach(item => {
+        result.models[0].productModels.forEach(item => {
             if (item._id === modelId) {
-                model = item.productModels[0];
+                model = item;
                 return;
             }
         });
