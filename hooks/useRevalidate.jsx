@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-const Revalidate = path => {
+const Revalidate = async path => {
     revalidatePath(path, 'page');
 };
 export default Revalidate;

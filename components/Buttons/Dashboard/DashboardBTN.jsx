@@ -14,7 +14,7 @@ const DashboardBTN = (props, Ref) => {
         <button
             {...otherProps}
             ref={Ref}
-            className={`flex justify-center rounded-md  font-semibold leading-6  shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
+            className={`flex justify-center rounded-md  font-semibold leading-6  shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:bg-gray-500 disabled:cursor-not-allowed ${
                 props.className + ' ' + defaultPadding + ' ' + defaultColor
             }`}
         >
