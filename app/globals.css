@@ -94,6 +94,22 @@
 
     /* Category box END */
 
+    /* scroll bar styles START */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: rgba(70, 128, 255, 0.22);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(70, 128, 255, 0.8);
+        border-radius: 10px;
+    }
+    /* scroll bar styles END */
+
     /* change sidebar flow */
     @media screen and (min-width: 1152px) {
         .Dashboard_Sidebar:not(.active) .Dashboard_Sidebar-logoContainer {
