@@ -18,7 +18,11 @@ export default function NewProductModel({
     useEffect(() => {
         let isValidFields = true;
         categoryFields.forEach(field => {
-            isValidFields = isValidFields && field.isValid;
+            if (field?.optional) {
+                null
+            } else {
+                isValidFields = isValidFields && field.isValid;
+            }
         });
         if (isValidFields) {
             setModels(prv =>

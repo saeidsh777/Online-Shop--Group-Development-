@@ -65,7 +65,7 @@ export default function ProductProvider({ children }) {
                             productVariant.variantName.toLowerCase() === 'color'
                                 ? '#000000'
                                 : '',
-                        isValid:
+                        isValid: productVariant?.optional ? true:
                             productVariant.variantName.toLowerCase() === 'color'
                                 ? true
                                 : false,

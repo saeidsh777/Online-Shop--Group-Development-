@@ -1,7 +1,14 @@
 import { ProductContext } from '@/contexts/ProductProvider';
 import React, { useContext } from 'react';
 
-export default function CategoryInputs({ variantName, _id, value, modelId, isValid }) {
+export default function CategoryInputs({
+    variantName,
+    _id,
+    value,
+    modelId,
+    optional,
+    isValid,
+}) {
     const { setModels } = useContext(ProductContext);
     const newId = crypto.randomUUID();
 
@@ -18,7 +25,11 @@ export default function CategoryInputs({ variantName, _id, value, modelId, isVal
                         return {
                             ...field,
                             value: e.target.value,
-                            isValid: e.target.value ? true : false,
+                            isValid: field?.optional
+                                ? true
+                                : e.target.value
+                                ? true
+                                : false,
                         };
                     }),
                 };
@@ -31,7 +42,7 @@ export default function CategoryInputs({ variantName, _id, value, modelId, isVal
                 {variantName}:
             </label>
 
-            <div>
+            <div className='flex items-center gap-1'>
                 <input
                     id={variantName + newId}
                     type="text"
@@ -41,6 +52,7 @@ export default function CategoryInputs({ variantName, _id, value, modelId, isVal
                         !isValid && 'ring-red-400 focus-visible:ring-red-400'
                     }`}
                 />
+                {optional && <span className='text-[.7rem]'>Optional</span>}
             </div>
         </div>
     );
