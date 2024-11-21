@@ -3,6 +3,7 @@ import { LuUsers } from 'react-icons/lu';
 import { BsTicketPerforated } from 'react-icons/bs';
 import { AiOutlineProduct } from 'react-icons/ai';
 import { MdOutlineNotificationsActive } from 'react-icons/md';
+import ViewChart from '@/components/ViewChart/ViewChart';
 const DashboardHomepage = () => {
     return (
         <div>
@@ -44,9 +45,9 @@ const DashboardHomepage = () => {
                     textColer="text-red-500"
                 />
             </div>
-            <div className="grid grid-cols-3">
-                <div className="bg-white p-4 rounded-lg h-[20rem] col-span-2">
-                    <h2>Views</h2>
+            <div className="grid lg:grid-cols-3">
+                <div className="bg-white p-4 rounded-lg h-[20rem] lg:col-span-2">
+                    <ViewChart />
                 </div>
             </div>
         </div>
