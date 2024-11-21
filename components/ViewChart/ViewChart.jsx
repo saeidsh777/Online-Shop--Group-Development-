@@ -9,26 +9,13 @@ class ViewChart extends Component {
         this.state = {
             series: [
                 {
-                    name: 'VIEW',
-                    data: [
-                        '132',
-                        '165',
-                        '180',
-                        '230',
-                        '580',
-                        '210',
-                        '280',
-                        '600',
-                        '560',
-                        '720',
-                        '430',
-                        '690',
-                    ],
+                    name: props.name,
+                    data: props.data.data,
                 },
             ],
             options: {
                 chart: {
-                    type: 'area',
+                    id: 'line',
                     zoom: {
                         enabled: false,
                     },
@@ -49,36 +36,17 @@ class ViewChart extends Component {
                 },
                 stroke: {
                     curve: 'smooth',
-                    width: 5,
+                    width: 1,
                     colors: ['#2563eb'],
                 },
                 title: {
-                    text: 'Visit Statistics',
+                    text: props.title,
                     align: 'left',
                 },
                 xaxis: {
                     type: 'category',
-                    categories: [
-                        'Jan',
-                        'Feb',
-                        'Mar',
-                        'Apr',
-                        'May',
-                        'Jun',
-                        'Jul',
-                        'Aug',
-                        'Sep',
-                        'Oct',
-                        'Nov',
-                        'Dec',
-                    ],
+                    categories: props.data.categories,
                 },
-                // yaxis: {
-                //     opposite: true,
-                // },
-                // legend: {
-                //     horizontalAlign: 'left',
-                // },
             },
         };
     }
@@ -88,7 +56,7 @@ class ViewChart extends Component {
             <Chart
                 options={this.state.options}
                 series={this.state.series}
-                type="area"
+                type={this.props.type}
                 width="100%"
                 height={'100%'}
             />

@@ -4,6 +4,42 @@ import { BsTicketPerforated } from 'react-icons/bs';
 import { AiOutlineProduct } from 'react-icons/ai';
 import { MdOutlineNotificationsActive } from 'react-icons/md';
 import ViewChart from '@/components/ViewChart/ViewChart';
+
+const VisitData = {
+    data: [
+        '132',
+        '165',
+        '180',
+        '230',
+        '580',
+        '210',
+        '280',
+        '600',
+        '560',
+        '720',
+        '430',
+        '690',
+    ],
+    categories: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+    ],
+};
+
+const DollarData = {
+    data: ['1320', '1605', '1180', '2930', '5580', '3210'],
+    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+};
 const DashboardHomepage = () => {
     return (
         <div>
@@ -45,9 +81,22 @@ const DashboardHomepage = () => {
                     textColer="text-red-500"
                 />
             </div>
-            <div className="grid lg:grid-cols-3">
-                <div className="bg-white p-4 rounded-lg h-[20rem] lg:col-span-2">
-                    <ViewChart />
+            <div className="grid lg:grid-cols-3 gap-8">
+                <div className="bg-white p-4 rounded-lg h-[25rem] lg:col-span-2">
+                    <ViewChart
+                        type="area"
+                        name="Visits"
+                        title="Visit Statistics"
+                        data={VisitData}
+                    />
+                </div>
+                <div className="bg-white p-4 rounded-lg h-[25rem]">
+                    <ViewChart
+                        type="bar"
+                        name="Dollar"
+                        title="Financial Statistics"
+                        data={DollarData}
+                    />
                 </div>
             </div>
         </div>
