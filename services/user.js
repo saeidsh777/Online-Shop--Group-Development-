@@ -40,8 +40,7 @@ export const getUserByPhoneNumber = async phoneNumber => {
     }
 };
 
-export const getUserInfo = async (token) => {
-    
+export const getUserInfo = async token => {
     try {
         const res = await fetch(`${API_BASE_URL}/users/me/`, {
             headers: {
@@ -49,7 +48,6 @@ export const getUserInfo = async (token) => {
             },
         });
         const result = await res.json();
-       
 
         return { res, result };
     } catch (err) {
@@ -57,19 +55,15 @@ export const getUserInfo = async (token) => {
     }
 };
 
-
-
-export const getUserList = async (token) => {
-    
+export const getUserList = async token => {
     try {
         const res = await fetch(`${API_BASE_URL}/users/all-users/`, {
+            cache: 'no-store',
             headers: {
                 authorization: `Bearer ${token}`,
             },
         });
         const result = await res.json();
-        
-       
 
         return { res, result };
     } catch (err) {
@@ -77,8 +71,7 @@ export const getUserList = async (token) => {
     }
 };
 
-
-export const updateUserInfo = async (updatedUser ) => {
+export const updateUserInfo = async updatedUser => {
     try {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('Token not found');
@@ -93,18 +86,14 @@ export const updateUserInfo = async (updatedUser ) => {
         });
 
         const result = await res.json();
-        if (!res.ok) throw new Error(result.message || 'Error updating user info');
+        if (!res.ok)
+            throw new Error(result.message || 'Error updating user info');
 
         return { res, result };
     } catch (err) {
         return err instanceof Error ? err.message : 'Error updating user info';
     }
 };
-
-
-
-
-
 
 export const updatePassword = async ({ currentPassword, newPassword }) => {
     try {
@@ -121,15 +110,14 @@ export const updatePassword = async ({ currentPassword, newPassword }) => {
         });
 
         const result = await res.json();
-        if (!res.ok) throw new Error(result.message || 'Error updating password');
+        if (!res.ok)
+            throw new Error(result.message || 'Error updating password');
 
         return { res, result };
     } catch (err) {
         return err instanceof Error ? err.message : 'Error updating password';
     }
 };
-
-
 
 export const changeUserRole = async (phoneNumber, newRole, token) => {
     try {
@@ -142,11 +130,9 @@ export const changeUserRole = async (phoneNumber, newRole, token) => {
             body: JSON.stringify({ role: newRole }),
         });
         const result = await res.json();
-            
+
         return { res, result };
     } catch (err) {
         return { err, ...responseAndResult };
     }
 };
-
-
