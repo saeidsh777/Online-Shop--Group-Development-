@@ -1,6 +1,6 @@
-import DashboardAdminTemplate from '@/components/Template/DashboardAdminTemplate/DashboardAdminTemplate';
+import DashboardTemplate from '@/components/Template/DashboardTemplate/DashboardAdminTemplate/DashboardTemplate';
 
 const DashboardHomepage = () => {
-    return <DashboardAdminTemplate />;
+    return <DashboardTemplate />;
 };
 export default DashboardHomepage;
