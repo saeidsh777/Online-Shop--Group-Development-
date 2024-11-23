@@ -55,6 +55,7 @@ export const getTicket = async (id, token, isAdmin) => {
 export const getAllTickets = async token => {
     try {
         const response = await fetch(`${API_BASE_URL}/tickets`, {
+            cache: 'no-store',
             method: 'GET',
             headers: {
                 authorization: `Bearer ${token}`,

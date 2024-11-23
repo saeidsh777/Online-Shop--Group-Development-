@@ -42,7 +42,8 @@ export const getUserByPhoneNumber = async phoneNumber => {
 
 export const getUserInfo = async token => {
     try {
-        const res = await fetch(`${API_BASE_URL}/users/me/`, {
+        const res = await fetch(`${API_BASE_URL}/users/me`, {
+            cache: 'no-store',
             headers: {
                 authorization: `Bearer ${token}`,
             },
@@ -57,7 +58,7 @@ export const getUserInfo = async token => {
 
 export const getUserList = async token => {
     try {
-        const res = await fetch(`${API_BASE_URL}/users/all-users/`, {
+        const res = await fetch(`${API_BASE_URL}/users/all-users`, {
             cache: 'no-store',
             headers: {
                 authorization: `Bearer ${token}`,

@@ -60,7 +60,7 @@ const AuthProvider = ({ children }) => {
             setUser(prv => ({ ...prv, isLoggedIn: userStatus['loading'] }));
 
             const response = await getUserInfo(token);
-
+            
             if (response?.res?.status === 200) {
                 const UserInfo = {};
                 Object.entries(response.result).forEach(([key, value]) => {

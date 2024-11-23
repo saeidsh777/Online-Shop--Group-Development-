@@ -1,9 +1,15 @@
+'use client';
 import CountBox from '@/components/Boxes/CountBox/CountBox';
 import { LuUsers } from 'react-icons/lu';
 import { BsTicketPerforated } from 'react-icons/bs';
 import { AiOutlineProduct } from 'react-icons/ai';
 import { MdOutlineNotificationsActive } from 'react-icons/md';
 import ViewChart from '@/components/ViewChart/ViewChart';
+import { getUserList } from '@/services/user';
+import { Suspense, useEffect, useState } from 'react';
+import { getAllTickets } from '@/services/ticket';
+import { getAllProducts } from '@/services/product';
+import { getAllNotifications } from '@/services/notification';
 
 const VisitData = {
     data: [
@@ -41,13 +47,54 @@ const DollarData = {
     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
 };
 const DashboardHomepage = () => {
+    const [userCount, setUserCount] = useState(0);
+    const [ticketsCount, setTicketsCount] = useState(0);
+    const [productsCount, setProductsCount] = useState(0);
+    const [notificationsCount, setNotificationsCount] = useState(0);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const users = async () => {
+            const { res, result } = await getUserList(token);
+
+            if (res?.status === 200) {
+                setUserCount(result.length);
+            }
+        };
+        const tickets = async () => {
+            const { res, result } = await getAllTickets(token);
+
+            if (res?.status === 200) {
+                setTicketsCount(result.length);
+            }
+        };
+        const products = async () => {
+            const { res, result } = await getAllProducts();
+
+            if (res?.status === 200) {
+                setProductsCount(result.length);
+            }
+        };
+        const notifications = async () => {
+            const { res, result } = await getAllNotifications(token);
+
+            if (res?.status === 200) {
+                setNotificationsCount(result.length);
+            }
+        };
+        users();
+        tickets();
+        products();
+        notifications();
+    }, []);
+
     return (
         <div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <CountBox
                     imgSrc="/images/user-icon.svg"
                     title="Users"
-                    count={'500'}
+                    count={userCount}
                     icon={<LuUsers />}
                     hrefDir="/dashboard/users"
                     bg="bg-green-50"
@@ -56,7 +103,7 @@ const DashboardHomepage = () => {
                 <CountBox
                     imgSrc="/images/ticket-icon.svg"
                     title="Tickets"
-                    count={'1000'}
+                    count={ticketsCount}
                     icon={<BsTicketPerforated />}
                     hrefDir="/dashboard/tickets"
                     bg="bg-cyan-50"
@@ -65,7 +112,7 @@ const DashboardHomepage = () => {
                 <CountBox
                     imgSrc="/images/product-icon.svg"
                     title="Products"
-                    count={'3700'}
+                    count={productsCount}
                     icon={<AiOutlineProduct />}
                     hrefDir="/dashboard/products"
                     bg="bg-yellow-50"
@@ -74,7 +121,7 @@ const DashboardHomepage = () => {
                 <CountBox
                     imgSrc="/images/notification-icon.svg"
                     title="Notifications"
-                    count={'500'}
+                    count={notificationsCount}
                     icon={<MdOutlineNotificationsActive />}
                     hrefDir="/dashboard/notification-list"
                     bg="bg-red-50"

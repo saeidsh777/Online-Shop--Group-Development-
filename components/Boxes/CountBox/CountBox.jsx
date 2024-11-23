@@ -1,3 +1,4 @@
+"use client"
 import Image from 'next/image';
 import Link from 'next/link';
 import { IoIosArrowRoundForward } from 'react-icons/io';
@@ -39,7 +40,9 @@ export default function CountBox({
                     </div>
                 </div>
                 <div className="flex items-center py-5">
-                    <p className="text-4xl font-bold">+ {count}</p>
+                    <p className="text-4xl font-bold">
+                        <span className='text-gray-400'>+</span> {count}
+                    </p>
                 </div>
             </div>
         </div>
