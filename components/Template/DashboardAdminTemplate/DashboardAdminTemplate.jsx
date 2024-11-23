@@ -6,7 +6,7 @@ import { AiOutlineProduct } from 'react-icons/ai';
 import { MdOutlineNotificationsActive } from 'react-icons/md';
 import ViewChart from '@/components/ViewChart/ViewChart';
 import { getUserList } from '@/services/user';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllTickets } from '@/services/ticket';
 import { getAllProducts } from '@/services/product';
 import { getAllNotifications } from '@/services/notification';
@@ -128,8 +128,8 @@ const DashboardAdminTemplate = () => {
                     textColer="text-red-500"
                 />
             </div>
-            <div className="grid lg:grid-cols-3 gap-8">
-                <div className="bg-white p-4 rounded-lg h-[25rem] lg:col-span-2">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="bg-white p-4 rounded-lg h-[25rem] col-span-1 lg:col-span-2">
                     <ViewChart
                         type="area"
                         name="Visits"
